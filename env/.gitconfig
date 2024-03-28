@@ -1,0 +1,5 @@
+# This is Git's per-user configuration file.
+[user]
+# Please adapt and uncomment the following lines:
+#	name = EC2 Default User
+#	email = ec2-user@ip-172-31-4-61.us-east-2.compute.internal
