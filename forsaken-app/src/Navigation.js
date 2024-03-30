@@ -1,7 +1,4 @@
-import Container from "react-bootstrap/Container";
-import Nav from "react-bootstrap/Nav";
-import Navbar from "react-bootstrap/Navbar";
-import NavDropdown from "react-bootstrap/NavDropdown";
+import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 
 function Navigation() {
   return (
@@ -30,6 +27,14 @@ function Navigation() {
               </NavDropdown.Item>
               <NavDropdown.Item href="https://www.meta.com/referrals/link/Protagosus">
                 Meta Referral Program (it helps!)
+              </NavDropdown.Item>
+            </NavDropdown>
+            <NavDropdown title="Tools" id="tools-nav-dropdown">
+              <NavDropdown.Item href="#/drop-rate-calculator">
+                Drop Rate Calculator
+              </NavDropdown.Item>
+              <NavDropdown.Item href="#/gallery">
+                Protagosus' Statistical Guides and Magical Meandering
               </NavDropdown.Item>
             </NavDropdown>
           </Nav>
