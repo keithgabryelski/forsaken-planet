@@ -67,8 +67,8 @@ class Selectables {
 
   selectedPerksDropRate() {
     return this.selectedPerks().reduce(
-      (accumulator, item) => accumulator + item.dropRate(),
-      0.0,
+      (accumulator, item) => accumulator * item.dropRate(),
+      1.0,
     );
   }
 }

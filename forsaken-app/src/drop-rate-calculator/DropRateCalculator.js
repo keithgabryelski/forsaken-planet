@@ -65,7 +65,6 @@ function DropRateCalculator() {
               const newSelected = update(selected, {
                 gearNames: { $set: targets.map((t) => t.name) },
               });
-              console.info("newSelected", newSelected);
               setSelected(newSelected);
             }}
           />
@@ -125,7 +124,7 @@ function DropRateCalculator() {
           />
         </Col>
       </Row>
-      <Row className="display-1">
+      <Row className="display-3">
         <DropRate selectables={selectables} />
       </Row>
     </Container>

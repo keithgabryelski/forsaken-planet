@@ -2,7 +2,13 @@ import { MultiSelect } from "primereact/multiselect";
 import { Item, DamageTypeItem } from "./models/Item";
 
 function DamageTypesSelector({ onChange, selectables }) {
-  const source = selectables.damageTypes().filter((s) => s.isSource);
+  let source = selectables.damageTypes().filter((s) => s.isSource);
+  const damageTypesExcluded = selectables
+    .selectedGear()
+    .some((item) => ["shields", "staves"].includes(item.name));
+  if (damageTypesExcluded) {
+    source = [];
+  }
   const target = selectables.damageTypes().filter((s) => s.isTarget);
   const targetDropRate =
     target.length === 0 ? 1.0 : selectables.selectedDamageTypesDropRate();

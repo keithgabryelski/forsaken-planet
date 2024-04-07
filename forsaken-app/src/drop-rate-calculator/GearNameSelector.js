@@ -7,17 +7,11 @@ function GearNameSelector({ onChange, selectables }) {
   const targetDropRate =
     target.length === 0 ? 1.0 : selectables.selectedGearDropRate();
   const { percent, humanText } = Item.dropRatePercent(targetDropRate);
-  const targetHeader = `Selected Gear Names: ${percent}% (${humanText})`;
-
-  const panelFooterTemplate = () => {
-    const length = target.length;
-
-    return (
-      <div className="py-2 px-3">
-        <b>{length}</b> item{length > 1 ? "s" : ""} selected.
-      </div>
-    );
-  };
+  const panelFooterTemplate = Item.footerTemplateFunc(
+    target.length,
+    percent,
+    humanText,
+  );
 
   return (
     <div className="card flex justify-content-center">

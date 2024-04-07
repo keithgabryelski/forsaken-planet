@@ -1,6 +1,5 @@
 import { Row, Col } from "react-bootstrap";
-import { gearPerksMatrix, gearDamageTypesMaxtrix } from "./Perks";
-import Calculator from "./Calculator";
+import DungeonsOfEternityStatistics from "./DungeonsOfEternityStatistics";
 
 export class Item {
   constructor(name, selectables) {
@@ -35,6 +34,24 @@ export class Item {
     return Item.dropRatePercent(total);
   }
 
+  static dropRate(selected, statsIndex, logical = "or") {
+    if (selected.length === 0) {
+      return 1.0;
+    }
+
+    let dropRate = 1.0;
+    if (logical === "or") {
+      dropRate = selected.reduce((accumulator, gearName) => {
+        return accumulator + statsIndex.get(gearName);
+      }, 0.0);
+    } else {
+      dropRate = selected.reduce((accumulator, gearName) => {
+        return accumulator * statsIndex.get(gearName);
+      }, 1.0);
+    }
+    return dropRate;
+  }
+
   static dropRatePercent(total) {
     let percent = Math.round(total * 100000) / 1000;
     let humanText = "unknown";
@@ -46,7 +63,6 @@ export class Item {
       factor *= 10;
     }
     const coef = Math.round(total * factor);
-    console.info("before factor = ", total, factor, coef, total * factor);
     if (coef > 0) {
       factor *= coef;
     }
@@ -63,7 +79,7 @@ export class Item {
     if (num === inTotal) {
       humanText = "always";
     } else if (isFinite(num) && isFinite(inTotal) && inTotal !== 0) {
-      humanText = `one in ${inTotal} drops`;
+      humanText = `about one in ${inTotal} drops`;
     } else {
       humanText = "almost never";
     }
@@ -80,10 +96,8 @@ export class Item {
       return (
         <div className="py-2 px-3">
           <span>
-            <b>{length}</b> item{length > 1 ? "s" : ""} selected.
-          </span>
-          <span>
-            {percent}% ({humanText})
+            <b>{length}</b> item{length > 1 ? "s" : ""} selected: {percent}% (
+            {humanText})
           </span>
         </div>
       );
@@ -162,13 +176,15 @@ export class GearItem extends Item {
   }
   get isValidGearForDamageType() {
     return this.selected.damageTypes.every((damageType) =>
-      gearDamageTypesMaxtrix[this.name]?.includes(damageType),
+      DungeonsOfEternityStatistics.gearDamageTypesMaxtrix[this.name]?.includes(
+        damageType,
+      ),
     );
   }
 
   get isValidGearForPerk() {
     return this.selected.perks.every((perk) =>
-      gearPerksMatrix[this.name]?.includes(perk),
+      DungeonsOfEternityStatistics.gearPerksMatrix[this.name]?.includes(perk),
     );
   }
 
@@ -181,10 +197,7 @@ export class GearItem extends Item {
   }
 
   dropRate() {
-    return new Calculator().dropRate(
-      [this.name],
-      this.statistics.stats.byGroup,
-    );
+    return Item.dropRate([this.name], this.statistics.stats.byGroup);
   }
 
   static itemTemplate(item) {
@@ -202,10 +215,7 @@ export class RarityItem extends Item {
   }
 
   dropRate() {
-    return new Calculator().dropRate(
-      [this.name],
-      this.statistics.stats.byRarity,
-    );
+    return Item.dropRate([this.name], this.statistics.stats.byRarity);
   }
 
   static itemTemplate(item) {
@@ -223,10 +233,7 @@ export class DamageTypeItem extends Item {
   }
 
   dropRate() {
-    return new Calculator().dropRate(
-      [this.name],
-      this.statistics.stats.byDamageType,
-    );
+    return Item.dropRate([this.name], this.statistics.stats.byDamageType);
   }
 
   static itemTemplate(item) {
@@ -241,7 +248,9 @@ export class PerkItem extends Item {
 
   get isValidPerkForGear() {
     return this.selected.gearNames.every((gearName) =>
-      gearPerksMatrix[gearName]?.includes(this.name),
+      DungeonsOfEternityStatistics.gearPerksMatrix[gearName]?.includes(
+        this.name,
+      ),
     );
   }
 
@@ -250,7 +259,7 @@ export class PerkItem extends Item {
   }
 
   dropRate() {
-    return new Calculator().dropRate([this.name], this.statistics.stats.byPerk);
+    return Item.dropRate([this.name], this.statistics.stats.byPerk, "and");
   }
 
   static itemTemplate(item) {
