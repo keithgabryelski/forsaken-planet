@@ -5,6 +5,7 @@ import ChartGallery from "./ChartGallery";
 import Navigation from "./Navigation";
 import Welcome from "./Welcome";
 import DropRateCalculator from "./drop-rate-calculator/DropRateCalculator";
+import Drops from "./drops/Drops";
 import "primereact/resources/themes/bootstrap4-dark-blue/theme.css";
 
 import "./App.css";
@@ -19,6 +20,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Welcome />} />
               <Route path="/gallery" element={<ChartGallery />} />
+              <Route path="/drops" element={<Drops />} />
               <Route
                 path="/drop-rate-calculator"
                 element={<DropRateCalculator />}
