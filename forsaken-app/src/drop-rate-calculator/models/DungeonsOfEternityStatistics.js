@@ -47,6 +47,16 @@ export default class DungeonsOfEternityStatistics {
     ...this.shieldPerks,
     ...this.swordPerks,
   ]);
+  static gearSlotPlacement = {
+    axes: "hip",
+    bows: "back",
+    crossbows: "back",
+    daggers: "hip",
+    hammers: "hip",
+    shields: "back",
+    staves: "back",
+    swords: "hip",
+  };
 
   constructor(drops = []) {
     this.drops = drops;
@@ -74,6 +84,10 @@ export default class DungeonsOfEternityStatistics {
       totalDrops: 0,
       numDamageTypeDrops: 0,
       numDamageDrops: 0,
+      slots: {
+        hip: 0,
+        back: 0,
+      },
       rare: {
         numNoPerks: 0,
         numOneishPerks: 0,
@@ -223,6 +237,11 @@ export default class DungeonsOfEternityStatistics {
       if (hasDamageType) {
         collections.stats.numDamageTypeDrops += 1;
       }
+
+      collections.stats.slots[
+        DungeonsOfEternityStatistics.gearSlotPlacement[item.Group]
+      ] += 1;
+
       return collections;
     }, this);
 

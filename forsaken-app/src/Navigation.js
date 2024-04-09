@@ -33,6 +33,9 @@ function Navigation() {
               <NavDropdown.Item href="#/drop-rate-calculator">
                 Drop Rate Calculator
               </NavDropdown.Item>
+              <NavDropdown.Item href="#/drop-rate-pie-chart">
+                Drop Rate Pie Chart
+              </NavDropdown.Item>
               <NavDropdown.Item href="#/drops">
                 Drops Investigator
               </NavDropdown.Item>
