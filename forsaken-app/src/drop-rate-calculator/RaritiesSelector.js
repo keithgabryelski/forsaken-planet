@@ -1,5 +1,5 @@
 import { MultiSelect } from "primereact/multiselect";
-import { Item, RarityItem } from "./models/Item";
+import { Item, RarityItem } from "../models/Item";
 
 function RaritiesSelector({ onChange, selectables }) {
   const source = selectables.rarities().filter((s) => s.isSource);

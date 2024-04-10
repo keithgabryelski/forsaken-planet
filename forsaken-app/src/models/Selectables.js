@@ -1,35 +1,54 @@
 import { GearItem, RarityItem, DamageTypeItem, PerkItem } from "./Item";
 
 class Selectables {
-  constructor(statistics, selected) {
-    this.statistics = statistics;
+  constructor(cache, selected) {
+    this.cache = cache;
     this.selected = selected;
   }
 
+  get statistics() {
+    return this.cache.statistics;
+  }
+
   gear() {
-    return [...this.statistics.catalog.groupNames].map(
-      (g) => new GearItem(g, this),
-    );
+    try {
+      return [...this.cache.catalog.groupNames].map(
+        (g) => new GearItem(g, this),
+      );
+    } catch (e) {}
+    return [];
   }
 
   rarities() {
-    return [...this.statistics.catalog.rarities].map(
-      (g) => new RarityItem(g, this),
-    );
+    try {
+      return [...this.cache.catalog.rarities].map(
+        (g) => new RarityItem(g, this),
+      );
+    } catch (e) {}
+    return [];
   }
 
   damageTypes() {
-    return [...this.statistics.catalog.damageTypes].map(
-      (g) => new DamageTypeItem(g, this),
-    );
+    try {
+      return [...this.cache.catalog.damageTypes].map(
+        (g) => new DamageTypeItem(g, this),
+      );
+    } catch (e) {}
+    return [];
   }
 
   perks() {
-    return [...this.statistics.catalog.perks].map((g) => new PerkItem(g, this));
+    try {
+      return [...this.cache.catalog.perks].map((g) => new PerkItem(g, this));
+    } catch (e) {}
+    return [];
   }
 
   selectedGear() {
-    return this.gear().filter((g) => g.isTarget);
+    try {
+      return this.gear().filter((g) => g.isTarget);
+    } catch (e) {}
+    return [];
   }
 
   selectedGearDropRate() {

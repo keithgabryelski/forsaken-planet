@@ -1,5 +1,5 @@
 import { MultiSelect } from "primereact/multiselect";
-import { Item, DamageTypeItem } from "./models/Item";
+import { Item, DamageTypeItem } from "../models/Item";
 
 function DamageTypesSelector({ onChange, selectables }) {
   let source = selectables.damageTypes().filter((s) => s.isSource);

@@ -7,6 +7,7 @@ import Welcome from "./Welcome";
 import DropRateCalculator from "./drop-rate-calculator/DropRateCalculator";
 import Drops from "./drops/Drops";
 import DropRatePieChart from "./drop-rate-pie-chart";
+import PerkDropRateRadar from "./perk-drop-rate-radar";
 import "primereact/resources/themes/bootstrap4-dark-blue/theme.css";
 
 import "./App.css";
@@ -29,6 +30,10 @@ function App() {
               <Route
                 path="/drop-rate-pie-chart"
                 element={<DropRatePieChart />}
+              />
+              <Route
+                path="/perk-drop-rate-radar"
+                element={<PerkDropRateRadar />}
               />
             </Routes>
           </Router>

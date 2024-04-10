@@ -1,4 +1,4 @@
-import { Item, GearItem } from "./models/Item";
+import { Item, GearItem } from "../models/Item";
 import { MultiSelect } from "primereact/multiselect";
 
 function GearNameSelector({ onChange, selectables }) {

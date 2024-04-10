@@ -2,19 +2,18 @@ import { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import update from "immutability-helper";
 import Header from "./Header";
+import Footer from "./Footer";
 import GearNameSelector from "./GearNameSelector";
 import RaritiesSelector from "./RaritiesSelector";
 import DamageTypesSelector from "./DamageTypesSelector";
 import PerksSelector from "./PerksSelector";
 import DropRate from "./DropRate";
-import DungeonsOfEternityStatistics from "./models/DungeonsOfEternityStatistics";
-import Selectables from "./models/Selectables";
-import { Item } from "./models/Item";
+import DungeonsOfEternityCache from "../models/DungeonsOfEternityCache";
+import Selectables from "../models/Selectables";
+import { Item } from "../models/Item";
 
 function DropRateCalculator() {
-  const [statistics, setStatistics] = useState(
-    new DungeonsOfEternityStatistics(),
-  );
+  const [statistics, setStatistics] = useState(new DungeonsOfEternityCache());
 
   const [selected, setSelected] = useState({
     gearNames: [],
@@ -38,7 +37,7 @@ function DropRateCalculator() {
         method: "GET",
       });
       const json = await fetched.json();
-      const newStatistics = new DungeonsOfEternityStatistics(json);
+      const newStatistics = new DungeonsOfEternityCache(json);
       setStatistics(newStatistics);
     };
 
@@ -126,6 +125,9 @@ function DropRateCalculator() {
       </Row>
       <Row className="display-3">
         <DropRate selectables={selectables} />
+      </Row>
+      <Row>
+        <Footer selectables={selectables} />
       </Row>
     </Container>
   );

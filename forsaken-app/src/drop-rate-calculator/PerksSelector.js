@@ -1,5 +1,5 @@
 import { MultiSelect } from "primereact/multiselect";
-import { Item, PerkItem } from "./models/Item";
+import { Item, PerkItem } from "../models/Item";
 
 function PerksSelector({ onChange, selectables }) {
   let source = selectables.perks().filter((s) => s.isSource && s.isTargetable);

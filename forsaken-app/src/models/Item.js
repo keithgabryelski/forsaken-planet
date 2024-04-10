@@ -1,5 +1,8 @@
 import { Row, Col } from "react-bootstrap";
-import DungeonsOfEternityStatistics from "./DungeonsOfEternityStatistics";
+import {
+  gearPerksMatrix,
+  gearDamageTypesMaxtrix,
+} from "./DungeonsOfEternityPerkMatrices";
 
 export class Item {
   constructor(name, selectables) {
@@ -176,15 +179,13 @@ export class GearItem extends Item {
   }
   get isValidGearForDamageType() {
     return this.selected.damageTypes.every((damageType) =>
-      DungeonsOfEternityStatistics.gearDamageTypesMaxtrix[this.name]?.includes(
-        damageType,
-      ),
+      gearDamageTypesMaxtrix[this.name]?.includes(damageType),
     );
   }
 
   get isValidGearForPerk() {
     return this.selected.perks.every((perk) =>
-      DungeonsOfEternityStatistics.gearPerksMatrix[this.name]?.includes(perk),
+      gearPerksMatrix[this.name]?.includes(perk),
     );
   }
 
@@ -197,7 +198,7 @@ export class GearItem extends Item {
   }
 
   dropRate() {
-    return Item.dropRate([this.name], this.statistics.stats.byGroup);
+    return Item.dropRate([this.name], this.statistics.byGroup);
   }
 
   static itemTemplate(item) {
@@ -215,7 +216,7 @@ export class RarityItem extends Item {
   }
 
   dropRate() {
-    return Item.dropRate([this.name], this.statistics.stats.byRarity);
+    return Item.dropRate([this.name], this.statistics.byRarity);
   }
 
   static itemTemplate(item) {
@@ -233,7 +234,7 @@ export class DamageTypeItem extends Item {
   }
 
   dropRate() {
-    return Item.dropRate([this.name], this.statistics.stats.byDamageType);
+    return Item.dropRate([this.name], this.statistics.byDamageType);
   }
 
   static itemTemplate(item) {
@@ -248,9 +249,7 @@ export class PerkItem extends Item {
 
   get isValidPerkForGear() {
     return this.selected.gearNames.every((gearName) =>
-      DungeonsOfEternityStatistics.gearPerksMatrix[gearName]?.includes(
-        this.name,
-      ),
+      gearPerksMatrix[gearName]?.includes(this.name),
     );
   }
 
@@ -259,7 +258,7 @@ export class PerkItem extends Item {
   }
 
   dropRate() {
-    return Item.dropRate([this.name], this.statistics.stats.byPerk, "and");
+    return Item.dropRate([this.name], this.statistics.byPerk, "and");
   }
 
   static itemTemplate(item) {

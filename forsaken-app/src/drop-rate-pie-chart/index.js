@@ -2,20 +2,40 @@ import React, { useState, useEffect } from "react";
 import { Container } from "react-bootstrap";
 import { Chart } from "primereact/chart";
 import ChartDataLabels from "chartjs-plugin-datalabels";
-import DungeonsOfEternityStatistics from "../drop-rate-calculator/models/DungeonsOfEternityStatistics";
+import DungeonsOfEternityCache from "../models/DungeonsOfEternityCache";
+import { gearSlotPlacement } from "../models/DungeonsOfEternityCache";
 import "./overlap.css";
 
 export default function DoughnutChartDemo() {
-  const [chartData1, setChartData1] = useState({});
-  const [chartData2, setChartData2] = useState({});
-  const [chartData3, setChartData3] = useState({});
+  const [chartData1, setChartData1] = useState({
+    labels: [],
+    datasets: [
+      {
+        data: [],
+      },
+    ],
+  });
+  const [chartData2, setChartData2] = useState({
+    labels: [],
+    datasets: [
+      {
+        data: [],
+      },
+    ],
+  });
+  const [chartData3, setChartData3] = useState({
+    labels: [],
+    datasets: [
+      {
+        data: [],
+      },
+    ],
+  });
   const [chartOptions1, setChartOptions1] = useState({});
   const [chartOptions2, setChartOptions2] = useState({});
   const [chartOptions3, setChartOptions3] = useState({});
 
-  const [statistics, setStatistics] = useState(
-    new DungeonsOfEternityStatistics(),
-  );
+  const [cache, setCache] = useState(new DungeonsOfEternityCache());
 
   useEffect(() => {
     const fetcher = async () => {
@@ -26,8 +46,8 @@ export default function DoughnutChartDemo() {
         method: "GET",
       });
       const json = await fetched.json();
-      const newStatistics = new DungeonsOfEternityStatistics(json);
-      setStatistics(newStatistics);
+      const newCache = new DungeonsOfEternityCache(json);
+      setCache(newCache);
     };
 
     fetcher();
@@ -47,7 +67,7 @@ export default function DoughnutChartDemo() {
             const data = context.dataset.data;
             const label = labels[index];
             const datum = data[index];
-            return label + ": " + Math.round(datum * 10000) / 100 + "%";
+            return label + ":\n" + Math.round(datum * 10000) / 100 + "%";
           },
           color: "white",
         },
@@ -69,7 +89,7 @@ export default function DoughnutChartDemo() {
             const data = context.dataset.data;
             const label = labels[index];
             const datum = data[index];
-            return label + ": " + Math.round(datum * 100) / 100 + "%";
+            return label + ":\n" + Math.round(datum * 100) / 100 + "%";
           },
           color: "white",
           font: {
@@ -94,7 +114,7 @@ export default function DoughnutChartDemo() {
             const data = context.dataset.data;
             const label = labels[index];
             const datum = data[index];
-            return label + ": " + Math.round(datum * 10000) / 100 + "%";
+            return label + ":\n" + Math.round(datum * 10000) / 100 + "%";
           },
           color: "white",
           font: {
@@ -111,31 +131,31 @@ export default function DoughnutChartDemo() {
     setChartOptions3(options3);
 
     const gearSlotLabels = [
-      ...[...Object.values(DungeonsOfEternityStatistics.gearSlotPlacement)]
+      ...[...Object.values(gearSlotPlacement)]
         .reduce((a, e) => a.add(e), new Set())
         .values(),
     ].sort();
     const gearSlotValues = gearSlotLabels.map(
       (slotName) =>
-        statistics.stats.slots[slotName] / statistics.stats.totalDrops,
+        cache.statistics.slots[slotName] / cache.statistics.totalDrops,
     );
-    const entries = Object.entries(
-      DungeonsOfEternityStatistics.gearSlotPlacement,
-    ).sort(([e1g, e1s], [e2g, e2s]) => {
-      if (e1s < e2s) {
-        return -1;
-      }
-      if (e1s > e2s) {
-        return 1;
-      }
-      if (e1g < e2g) {
-        return -1;
-      }
-      if (e1g > e2g) {
-        return 1;
-      }
-      return 0;
-    });
+    const entries = Object.entries(gearSlotPlacement).sort(
+      ([e1g, e1s], [e2g, e2s]) => {
+        if (e1s < e2s) {
+          return -1;
+        }
+        if (e1s > e2s) {
+          return 1;
+        }
+        if (e1g < e2g) {
+          return -1;
+        }
+        if (e1g > e2g) {
+          return 1;
+        }
+        return 0;
+      },
+    );
     const gearByBackThenHip = entries.map((e) => e[0]);
 
     const documentStyle = getComputedStyle(document.documentElement);
@@ -156,9 +176,9 @@ export default function DoughnutChartDemo() {
         },
       ],
     };
-    const gearData2 = gearByBackThenHip.map(
-      (g) => statistics.stats.byGroup.get(g) * 100,
-    );
+    const gearData2 = gearByBackThenHip.map((g) => {
+      return cache.statistics.byGroup?.get(g) * 100;
+    });
     const data2 = {
       labels: gearByBackThenHip,
       datasets: [
@@ -190,7 +210,7 @@ export default function DoughnutChartDemo() {
 
     const gear3DataLabels = gearByBackThenHip
       .map((groupName) => {
-        const gearDrops = statistics.indexes.byGroup.get(groupName) ?? [];
+        const gearDrops = cache.indexes.byGroup.get(groupName) ?? [];
         const names = [...new Set(gearDrops.map((g) => g.Name))].sort();
         return names;
       })
@@ -199,7 +219,7 @@ export default function DoughnutChartDemo() {
       labels: gear3DataLabels,
       datasets: [
         {
-          data: gear3DataLabels.map((l) => statistics.stats.byName.get(l)),
+          data: gear3DataLabels.map((l) => cache.statistics.byName.get(l)),
           backgroundColor: [
             documentStyle.getPropertyValue("--red-900"),
             documentStyle.getPropertyValue("--red-800"),
@@ -292,7 +312,7 @@ export default function DoughnutChartDemo() {
     setChartOptions2(options2);
     setChartData3(data3);
     setChartOptions3(options3);
-  }, [statistics]);
+  }, [cache]);
 
   return (
     <Container fluid className="chartcontainer">

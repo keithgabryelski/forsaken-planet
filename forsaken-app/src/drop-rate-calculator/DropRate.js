@@ -1,10 +1,10 @@
 import { Container } from "react-bootstrap";
-import { Item } from "./models/Item";
+import { Item } from "../models/Item";
 
 function DropRate({ selectables }) {
   const { statistics, selected } = selectables;
   const { gearNames, rarities, damageTypes, perks } = selected;
-  const { byGroup, byRarity, byDamageType, byPerk } = statistics.stats;
+  const { byGroup, byRarity, byDamageType, byPerk } = statistics;
 
   const namesDropRate = Item.dropRate(gearNames, byGroup);
   const raritiesDropRate = Item.dropRate(rarities, byRarity);
