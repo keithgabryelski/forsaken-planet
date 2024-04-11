@@ -91,17 +91,12 @@ export const perkDescriptions = {
   slowing: "Gives 20-30% chance to slow enemy",
   reload: "Gives 1-6 extra shots per reload",
   "shot distance": "Increases shooting range by 10-60%",
-  slowing: "Gives 20-30% chance to slow enemy",
-  "throw distance": "Increases throwing range by 10-60%",
   vampire: "Gives 20-30% chance to heal 25% of player health",
   poison: "Gives 20-30% chance to poison enemy",
-  "throw distance": "Increases throwing range by 10-60%",
-  slowing: "Gives 20-30% chance to slow enemy",
   "area damage": "Gives 20-30% chance to explode for 200% damage",
   "knockback distance":
     "Knockback distance increases shield knockback by 10-60%",
   absorb: "Heals 4-25% of player health when blocking",
-  vampire: "Gives 20-30% chance to heal 25% of player health",
   throwable: "Allows sword to be thrown",
   "stab damage": "Increases damage by 50%",
 };
