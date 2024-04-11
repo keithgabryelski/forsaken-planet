@@ -70,7 +70,6 @@ export default function StackedBarDemo() {
         },
       },
     );
-    console.info("data", ds);
 
     const documentStyle = getComputedStyle(document.documentElement);
     const textColorSecondary = documentStyle.getPropertyValue(
@@ -122,9 +121,10 @@ export default function StackedBarDemo() {
         datalabels: {
           anchor: "start", // Anchor the labels to the start of the datapoint
           align: "end", // Align the text after the anchor point
+          color: "white",
           formatter: function (value, context) {
             // Show the label instead of the value
-            return context.chart.data.labels[context.dataIndex];
+            return `${value[1]}\n${value[0]}`;
           },
         },
 
