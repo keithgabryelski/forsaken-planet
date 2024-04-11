@@ -4,7 +4,6 @@ import { Chart } from "primereact/chart";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import DungeonsOfEternityCache from "../models/DungeonsOfEternityCache";
 import { gearSlotPlacement } from "../models/DungeonsOfEternityCache";
-import "./overlap.css";
 
 export default function DoughnutChartDemo() {
   const [chartData, setChartData] = useState({

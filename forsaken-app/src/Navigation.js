@@ -39,11 +39,14 @@ function Navigation() {
               <NavDropdown.Item href="#/perk-drop-rate-radar">
                 Perk Drop Rate Radar
               </NavDropdown.Item>
+              <NavDropdown.Item href="#/damage-min-max">
+                Damage MIN/MAX
+              </NavDropdown.Item>
               <NavDropdown.Item href="#/drops">
                 Drops Investigator
               </NavDropdown.Item>
               <NavDropdown.Item href="#/gallery">
-                Protagosus' Statistical Guides and Magical Meandering
+                Protagosus' Statistical Guides and Magical Meanderings
               </NavDropdown.Item>
             </NavDropdown>
           </Nav>
