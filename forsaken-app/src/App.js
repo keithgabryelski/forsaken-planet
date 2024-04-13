@@ -9,6 +9,7 @@ import Drops from "./drops/Drops";
 import DropRatePieChart from "./drop-rate-pie-chart";
 import PerkDropRateRadar from "./perk-drop-rate-radar";
 import DamageMINMAX from "./damage-min-max";
+import DamageMINMAXGrouped from "./damage-min-max-grouped";
 import "primereact/resources/themes/bootstrap4-dark-blue/theme.css";
 
 import "./App.css";
@@ -23,6 +24,10 @@ function App() {
             <Routes>
               <Route path="/" element={<Welcome />} />
               <Route path="/damage-min-max" element={<DamageMINMAX />} />
+              <Route
+                path="/damage-min-max-grouped"
+                element={<DamageMINMAXGrouped />}
+              />
               <Route path="/drops" element={<Drops />} />
               <Route
                 path="/drop-rate-calculator"

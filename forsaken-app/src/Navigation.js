@@ -42,6 +42,9 @@ function Navigation() {
               <NavDropdown.Item href="#/damage-min-max">
                 Damage MIN/MAX
               </NavDropdown.Item>
+              <NavDropdown.Item href="#/damage-min-max-grouped">
+                Damage MIN/MAX Grouped
+              </NavDropdown.Item>
               <NavDropdown.Item href="#/drops">
                 Drops Investigator
               </NavDropdown.Item>
