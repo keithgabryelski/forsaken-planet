@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { Container, Row } from "react-bootstrap";
 import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
 import image01 from "./assets/charts/drop-rates.png";
@@ -21,16 +23,46 @@ const charts = [
   {
     original: image01,
     originalTitle: "Drop Rates",
+    notes: (
+      <div>
+        <h3>Notes:</h3>
+        <p>
+          This is an older drop rate pie chart which can be easier to read than
+          the <a href="/#/drop-rate-pie-chart">LIVE chart</a>, but can be
+          out-of-date.
+        </p>
+      </div>
+    ),
     width: 2742,
     height: 1652,
   },
   {
     original: image02,
     originalTitle: "Damage MIN_MAX by Category",
+    notes: (
+      <div>
+        <h3>Notes:</h3>
+        <p>
+          Minimum/Maximum damage by weapon's category. This is an older chart
+          than the <a href="/#/damage-min-max">LIVE chart</a>, and is probably
+          out-of-date.
+        </p>
+      </div>
+    ),
   },
   {
     original: image03,
     originalTitle: "Damage MIN_MAX by Name",
+    notes: (
+      <div>
+        <h3>Notes:</h3>
+        <p>
+          Minimum/Maximum damage by weapon's category. This is an older chart
+          than the <a href="/#/damage-min-max">LIVE chart</a>, and is probably
+          out-of-date.
+        </p>
+      </div>
+    ),
   },
   {
     original: image04,
@@ -76,10 +108,30 @@ const charts = [
   {
     original: image14,
     originalTitle: "Legendary Weapon Damage Ranges",
+    notes: (
+      <div>
+        <h3>Notes:</h3>
+        <p>
+          Minimum/Maximum damage by weapon's category. This is an older chart
+          than the <a href="/#/damage-min-max-grouped">LIVE chart</a>, and is
+          probably out-of-date.
+        </p>
+      </div>
+    ),
   },
   {
     original: image15,
     originalTitle: "Weapon Damage Ranges",
+    notes: (
+      <div>
+        <h3>Notes:</h3>
+        <p>
+          Minimum/Maximum damage by weapon's category. This is an older chart
+          than the <a href="/#/damage-min-max-grouped">LIVE chart</a>, and is
+          probably out-of-date.
+        </p>
+      </div>
+    ),
   },
   {
     original: image16,
@@ -95,7 +147,21 @@ const charts = [
 });
 
 function ChartGallery() {
-  return <ImageGallery items={charts} />;
+  const [chartIndex, setChartIndex] = useState(0);
+
+  return (
+    <Container fluid>
+      <Row>
+        <ImageGallery
+          items={charts}
+          onBeforeSlide={(index) => {
+            setChartIndex(index);
+          }}
+        />
+      </Row>
+      <Row>{charts[chartIndex]?.notes}</Row>
+    </Container>
+  );
 }
 
 export default ChartGallery;
