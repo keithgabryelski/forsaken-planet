@@ -7,17 +7,15 @@ import DungeonsOfEternityCache from "../models/DungeonsOfEternityCache";
 export default function DamageMINMAX() {
   const [cache, setCache] = useState(new DungeonsOfEternityCache());
   const [loading, setLoading] = useState(true);
+  const [failedToLoad, setFailedToLoad] = useState(false);
 
   useEffect(() => {
     const fetcher = async () => {
-      const url = new URL(window.location.origin);
-      url.port = 3001;
-      url.pathname = "/reports";
-      const fetched = await fetch(url, {
-        method: "GET",
-      });
-      const json = await fetched.json();
-      const newCache = new DungeonsOfEternityCache(json);
+      const newCache = await DungeonsOfEternityCache.Factory();
+      if (newCache == null) {
+        setFailedToLoad(true);
+        return;
+      }
       setCache(newCache);
       setLoading(false);
     };
@@ -193,6 +191,10 @@ export default function DamageMINMAX() {
     setChartData(data);
     setChartOptions(options);
   }, [chartDataSource, cache.indexes.byGroup, cache.indexes.byName, loading]);
+
+  if (failedToLoad) {
+    return <p>bummer</p>;
+  }
 
   if (loading) {
     return null;

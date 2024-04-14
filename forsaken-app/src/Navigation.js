@@ -45,6 +45,9 @@ function Navigation() {
               <NavDropdown.Item href="#/damage-min-max-grouped">
                 Damage MIN/MAX Grouped
               </NavDropdown.Item>
+              <NavDropdown.Item href="#/damage-scatter-plot">
+                Damage Scatter Plot
+              </NavDropdown.Item>
               <NavDropdown.Item href="#/drops">
                 Drops Investigator
               </NavDropdown.Item>

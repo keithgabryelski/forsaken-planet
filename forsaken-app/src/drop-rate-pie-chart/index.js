@@ -25,19 +25,19 @@ export default function DoughnutChartDemo() {
   });
   const [chartOptions, setChartOptions] = useState({});
 
+  const [loading, setLoading] = useState(true);
+  const [failedToLoad, setFailedToLoad] = useState(false);
   const [cache, setCache] = useState(new DungeonsOfEternityCache());
 
   useEffect(() => {
     const fetcher = async () => {
-      const url = new URL(window.location.origin);
-      url.port = 3001;
-      url.pathname = "/reports";
-      const fetched = await fetch(url, {
-        method: "GET",
-      });
-      const json = await fetched.json();
-      const newCache = new DungeonsOfEternityCache(json);
+      const newCache = await DungeonsOfEternityCache.Factory();
+      if (newCache == null) {
+        setFailedToLoad(true);
+        return;
+      }
       setCache(newCache);
+      setLoading(false);
     };
 
     fetcher();
@@ -187,6 +187,13 @@ export default function DoughnutChartDemo() {
     setChartOptions(options);
   }, [cache]);
 
+  if (failedToLoad) {
+    return <p>bummer</p>;
+  }
+
+  if (loading) {
+    return null;
+  }
   return (
     <Container fluid>
       <Chart

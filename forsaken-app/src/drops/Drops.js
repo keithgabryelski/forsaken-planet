@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from "react";
+import DungeonsOfEternityCache from "../models/DungeonsOfEternityCache";
 import { FilterMatchMode } from "primereact/api";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
@@ -7,6 +8,8 @@ import { Button } from "primereact/button";
 import { Row, Col } from "react-bootstrap";
 
 function Drops() {
+  const [cache, setCache] = useState(new DungeonsOfEternityCache());
+  const [failedToLoad, setFailedToLoad] = useState(false);
   const dt = useRef(null);
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -18,25 +21,21 @@ function Drops() {
 
   useEffect(() => {
     const fetcher = async () => {
-      const url = new URL(window.location.origin);
-      url.port = 3001;
-      url.pathname = "/reports";
-      const fetched = await fetch(url, {
-        method: "GET",
-      });
-      const newResults = await fetched.json();
-      setResults(
-        newResults.map((r) =>
-          Object.assign(r, {
-            perks: [r.Perk1, r.Perk2].filter(Boolean).sort().join(","),
-          }),
-        ),
-      );
+      const newCache = await DungeonsOfEternityCache.Factory();
+      if (newCache == null) {
+        setFailedToLoad(true);
+        return;
+      }
+      setCache(newCache);
       setLoading(false);
     };
 
     fetcher();
   }, []);
+
+  useEffect(() => {
+    setResults(cache.drops);
+  }, [cache.drops]);
 
   const onGlobalFilterChange = (e) => {
     const value = e.target.value;
@@ -77,6 +76,13 @@ function Drops() {
 
   const header = renderHeader();
 
+  if (failedToLoad) {
+    return <p>bummer</p>;
+  }
+
+  if (loading) {
+    return null;
+  }
   return (
     <DataTable
       ref={dt}

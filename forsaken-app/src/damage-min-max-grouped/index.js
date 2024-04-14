@@ -11,23 +11,16 @@ export default function DamageMINMAX() {
 
   useEffect(() => {
     const fetcher = async () => {
-      const url = new URL(window.location.origin);
-      url.port = 3001;
-      url.pathname = "/reports";
-      const fetched = await fetch(url, {
-        method: "GET",
-      });
-      const json = await fetched.json();
-      const newCache = new DungeonsOfEternityCache(json);
+      const newCache = await DungeonsOfEternityCache.Factory();
+      if (newCache == null) {
+        setFailedToLoad(true);
+        return;
+      }
       setCache(newCache);
       setLoading(false);
     };
 
-    try {
-      fetcher();
-    } catch (e) {
-      setFailedToLoad(true);
-    }
+    fetcher();
   }, []);
 
   const dataSources = [
