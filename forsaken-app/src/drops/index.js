@@ -34,7 +34,13 @@ function Drops() {
   }, []);
 
   useEffect(() => {
-    setResults(cache.drops);
+    setResults(
+      cache.drops.map((r) =>
+        Object.assign(r, {
+          perks: [r.Perk1, r.Perk2].filter(Boolean).sort().join(","),
+        }),
+      ),
+    );
   }, [cache.drops]);
 
   const onGlobalFilterChange = (e) => {

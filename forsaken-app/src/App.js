@@ -5,12 +5,13 @@ import ChartGallery from "./ChartGallery";
 import Navigation from "./Navigation";
 import Welcome from "./Welcome";
 import DropRateCalculator from "./drop-rate-calculator/DropRateCalculator";
-import Drops from "./drops/Drops";
+import Drops from "./drops";
 import DropRatePieChart from "./drop-rate-pie-chart";
 import PerkDropRateRadar from "./perk-drop-rate-radar";
 import DamageMINMAX from "./damage-min-max";
 import DamageMINMAXGrouped from "./damage-min-max-grouped";
 import DamageScatterPlot from "./damage-scatter-plot";
+import Tools from "./tools";
 import "primereact/resources/themes/bootstrap4-dark-blue/theme.css";
 
 import "./App.css";
@@ -47,6 +48,7 @@ function App() {
                 element={<DamageScatterPlot />}
               />
               <Route path="/gallery" element={<ChartGallery />} />
+              <Route path="/tools" element={<Tools />} />
             </Routes>
           </Router>
         </Container>
