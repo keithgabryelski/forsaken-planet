@@ -1,6 +1,3 @@
-/* eslint-disable no-use-before-define */
-import { window } from "global";
-
 /**
  * FolderEntry represents a file's meta data in the folder-file
  * it is managed by Folder.
