@@ -68,13 +68,29 @@ export default function PerkDropRateRadar() {
     });
     const gears = Object.keys(gearPerksMatrix);
 
+    const colors = [
+      "#990000",
+      "#009900",
+      "#000099",
+      "#440055",
+      "#554400",
+      "#550044",
+      "#005544",
+    ];
+
     const data = {
       labels,
       datasets: gears
         .filter((a) => a !== "staves")
-        .map((gearLabel) => {
+        .map((gearLabel, i) => {
           return {
             label: gearLabel,
+            backgroundColor: colors[i] + "66",
+            borderColor: colors[i],
+            pointBackgroundColor: colors[i],
+            pointBorderColor: colors[i],
+            pointHoverBackgroundColor: colors[i],
+            pointHoverBorderColor: textColor,
             data: labels.map((perk) =>
               gearPerksMatrix[gearLabel].includes(perk)
                 ? cache.statistics.perksDropsByWeapon[gearLabel][perk] * 100
