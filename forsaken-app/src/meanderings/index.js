@@ -5,13 +5,15 @@ import DamageMINMAXGrouped from "../assets/images/damage-min-max-grouped.png";
 import DropRatePieChart from "../assets/images/drop-rate-pie-chart.png";
 import DamageScatterPlot from "../assets/images/damage-scatter-plot.png";
 import DropsTable from "../assets/images/drops-table.png";
+import DamageTypePieChart from "../assets/images/damage-type-pie-chart.png";
+import PerkDropRateRadar from "../assets/images/perk-drop-rate-radar.png";
 
-export default function Tools() {
+export default function Meanderings() {
   return (
     <div className="surface-0 text-center">
       <div className="mb-3 font-bold text-3xl">
-        <span className="text-900">Live Data Tools, </span>
-        <span className="text-blue-600">Statistical Charts</span>
+        <span className="text-900">Protagosus' Statistical Charts </span>
+        <span className="text-900">and Magical Meanderings</span>
       </div>
       <div className="text-700 mb-6">
         From gear drop rates to weapon's damage ranges. Examine all aspects of
@@ -112,6 +114,40 @@ export default function Tools() {
           <div className="text-900 text-xl mb-3 font-medium">Drops Table</div>
           <span className="text-700 line-height-3">
             Interrogate all live data which backs this site's statistics.
+          </span>
+        </div>
+
+        <div className="col-12 md:col-4 mb-4 px-5">
+          <span
+            className="p-3 shadow-2 mb-3 inline-block"
+            style={{ borderRadius: "10px" }}
+          >
+            <a href="#/damage-type-pie-chart">
+              <Image src={DamageTypePieChart} width={128} />
+            </a>
+          </span>
+          <div className="text-900 text-xl mb-3 font-medium">
+            Damage Type Pie Chart
+          </div>
+          <span className="text-700 line-height-3">
+            Drop rate for damage types.
+          </span>
+        </div>
+
+        <div className="col-12 md:col-4 mb-4 px-5">
+          <span
+            className="p-3 shadow-2 mb-3 inline-block"
+            style={{ borderRadius: "10px" }}
+          >
+            <a href="#/perk-drop-rate-radar">
+              <Image src={PerkDropRateRadar} width={128} />
+            </a>
+          </span>
+          <div className="text-900 text-xl mb-3 font-medium">
+            Perk Drop Rate Radar
+          </div>
+          <span className="text-700 line-height-3">
+            Chance of receiving specific perks given a weapon's drop.
           </span>
         </div>
       </div>

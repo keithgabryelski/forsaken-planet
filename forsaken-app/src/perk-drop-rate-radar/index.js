@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { Container } from "react-bootstrap";
 import { Chart } from "primereact/chart";
 import DungeonsOfEternityCache from "../models/DungeonsOfEternityCache";
 import {
@@ -128,13 +129,10 @@ export default function PerkDropRateRadar() {
     return null;
   }
   return (
-    <div className="card flex justify-content-center">
-      <Chart
-        type="radar"
-        data={chartData}
-        options={chartOptions}
-        className="w-full md:w-30rem"
-      />
-    </div>
+    <Container fluid>
+      <Chart type="radar" data={chartData} options={chartOptions} />
+      <h3>Notes:</h3>
+      <p>Click on the legend to hide datasets</p>
+    </Container>
   );
 }

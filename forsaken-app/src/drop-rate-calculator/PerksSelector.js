@@ -18,21 +18,18 @@ function PerksSelector({ onChange, selectables }) {
   }
 
   return (
-    <div className="card flex justify-content-center">
-      <MultiSelect
-        value={target}
-        options={source}
-        onChange={(event) => onChange(event.value)}
-        optionLabel="name"
-        placeholder="Select Perks"
-        itemTemplate={PerkItem.itemTemplate}
-        panelFooterTemplate={panelFooterTemplate}
-        className="w-full md:w-20rem"
-        display="chip"
-        selectionLimit={2}
-        showSelectAll={false}
-      />
-    </div>
+    <MultiSelect
+      value={target}
+      options={source}
+      onChange={(event) => onChange(event.value)}
+      optionLabel="name"
+      placeholder="Select Perks"
+      itemTemplate={PerkItem.itemTemplate}
+      panelFooterTemplate={panelFooterTemplate}
+      display="chip"
+      selectionLimit={2}
+      showSelectAll={false}
+    />
   );
 }
 

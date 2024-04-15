@@ -35,9 +35,9 @@ function Welcome() {
             <Button
               type="button"
               className="mr-3 p-button-raised"
-              href="/#/tools"
+              href="/#/meanderings"
             >
-              Forsaken Tools
+              Forsaken Meanderings
             </Button>
           </section>
         </div>
