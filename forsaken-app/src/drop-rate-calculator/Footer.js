@@ -14,7 +14,7 @@ function Footer({ selectables }) {
         <div key={perk.name}>
           <span className="fw-bold">{perk.name}</span>
           {" (perk): "}
-          {perkDescriptions[perk.name]}
+          {perkDescriptions[perk.name]?.description}
         </div>
       );
     });

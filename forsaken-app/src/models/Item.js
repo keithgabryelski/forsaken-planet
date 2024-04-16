@@ -15,6 +15,9 @@ export class Item {
   get selected() {
     return this.selectables.selected;
   }
+  get code() {
+    return this.name;
+  }
   get itemNames() {
     return [];
   }

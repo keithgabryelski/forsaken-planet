@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { Button, Container, Row, Col } from "react-bootstrap";
 import update from "immutability-helper";
-import GearNameSelector from "../drop-rate-calculator/GearNameSelector";
-import RaritiesSelector from "../drop-rate-calculator/RaritiesSelector";
-import DamageTypesSelector from "../drop-rate-calculator/DamageTypesSelector";
+import GearNameSelector from "./GearNameSelector";
+import DamageTypesSelector from "./DamageTypesSelector";
+import DamageSelector from "./DamageSelector";
 import PerksSelector from "../drop-rate-calculator/PerksSelector";
 import DungeonsOfEternityCache from "../models/DungeonsOfEternityCache";
 import Selectables from "../models/Selectables";
@@ -86,20 +86,7 @@ export default function Simulator() {
       </Row>
       <Row>
         <Col>
-          <RaritiesSelector
-            selectables={selectables}
-            onChange={(targets) => {
-              const targetable = Item.isTargetable(targets);
-              if (!targetable) {
-                console.info("is not rarity targetable", targets);
-                return;
-              }
-              const newSelected = update(selected, {
-                rarities: { $set: targets.map((t) => t.name) },
-              });
-              setSelected(newSelected);
-            }}
-          />
+          <DamageSelector onChange={(targets) => {}} />
         </Col>
       </Row>
       <Row>
@@ -116,6 +103,7 @@ export default function Simulator() {
                 damageTypes: { $set: targets.map((t) => t.name) },
               });
               setSelected(newSelected);
+              return true;
             }}
           />
         </Col>

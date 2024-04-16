@@ -200,7 +200,7 @@ class Scenario {
 }
 
 class Simulator {
-  constructor(damage, damageType, perks, exos) {
+  constructor() {
     this.damage = damage;
     this.damageTye = damageType;
     this.perks = perks;
@@ -224,7 +224,31 @@ class Simulator {
       const calced = this.calc(hit);
       out.push(calced);
     }
+    return out;
   }
 
-  createScenario() {}
+  createScenario(gearName, damage, damageType, perks, exoName, exoAdjustment) {
+    const gear = this.createGear(gearName, damage);
+    const weapon = this.createWeapon(gear, damageType, perks[0], perks[1]);
+    const suit = this.createSuit(exoName, exoAdjustment);
+    const scenario = new Scenario(weapon, suit);
+    return scenario;
+  }
+
+  createDamageType(name, adjustment) {
+    return new DamageType(name, adjustment);
+  }
+  createPerk(name, adjustment) {
+    return new Perk(name, adjustment);
+  }
+  createGear(name, damage) {
+    return new Gear(name, damage);
+  }
+  createWeapon(gear, damageType, perk1, perk2) {
+    return new Weapon(gear, damageType, perk1, perk2);
+  }
+  createSuit(name, adjustment) {
+    const exo = new ArmEXO(name, adjustment);
+    return new Suit(exo);
+  }
 }
