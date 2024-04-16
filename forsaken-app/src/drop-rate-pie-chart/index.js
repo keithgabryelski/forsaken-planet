@@ -4,30 +4,41 @@ import { Chart } from "primereact/chart";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import DungeonsOfEternityCache from "../models/DungeonsOfEternityCache";
 import { gearSlotPlacement } from "../models/DungeonsOfEternityCache";
+import "./overlap.css";
 
 export default function DoughnutChartDemo() {
-  const [chartData, setChartData] = useState({
+  const [chartData1, setChartData1] = useState({
     labels: [],
     datasets: [
       {
-        labels: [],
-        data: [],
-      },
-      {
-        labels: [],
-        data: [],
-      },
-      {
-        labels: [],
         data: [],
       },
     ],
   });
-  const [chartOptions, setChartOptions] = useState({});
+  const [chartData2, setChartData2] = useState({
+    labels: [],
+    datasets: [
+      {
+        data: [],
+      },
+    ],
+  });
+  const [chartData3, setChartData3] = useState({
+    labels: [],
+    datasets: [
+      {
+        data: [],
+      },
+    ],
+  });
+  const [chartOptions1, setChartOptions1] = useState({});
+  const [chartOptions2, setChartOptions2] = useState({});
+  const [chartOptions3, setChartOptions3] = useState({});
+
+  const [cache, setCache] = useState(new DungeonsOfEternityCache());
 
   const [loading, setLoading] = useState(true);
   const [failedToLoad, setFailedToLoad] = useState(false);
-  const [cache, setCache] = useState(new DungeonsOfEternityCache());
 
   useEffect(() => {
     const fetcher = async () => {
@@ -44,11 +55,11 @@ export default function DoughnutChartDemo() {
   }, []);
 
   useEffect(() => {
-    const options = {
-      responsive: true,
+    const options1 = {
+      cutout: "0%",
       plugins: {
         legend: {
-          display: true,
+          display: false,
         },
         datalabels: {
           formatter: function (value, context) {
@@ -62,16 +73,63 @@ export default function DoughnutChartDemo() {
           color: "white",
         },
         tooltip: {
-          enabled: true,
-          callbacks: {
-            label: function (context) {
-              return ` ${Math.round(context.parsed * 10000) / 100}%`;
-            },
-          },
+          enabled: false,
         },
       },
     };
-    setChartOptions(options);
+    const options2 = {
+      cutout: "60%",
+      plugins: {
+        legend: {
+          display: false,
+        },
+        datalabels: {
+          formatter: function (value, context) {
+            const { labels } = context.chart.data;
+            const index = context.dataIndex;
+            const data = context.dataset.data;
+            const label = labels[index];
+            const datum = data[index];
+            return label + ":\n" + Math.round(datum * 100) / 100 + "%";
+          },
+          color: "white",
+          font: {
+            weight: "bold",
+          },
+        },
+        tooltip: {
+          enabled: false,
+        },
+      },
+    };
+    const options3 = {
+      cutout: "80%",
+      plugins: {
+        legend: {
+          display: false,
+        },
+        datalabels: {
+          formatter: function (value, context) {
+            const { labels } = context.chart.data;
+            const index = context.dataIndex;
+            const data = context.dataset.data;
+            const label = labels[index];
+            const datum = data[index];
+            return label + ":\n" + Math.round(datum * 10000) / 100 + "%";
+          },
+          color: "white",
+          font: {
+            weight: "bold",
+          },
+        },
+        tooltip: {
+          enabled: false,
+        },
+      },
+    };
+    setChartOptions1(options1);
+    setChartOptions2(options2);
+    setChartOptions3(options3);
 
     const gearSlotLabels = [
       ...[...Object.values(gearSlotPlacement)]
@@ -100,6 +158,57 @@ export default function DoughnutChartDemo() {
       },
     );
     const gearByBackThenHip = entries.map((e) => e[0]);
+
+    const documentStyle = getComputedStyle(document.documentElement);
+    const data1 = {
+      labels: gearSlotLabels,
+      datasets: [
+        {
+          data: gearSlotValues,
+
+          backgroundColor: [
+            documentStyle.getPropertyValue("--red-800"),
+            documentStyle.getPropertyValue("--blue-800"),
+          ],
+          hoverBackgroundColor: [
+            documentStyle.getPropertyValue("--red-600"),
+            documentStyle.getPropertyValue("--blue-600"),
+          ],
+        },
+      ],
+    };
+    const gearData2 = gearByBackThenHip.map((g) => {
+      return cache.statistics.byGroup?.get(g) * 100;
+    });
+    const data2 = {
+      labels: gearByBackThenHip,
+      datasets: [
+        {
+          data: gearData2,
+          backgroundColor: [
+            documentStyle.getPropertyValue("--red-800"),
+            documentStyle.getPropertyValue("--red-600"),
+            documentStyle.getPropertyValue("--red-400"),
+            documentStyle.getPropertyValue("--red-200"),
+            documentStyle.getPropertyValue("--blue-800"),
+            documentStyle.getPropertyValue("--blue-600"),
+            documentStyle.getPropertyValue("--blue-400"),
+            documentStyle.getPropertyValue("--blue-200"),
+          ],
+          hoverBackgroundColor: [
+            documentStyle.getPropertyValue("--red-800"),
+            documentStyle.getPropertyValue("--red-600"),
+            documentStyle.getPropertyValue("--red-400"),
+            documentStyle.getPropertyValue("--red-200"),
+            documentStyle.getPropertyValue("--blue-800"),
+            documentStyle.getPropertyValue("--blue-600"),
+            documentStyle.getPropertyValue("--blue-400"),
+            documentStyle.getPropertyValue("--blue-200"),
+          ],
+        },
+      ],
+    };
+
     const gear3DataLabels = gearByBackThenHip
       .map((groupName) => {
         const gearDrops = cache.indexes.byGroup.get(groupName) ?? [];
@@ -107,16 +216,10 @@ export default function DoughnutChartDemo() {
         return names;
       })
       .flat();
-    const gearData2 = gearByBackThenHip.map((g) => {
-      return cache.statistics.byGroup?.get(g);
-    });
-
-    const documentStyle = getComputedStyle(document.documentElement);
-    const data = {
-      labels: [...gear3DataLabels, ...gearByBackThenHip, ...gearSlotLabels],
+    const data3 = {
+      labels: gear3DataLabels,
       datasets: [
         {
-          labels: gear3DataLabels,
           data: gear3DataLabels.map((l) => cache.statistics.byName.get(l)),
           backgroundColor: [
             documentStyle.getPropertyValue("--red-900"),
@@ -157,34 +260,59 @@ export default function DoughnutChartDemo() {
             documentStyle.getPropertyValue("--purple-700"),
             documentStyle.getPropertyValue("--purple-600"),
           ],
-        },
-        {
-          labels: gearByBackThenHip,
-          data: gearData2,
-          backgroundColor: [
+          hoverBackgroundColor: [
+            documentStyle.getPropertyValue("--red-900"),
             documentStyle.getPropertyValue("--red-800"),
+            documentStyle.getPropertyValue("--red-700"),
             documentStyle.getPropertyValue("--red-600"),
+            documentStyle.getPropertyValue("--red-500"),
             documentStyle.getPropertyValue("--red-400"),
+            documentStyle.getPropertyValue("--red-300"),
             documentStyle.getPropertyValue("--red-200"),
+            documentStyle.getPropertyValue("--yellow-200"),
+            documentStyle.getPropertyValue("--yellow-300"),
+            documentStyle.getPropertyValue("--yellow-400"),
+            documentStyle.getPropertyValue("--yellow-500"),
+            documentStyle.getPropertyValue("--yellow-600"),
+            documentStyle.getPropertyValue("--yellow-700"),
+            documentStyle.getPropertyValue("--yellow-800"),
+            documentStyle.getPropertyValue("--yellow-900"),
+            documentStyle.getPropertyValue("--orange-900"),
+            documentStyle.getPropertyValue("--orange-800"),
+            documentStyle.getPropertyValue("--orange-700"),
+            documentStyle.getPropertyValue("--orange-600"),
+
+            documentStyle.getPropertyValue("--blue-900"),
             documentStyle.getPropertyValue("--blue-800"),
+            documentStyle.getPropertyValue("--blue-700"),
             documentStyle.getPropertyValue("--blue-600"),
+            documentStyle.getPropertyValue("--blue-500"),
             documentStyle.getPropertyValue("--blue-400"),
+            documentStyle.getPropertyValue("--blue-300"),
             documentStyle.getPropertyValue("--blue-200"),
-          ],
-        },
-        {
-          labels: gearSlotLabels,
-          data: gearSlotValues,
-          backgroundColor: [
-            documentStyle.getPropertyValue("--red-800"),
-            documentStyle.getPropertyValue("--blue-800"),
+            documentStyle.getPropertyValue("--green-200"),
+            documentStyle.getPropertyValue("--green-300"),
+            documentStyle.getPropertyValue("--green-400"),
+            documentStyle.getPropertyValue("--green-500"),
+            documentStyle.getPropertyValue("--green-600"),
+            documentStyle.getPropertyValue("--green-700"),
+            documentStyle.getPropertyValue("--green-800"),
+            documentStyle.getPropertyValue("--green-900"),
+            documentStyle.getPropertyValue("--purple-900"),
+            documentStyle.getPropertyValue("--purple-800"),
+            documentStyle.getPropertyValue("--purple-700"),
+            documentStyle.getPropertyValue("--purple-600"),
           ],
         },
       ],
     };
 
-    setChartData(data);
-    setChartOptions(options);
+    setChartData1(data1);
+    setChartOptions1(options1);
+    setChartData2(data2);
+    setChartOptions2(options2);
+    setChartData3(data3);
+    setChartOptions3(options3);
   }, [cache]);
 
   if (failedToLoad) {
@@ -195,15 +323,28 @@ export default function DoughnutChartDemo() {
     return null;
   }
   return (
-    <Container fluid>
+    <Container fluid className="chartcontainer">
       <Chart
         plugins={[ChartDataLabels]}
-        type="pie"
-        data={chartData}
-        options={chartOptions}
+        className="topchart"
+        type="doughnut"
+        data={chartData1}
+        options={chartOptions1}
       />
-      <h2>Notes:</h2>
-      <p>click on items in legend to hide them</p>
+      <Chart
+        plugins={[ChartDataLabels]}
+        type="doughnut"
+        data={chartData2}
+        options={chartOptions2}
+        className="middlechart"
+      />
+      <Chart
+        plugins={[ChartDataLabels]}
+        type="doughnut"
+        data={chartData3}
+        options={chartOptions3}
+        className="bottomchart"
+      />
     </Container>
   );
 }
