@@ -1,0 +1,18 @@
+.container {
+  display: flex;
+  flex-direction: row-reverse;
+}
+.image {
+  flex: 1 0 0%;
+  text-align: right;/* and here*/
+}
+.img {
+  vertical-align: top;/* here */
+  max-width: 50%;
+  max-height: 300px;
+}
+.text {
+  flex: 2 0 0%;
+  /* and eventually */
+  margin: auto 0;
+}
