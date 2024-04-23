@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { PrimeReactProvider } from "primereact/api";
-import Header from "./Header";
-import Footer from "./Footer";
+import Header from "./header";
+import Footer from "./footer";
 import "primereact/resources/themes/lara-dark-blue/theme.css";
 import "primeicons/primeicons.css";
 import "primeflex/themes/primeone-dark.css";
