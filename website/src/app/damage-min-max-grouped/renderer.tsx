@@ -4,8 +4,9 @@ import { Chart } from "primereact/chart";
 import { Dropdown } from "primereact/dropdown";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import DungeonsOfEternityCache from "@/models/DungeonsOfEternityCache";
+import { type DOEReport } from "@/models/DungeonsOfEternityCache";
 
-export default function Renderer({ reports }) {
+export default function Renderer({ reports }: { reports: DOEReport[] }) {
   const [chartDataSource, setChartDataSource] = useState("legendary");
   const [chartData, setChartData] = useState({});
   const [chartOptions, setChartOptions] = useState({});
@@ -47,7 +48,7 @@ export default function Renderer({ reports }) {
       for (const drop of drops) {
         const { Rarity, Damage, Name, Group } = drop;
         if (Rarity === chartDataSource && Damage) {
-          let minmax = damages[Group][Name];
+          const minmax = damages[Group][Name];
           if (minmax == null) {
             console.warn("!!!no data for named", groupName, Name);
           } else if (minmax[0] == null) {
@@ -82,7 +83,7 @@ export default function Renderer({ reports }) {
     const datas = [];
     for (let i = 0; i < 6; ++i) {
       let label = "unknown";
-      let tooltip = [];
+      const tooltip = [];
       const data = labels.map((groupName, ii) => {
         label = groupName;
         const datasetEntry = datasetEntries[groupName];
@@ -141,7 +142,7 @@ export default function Renderer({ reports }) {
         datalabels: {
           weight: "bold",
           color: "white",
-          formatter: function (value, context) {
+          formatter: function (value) {
             if (value.length === 0 || value[0] === 0) {
               return "";
             }

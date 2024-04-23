@@ -1,5 +1,4 @@
 import { Image } from "primereact/image";
-import { Button } from "primereact/button";
 import Link from "next/link";
 import styles from "./hero.module.css";
 import hero from "@/assets/images/forsaken-planet-hero.jpg";
@@ -61,6 +60,15 @@ export default function Welcome() {
                   href="/meanderings"
                 >
                   &nbsp;Forsaken Meanderings
+                </Link>
+              </div>
+              <div className="flex align-items-center justify-content-center h-4rem bg-primary font-bold border-round m-2">
+                <Link
+                  type="Primary"
+                  className="mr-3 p-button pi pi-code no-underline"
+                  href="https://forsaken-planet.wordpress.com/"
+                >
+                  &nbsp;Forsaken Blog
                 </Link>
               </div>
             </div>

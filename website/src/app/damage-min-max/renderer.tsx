@@ -126,7 +126,7 @@ export default function DamageMINMAX({ reports }) {
         datalabels: {
           weight: "bold",
           color: "white",
-          formatter: function (value, context) {
+          formatter: function (value) {
             return `${value[1]}\n${value[0]}`;
           },
         },

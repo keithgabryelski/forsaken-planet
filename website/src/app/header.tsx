@@ -7,11 +7,17 @@ export default function Header() {
       label: "Home",
       icon: "pi pi-home",
       url: "/",
+      prefetch: false,
     },
     {
       label: "Wiki",
       icon: "pi pi-book",
       url: "/mediawiki",
+    },
+    {
+      label: "Blog",
+      icon: "pi pi-link",
+      url: "https://forsaken-planet.wordpress.com/",
     },
     {
       label: "Meanderings",
@@ -20,6 +26,8 @@ export default function Header() {
         {
           label: "Mystical Mumblings",
           icon: "pi pi-ellipsis-h",
+          url: "/meanderings",
+          prefetch: false,
         },
         {
           label: "Drop Rates",
@@ -72,6 +80,30 @@ export default function Header() {
           label: "Damage Type Pie Chart",
           icon: "pi pi-chart-pie",
           url: "/damage-type-pie-chart",
+        },
+      ],
+    },
+    {
+      label: "What we're reading..",
+      icon: "pi pi-book",
+      items: [
+        {
+          label: "Statistics GitHub Repository (R Code)",
+          icon: "pi pi-github",
+          url: "https://github.com/keithgabryelski/dungeons-of-eternity-statistics",
+          prefetch: false,
+        },
+        {
+          label: "Original data (google sheets)",
+          icon: "pi pi-table",
+          url: "http://bit.ly/dungeons-of-eternity-statistics",
+          prefetch: false,
+        },
+        {
+          label: "This Site's GitHub Repository",
+          icon: "pi pi-github",
+          url: "https://github.com/keithgabryelski/forsaken-planet",
+          prefetch: false,
         },
       ],
     },

@@ -12,13 +12,13 @@ export default function Meanderings() {
   return (
     <div className="surface-0 text-center">
       <div className="mb-3 font-bold text-3xl">
-        <span className="text-900">Protagosus' Statistical Charts </span>
+        <span className="text-900">Protagosus&apos; Statistical Charts </span>
         <span className="text-900">and Magical Meanderings</span>
       </div>
       <div className="text-700 mb-6">
-        From gear drop rates to weapon's damage ranges. Examine all aspects of
-        the chest drops using live tools. Or, download a CSV of all the data we
-        use and do your own calcuations
+        From gear drop rates to weapon&apos;s damage ranges. Examine all aspects
+        of the chest drops using live tools. Or, download a CSV of all the data
+        we use and do your own calcuations
       </div>
       <div className="grid">
         <div className="col-12 md:col-4 mb-4 px-5">
@@ -52,10 +52,10 @@ export default function Meanderings() {
             </a>
           </span>
           <div className="text-900 text-xl mb-3 font-medium">
-            Weapon's Damage MIN/MAX
+            Weapon&apos;s Damage MIN/MAX
           </div>
           <span className="text-700 line-height-3">
-            Examine ranges of damage by weapon's group and name.
+            Examine ranges of damage by weapon&apos;s group and name.
           </span>
         </div>
         <div className="col-12 md:col-4 mb-4 px-5">
@@ -72,10 +72,10 @@ export default function Meanderings() {
             </a>
           </span>
           <div className="text-900 text-xl mb-3 font-medium">
-            Weapon's Damage MIN/MAX Grouped
+            Weapon&apos;s Damage MIN/MAX Grouped
           </div>
           <span className="text-700 line-height-3">
-            Examine ranges of damage by weapon's group.
+            Examine ranges of damage by weapon&apos;s group.
           </span>
         </div>
         <div className="col-12 md:col-4 mb-4 px-5">
@@ -95,7 +95,7 @@ export default function Meanderings() {
             Drop Rate Pie Chart
           </div>
           <span className="text-700 line-height-3">
-            Weapon's drop rate by group and name.
+            Weapon&apos;s drop rate by group and name.
           </span>
         </div>
         <div className="col-12 md:col-4 mb-4 px-5">
@@ -129,7 +129,7 @@ export default function Meanderings() {
           </span>
           <div className="text-900 text-xl mb-3 font-medium">Drops Table</div>
           <span className="text-700 line-height-3">
-            Interrogate all live data which backs this site's statistics.
+            Interrogate all live data which backs this site&apos;s statistics.
           </span>
         </div>
 
@@ -171,7 +171,7 @@ export default function Meanderings() {
             Perk Drop Rate Radar
           </div>
           <span className="text-700 line-height-3">
-            Chance of receiving specific perks given a weapon's drop.
+            Chance of receiving specific perks given a weapon&apos;s drop.
           </span>
         </div>
       </div>

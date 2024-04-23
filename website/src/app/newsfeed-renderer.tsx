@@ -1,15 +1,22 @@
+import Image from "next/image";
 import Link from "next/link";
 import styles from "./post-snippet.module.css";
 
 export default function Renderer({ items }) {
   let image;
   const components = items.map((item) => {
-    const src = /\<img .* src=[\\]*"([^"\\]*)[\\]*"/m.exec(item.html);
+    const src = /<img .* src=[\\]*"([^"\\]*)[\\]*"/m.exec(item.html);
     if (src && src[1]) {
       image = (
         <div className={styles.container}>
           <div className={styles.image}>
-            <img src={src[1]} className={styles.img} />
+            <Image
+              width="300"
+              height="300"
+              src={src[1]}
+              className={styles.img}
+              alt="leading blog image"
+            />
           </div>
           <div className={styles.text}>{item.snippetHTML}</div>
         </div>

@@ -248,10 +248,27 @@ export const perkDescriptions = {
 };
 
 export const damageTypeDescriptions = {
-  ice: "chance to freeze and cause embrittlement: frozen targets receive extra damage",
-  fire: "chance to explode for 200% damage",
-  poison: "chance to stun target for a few seconds",
-  physical: "no additional effect",
+  ice: {
+    description:
+      "chance to freeze and cause embrittlement: frozen targets receive extra damage",
+    chance: "",
+    multiplier: "",
+  },
+  fire: {
+    description: "chance to explode for 200% damage",
+    chance: 0.3,
+    multiplier: 2,
+  },
+  poison: {
+    description: "chance to stun target for a few seconds",
+    chance: "",
+    multiplier: "",
+  },
+  physical: {
+    description: "no additional effect",
+    chance: "",
+    multiplier: "",
+  },
 };
 
 export const exoDescriptions = {

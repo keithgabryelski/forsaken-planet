@@ -57,7 +57,7 @@ export default function Renderer({ reports }) {
           label,
           data: [...dataMap.entries()]
             .sort((a, b) => b[0] - a[0])
-            .map(([a, b]) => b),
+            .map(([_a, b]) => b),
         };
       }
     });
@@ -73,7 +73,7 @@ export default function Renderer({ reports }) {
           position: "bottom",
           ticks: {
             // Include a dollar sign in the ticks
-            callback: function (value, index, ticks) {
+            callback: function (_value, index, _ticks) {
               if (index === 0) {
                 return "";
               }

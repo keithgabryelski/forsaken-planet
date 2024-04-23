@@ -97,7 +97,7 @@ export class Item {
   }
 
   static footerTemplateFunc(length, percent, humanText) {
-    return () => {
+    return function template() {
       const num = length === 0 ? "no" : length;
       const items = "item" + (length !== 1 ? "s" : "");
       return (

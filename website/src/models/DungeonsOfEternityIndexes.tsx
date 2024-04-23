@@ -1,5 +1,17 @@
+import { type DOEReport } from "./DungeonsOfEternityCache";
+
 export default class DungeonsOfEternityIndexes {
-  constructor(drops = []) {
+  byGroup: Map<string, DOEReport>;
+  byCategory: Map<string, DOEReport>;
+  byName: Map<string, DOEReport>;
+  byIcon: Map<string, DOEReport>;
+  byRarity: Map<string, DOEReport>;
+  byDamageType: Map<string, DOEReport>;
+  byPerk: Map<string, DOEReport>;
+  byCost: Map<string, DOEReport>;
+  byDamage: Map<string, DOEReport>;
+
+  constructor(drops: DOEReport[] = []) {
     this.byGroup = new Map();
     this.byCategory = new Map();
     this.byName = new Map();

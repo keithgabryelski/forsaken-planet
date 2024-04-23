@@ -31,7 +31,7 @@ export default function DamageTypePieChart({ reports }) {
           display: true,
         },
         datalabels: {
-          formatter: function (value, context) {
+          formatter: function (_value, context) {
             const { labels } = context.chart.data;
             const index = context.dataIndex;
             const data = context.dataset.data;
@@ -55,7 +55,7 @@ export default function DamageTypePieChart({ reports }) {
 
     const labels = ["physical", "poison", "fire", "ice"];
     const collatedDataTypes = cache.indexes.byDamageType.entries().reduce(
-      (accumulator, [name, drops]) => {
+      (accumulator, [_name, drops]) => {
         return drops.reduce((acc, drop) => {
           if (["shields", "staves"].includes(drop.Group)) {
             return acc;

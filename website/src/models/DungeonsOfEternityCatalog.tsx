@@ -1,5 +1,15 @@
+import type DungeonsOfEternityIndexes from "./DungeonsOfEternityIndexes";
+
 export default class DungeonsOfEternityCatalog {
-  constructor(indexes) {
+  groupNames: Set<string>;
+  categoryNames: Set<string>;
+  gearNames: Set<string>;
+  iconNames: Set<string>;
+  rarities: Set<string>;
+  damageTypes: Set<string>;
+  perks: Set<string>;
+
+  constructor(indexes: DungeonsOfEternityIndexes) {
     this.groupNames = new Set([...indexes.byGroup.keys()]);
     this.categoryNames = new Set([...indexes.byCategory.keys()]);
     this.gearNames = new Set([...indexes.byName.keys()]);

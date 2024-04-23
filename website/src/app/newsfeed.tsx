@@ -1,4 +1,3 @@
-import Link from "next/link";
 import Parser from "rss-parser";
 import NewsfeedRenderer from "./newsfeed-renderer";
 

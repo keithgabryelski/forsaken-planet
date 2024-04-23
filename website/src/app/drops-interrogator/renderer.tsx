@@ -7,7 +7,7 @@ import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 
-export default function Renderer({ reports }) {
+export default function Renderer({ reports }: { reports: DOEReport[] }) {
   const [cache, setCache] = useState(new DungeonsOfEternityCache());
   const dt = useRef(null);
   const [filters, setFilters] = useState({
@@ -32,7 +32,7 @@ export default function Renderer({ reports }) {
 
   const onGlobalFilterChange = (e) => {
     const value = e.target.value;
-    let _filters = { ...filters };
+    const _filters = { ...filters };
 
     _filters["global"].value = value;
 

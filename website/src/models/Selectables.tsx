@@ -1,6 +1,10 @@
 import { GearItem, RarityItem, DamageTypeItem, PerkItem } from "./Item";
+import type DungeonsOfEternityCache from "./DungeonsOfEternityCache";
 
 class Selectables {
+  cache: DungeonsOfEternityCache;
+  selected: object;
+
   constructor(cache, selected) {
     this.cache = cache;
     this.selected = selected;
@@ -15,7 +19,9 @@ class Selectables {
       return [...this.cache.catalog.groupNames].map(
         (g) => new GearItem(g, this),
       );
-    } catch (e) {}
+    } catch (_e) {
+      // nothing
+    }
     return [];
   }
 
@@ -24,7 +30,9 @@ class Selectables {
       return [...this.cache.catalog.rarities].map(
         (g) => new RarityItem(g, this),
       );
-    } catch (e) {}
+    } catch (_e) {
+      // nothing
+    }
     return [];
   }
 
@@ -33,21 +41,27 @@ class Selectables {
       return [...this.cache.catalog.damageTypes].map(
         (g) => new DamageTypeItem(g, this),
       );
-    } catch (e) {}
+    } catch (_e) {
+      // nothing
+    }
     return [];
   }
 
   perks() {
     try {
       return [...this.cache.catalog.perks].map((g) => new PerkItem(g, this));
-    } catch (e) {}
+    } catch (_e) {
+      // nothing
+    }
     return [];
   }
 
   selectedGear() {
     try {
       return this.gear().filter((g) => g.isTarget);
-    } catch (e) {}
+    } catch (_e) {
+      // nothing
+    }
     return [];
   }
 
