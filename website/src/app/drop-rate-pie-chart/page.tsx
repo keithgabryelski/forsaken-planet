@@ -3,6 +3,8 @@ import DungeonsOfEternityCache from "@/models/DungeonsOfEternityCache";
 import { gearSlotPlacement } from "@/models/DungeonsOfEternityCache";
 import Renderer from "./renderer.tsx";
 
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
   title: "Drop Rate Pie Chart",
   description:
