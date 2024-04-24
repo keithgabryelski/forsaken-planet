@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: "reports server",
+      name: "reports",
       script: "server.mjs",
       watch: ".",
     },
