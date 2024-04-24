@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { PrimeReactProvider } from "primereact/api";
 import Header from "./header";
 import Footer from "./footer";
@@ -40,6 +41,7 @@ export default function RootLayout({
           <Footer />
         </PrimeReactProvider>
       </body>
+      <GoogleAnalytics gaId="G-JVFLHEQSDV" />
     </html>
   );
 }
