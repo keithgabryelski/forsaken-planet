@@ -12,6 +12,7 @@
     "@next/third-parties": "^14.2.2",
     "chart.js": "^4.4.2",
     "chartjs-plugin-datalabels": "^2.2.0",
+    "chartjs-plugin-trendline": "^2.1.0",
     "immutability-helper": "^3.1.1",
     "next": "^14.2.2",
     "pm2": "^5.3.1",

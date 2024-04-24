@@ -8,7 +8,8 @@ import {
 //import DungeonsOfEternityCache from "@/models/DungeonsOfEternityCache";
 import { type Selectables } from "./SimulatorSelectables";
 
-const NUM_ATTACKS_PER_DUNGEON = 50;
+const NUM_ATTACKS_TO_NORMALIZE = 1000;
+const NUM_ATTACKS_PER_DUNGEON = 100;
 
 // what's his kname's shuffle
 function shuffle(array: number[]): number[] {
@@ -416,7 +417,7 @@ class Scenario {
 export class Simulator {
   calc(hit: Hit): number[] {
     const out: number[] = [];
-    for (let n = 0; n < NUM_ATTACKS_PER_DUNGEON; ++n) {
+    for (let n = 0; n < NUM_ATTACKS_TO_NORMALIZE; ++n) {
       const result = hit.calculateHitResult(hit.enemy, hit.attackStyle);
       const damage = result.totalDamageDone;
       out.push(damage);
@@ -427,7 +428,7 @@ export class Simulator {
   simulate(scenario: Scenario): number[][] {
     const hit: Hit = scenario.calculateHit();
     const out: number[][] = [];
-    for (let n = 0; n < 100; ++n) {
+    for (let n = 0; n < NUM_ATTACKS_PER_DUNGEON; ++n) {
       const calced = this.calc(hit);
       out.push(calced);
     }

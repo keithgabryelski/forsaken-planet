@@ -1,17 +1,18 @@
 "use client";
+import { useRef, useState, useEffect } from "react";
 import { InputText } from "primereact/inputtext";
 import { Chart } from "primereact/chart";
 import { Dropdown } from "primereact/dropdown";
 import { Slider } from "primereact/slider";
 import { Toast } from "primereact/toast";
 import { Button } from "primereact/button";
-import { useRef, useState, useEffect } from "react";
+import chartTrendline from "chartjs-plugin-trendline";
+import update from "immutability-helper";
 import DungeonsOfEternityCache from "@/models/DungeonsOfEternityCache";
 import Opponents from "@/models/Opponents";
 import AttackStyles from "@/models/AttackStyles";
 import { Simulator } from "./Simulator";
 import SimulatorSelectables from "./SimulatorSelectables";
-import update from "immutability-helper";
 
 export default function Renderer({ reports }) {
   const toast = useRef(null);
@@ -30,7 +31,7 @@ export default function Renderer({ reports }) {
   const [selectables, setSelectables] = useState(
     new SimulatorSelectables(cache),
   );
-  const [damageTypeOptions, setDamageTypeOptions] = useState([]);
+  const [damageTypeOptions, setDamageTypeOptions] = useState(true);
 
   useEffect(() => {
     const newCache = new DungeonsOfEternityCache(reports);
@@ -43,12 +44,8 @@ export default function Renderer({ reports }) {
     const damageTypesExcluded = ["shields", "staves"].includes(
       selected.gearName,
     );
-    if (damageTypesExcluded) {
-      setDamageTypeOptions([]);
-    } else {
-      setDamageTypeOptions(selectables.damageTypeNamesAsOptions);
-    }
-  }, [selected.gearName, selectables.damageTypeNamesAsOptions]);
+    setDamageTypeOptions(!damageTypesExcluded);
+  }, [selected.gearName]);
 
   const onChange = (target: string, name: string) => {
     const newSelected = update(selected, {
@@ -90,6 +87,12 @@ export default function Renderer({ reports }) {
             fill: false,
             tension: 0.4,
             borderColor: documentStyle.getPropertyValue("--blue-500"),
+            trendlineLinear: {
+              colorMin: "red",
+              colorMax: "red",
+              lineStyle: "solid",
+              width: 2,
+            },
           },
         ],
       };
@@ -122,7 +125,14 @@ export default function Renderer({ reports }) {
           },
         },
       };
-      setSimulation(<Chart type="line" data={data} options={options} />);
+      setSimulation(
+        <Chart
+          type="line"
+          data={data}
+          options={options}
+          plugins={[chartTrendline]}
+        />,
+      );
     } catch (e) {
       toast.current.show({
         severity: "error",
@@ -191,7 +201,9 @@ export default function Renderer({ reports }) {
                 code: selected.damageTypeName,
               }}
               onChange={(e) => onChange(e.value.code, "damageTypeName")}
-              options={damageTypeOptions}
+              options={
+                damageTypeOptions ? selectables.damageTypeNamesAsOptions : []
+              }
               optionLabel="name"
               placeholder="Select Damage Type"
             />
