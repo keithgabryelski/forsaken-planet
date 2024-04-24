@@ -79,7 +79,7 @@ function fetchAndParseAllData() {
 
 const app = express();
 app.use(cors());
-const port = 3001;
+const port = 3100;
 let server = null;
 try {
     const options = {

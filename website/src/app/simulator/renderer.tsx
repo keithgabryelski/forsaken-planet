@@ -31,7 +31,6 @@ export default function Renderer({ reports }) {
     new SimulatorSelectables(cache),
   );
   const [damageTypeOptions, setDamageTypeOptions] = useState([]);
-  const allDamageTypeOptions = selectables.damageTypeNamesAsOptions;
 
   useEffect(() => {
     const newCache = new DungeonsOfEternityCache(reports);
@@ -47,9 +46,9 @@ export default function Renderer({ reports }) {
     if (damageTypesExcluded) {
       setDamageTypeOptions([]);
     } else {
-      setDamageTypeOptions(allDamageTypeOptions);
+      setDamageTypeOptions(selectables.damageTypeNamesAsOptions);
     }
-  }, [selected.gearName, allDamageTypeOptions]);
+  }, [selected.gearName, selectables.damageTypeNamesAsOptions]);
 
   const onChange = (target: string, name: string) => {
     const newSelected = update(selected, {

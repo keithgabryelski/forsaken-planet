@@ -20,6 +20,11 @@ export default function Header() {
       url: "https://forsaken-planet.wordpress.com/",
     },
     {
+      label: "Attack Simulator",
+      icon: "pi pi-bullseye",
+      url: "/simulator",
+    },
+    {
       label: "Meanderings",
       icon: "pi pi-code",
       items: [

@@ -40,13 +40,16 @@ export default class DungeonsOfEternityCache {
   }
 
   static async FetchReports(): Promise<DOEReport[]> {
-    const url = new URL("http://localhost");
-    url.port = 3001;
-    url.pathname = "/reports";
-    const fetched = await fetch(url, {
-      method: "GET",
-      next: { revalidate: 3600 },
-    });
-    return fetched.json();
+    try {
+      const url = new URL(process.env.FORSAKEN_REPORTS_URL);
+      const fetched = await fetch(url, {
+        method: "GET",
+        next: { revalidate: 3600 },
+      });
+      return await fetched.json();
+    } catch (e) {
+      console.error("fetch failed", e);
+      return [];
+    }
   }
 }
