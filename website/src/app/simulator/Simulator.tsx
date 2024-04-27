@@ -5,98 +5,89 @@ import {
   perkDescriptions,
   exoDescriptions,
 } from "@/models/DungeonsOfEternityPerkMatrices";
-//import DungeonsOfEternityCache from "@/models/DungeonsOfEternityCache";
 import { type Selectables } from "./SimulatorSelectables";
 
 const NUM_ATTACKS_TO_NORMALIZE = 1000;
 const NUM_ATTACKS_PER_DUNGEON = 100;
 
-// what's his kname's shuffle
-function shuffle(array: number[]): number[] {
-  let currentIndex = array.length;
-
-  // While there remain elements to shuffle...
-  while (currentIndex !== 0) {
-    // Pick a remaining element...
-    const randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex--;
-
-    // And swap it with the current element.
-    [array[currentIndex], array[randomIndex]] = [
-      array[randomIndex],
-      array[currentIndex],
-    ];
-  }
-}
-
 class Actor {
   name: string;
+  description: string;
 
-  constructor(name) {
+  constructor(name: string, description: string = null) {
     this.name = name;
-  }
-
-  get title(): string {
-    return this.name;
+    this.description = description;
   }
 }
 
 class Adjustment extends Actor {
   chance: number;
   multiplier: number;
+  limitsAffectTo: string;
 
-  constructor(name: string, chance: number, multiplier: number) {
-    super(name);
+  constructor(
+    name: string,
+    description: string,
+    chance: number,
+    multiplier: number,
+    limitsAffectTo: string,
+  ) {
+    super(name, description);
     this.chance = chance;
     this.multiplier = multiplier;
+    this.limitsAffectTo = limitsAffectTo;
   }
 
-  get title() {
-    return this.name + this.stats();
-  }
-
-  doesAdjustFor(_enemy: Enemy, _attackStyle: AttackStyle): boolean {
-    return true;
-  }
-
-  get stats() {
-    if (this.chance == 0) {
-      return "";
+  isValidFor(enemy: Enemy, attackStyle: AttackStyle): boolean {
+    if (this.limitsAffectTo == null) {
+      // no limiting parameter
+      return true;
     }
-    if (this.chance == 1) {
-      return "#" + this.multiplier;
+    const limitsToThisEnemy = enemy.identifiesAsEnemyType(this.limitsAffectTo);
+    if (limitsToThisEnemy) {
+      return true;
     }
-    return "#" + this.multiplier + "@" + this.chance;
+    const limitsToThisAttackStyle = attackStyle.affectedByExoName(
+      this.limitsAffectTo,
+    );
+    if (limitsToThisAttackStyle) {
+      return true;
+    }
+    return false;
   }
 }
 
 class Enemy extends Actor {
   enemyTypes: string[];
 
-  constructor(name: string, enemyTypes: string[]) {
-    super(name);
+  constructor(name: string, description: string, enemyTypes: string[]) {
+    super(name, description);
     this.enemyTypes = enemyTypes;
   }
 
-  // doesAdjustFor(enemy: Enemy, attackStyle: AttackStyle): boolean {
-  //  return true;
-  // }
+  identifiesAsEnemyType(enemyType: string): boolean {
+    return this.enemyTypes.some((et: string) => et === enemyType);
+  }
 
   static Factory(name: string): Enemy {
     const enemyTypes = Opponents[name];
     if (!enemyTypes) {
       throw new Error(`Invalid enemy name: ${name}`);
     }
-    return new Enemy(name, enemyTypes);
+    return new Enemy(name, name, enemyTypes);
   }
 }
 
 class AttackStyle extends Actor {
   exoNames: string[];
 
-  constructor(name: string, exoNames: string[]) {
-    super(name);
+  constructor(name: string, description: string, exoNames: string[]) {
+    super(name, description);
     this.exoNames = exoNames;
+  }
+
+  affectedByExoName(exoName: string): boolean {
+    return this.exoNames.some((en: string) => en === exoName);
   }
 
   static Factory(name: string): Enemy {
@@ -104,19 +95,11 @@ class AttackStyle extends Actor {
     if (!exoNames) {
       throw new Error(`Invalid attackStyle name: ${name}`);
     }
-    return new AttackStyle(name, exoNames);
+    return new AttackStyle(name, name, exoNames);
   }
 }
 
 class DamageType extends Adjustment {
-  get title() {
-    return "++" + super.title();
-  }
-
-  doesAdjustFor(_enemy: Enemy, _attackStyle: AttackStyle): boolean {
-    return true;
-  }
-
   static Factory(name: string): DamageType {
     const damageType = damageTypeDescriptions[name];
     if (!damageType) {
@@ -124,21 +107,15 @@ class DamageType extends Adjustment {
     }
     return new DamageType(
       name,
+      damageType.description,
       damageType.chance || 0.0,
       damageType.multiplier || 1.0,
+      damageType.limitsAffectsTo,
     );
   }
 }
 
 class Perk extends Adjustment {
-  get title() {
-    return "+" + super.title();
-  }
-
-  // doesAdjustFor(_enemy: Enemy, _attackStyle: AttackStyle): boolean {
-  //  return true;
-  // }
-
   static Factory(name: string): DamageType {
     if (!name) {
       return null;
@@ -149,8 +126,10 @@ class Perk extends Adjustment {
     }
     return new Perk(
       name,
+      perkDescription.description,
       perkDescription["max chance"] || 0.0,
       perkDescription["max multiplier"] || 1.0,
+      perkDescription.limitsAffectTo,
     );
   }
 }
@@ -166,23 +145,20 @@ class Exo extends Adjustment {
     }
     return new Exo(
       name,
+      exoDescription.description,
       exoDescription["max chance"] || 0.0,
       exoDescription["max multiplier"] || 1.0,
+      exoDescription.limitsAffectTo /* currently not set */,
     );
   }
 }
 
-class Gear {
-  name: string;
+class Gear extends Actor {
   damage: number;
 
   constructor(name: string, damage: number) {
-    this.name = name;
+    super(name, name);
     this.damage = damage;
-  }
-
-  get title() {
-    return this.name + "#" + this.damage;
   }
 
   static Factory(name: string, damage: number): Gear {
@@ -208,17 +184,6 @@ class Weapon {
 
   get damage(): number {
     return this.gear.damage;
-  }
-
-  get title() {
-    return [
-      this.gear.title(),
-      this.damageType.title(),
-      this.perk1?.title(),
-      this.perk2?.title(),
-    ]
-      .filter(Boolean)
-      .join(" ");
   }
 
   getAdjustments(): Adjustment[] {
@@ -253,10 +218,6 @@ class Suit {
     this.chestEXO = chestEXO;
   }
 
-  get title() {
-    return this.armEXO.title();
-  }
-
   getAdjustments(): Adjustment[] {
     return [this.armEXO, this.mindEXO, this.legEXO, this.chestEXO].filter(
       Boolean,
@@ -285,18 +246,16 @@ class HitResult {
   }
 
   get damageAdjustmentScale(): number {
-    // XXX should this pull non-critical adjustments first and
-    // XXX add those together, then add criticals together?
     return this.procs.reduce((accumulator, proc) => {
       if (proc.didOccur) {
-        return accumulator * proc.damageScale;
+        return accumulator + this.baseDamage * proc.damageScale;
       }
       return accumulator;
-    }, 1.0);
+    }, 0.0);
   }
 
   get totalDamageDone(): number {
-    return this.baseDamage * this.damageAdjustmentScale;
+    return this.baseDamage + this.damageAdjustmentScale;
   }
 }
 
@@ -319,14 +278,14 @@ class ProgrammedRandomOccurrence {
   }
 
   get damageScale(): number {
-    const doesAdjustment = this.fromAdjustment.doesAdjustFor(
+    const doesAdjustment = this.fromAdjustment.isValidFor(
       this.enemy,
       this.attackStyle,
     );
     if (doesAdjustment) {
       return this.fromAdjustment.multiplier;
     }
-    return 1.0;
+    return 0;
   }
 
   get didOccur(): boolean {
@@ -352,9 +311,8 @@ class Hit {
     this.attackStyle = attackStyle;
   }
 
-  baseHitDamage(): number {
-    // XXX maybe include chance to parry here.
-    return this.damage * Math.random();
+  get baseHitDamage(): number {
+    return this.damage;
   }
 
   rolls(enemy: Enemy, attackStyle: AttackStyle): ProgrammedRandomOccurrence[] {
@@ -366,8 +324,7 @@ class Hit {
 
   calculateHitResult(enemy: Enemy, attackStyle: AttackStyle): HitResult {
     const rolls = this.rolls(enemy, attackStyle);
-    shuffle(rolls);
-    return new HitResult(this, this.baseHitDamage(), rolls);
+    return new HitResult(this, this.baseHitDamage, rolls);
   }
 }
 
@@ -389,19 +346,11 @@ class Scenario {
     this.enemy = enemy;
   }
 
-  get title(): string {
-    return [
-      this.weapon.title(),
-      this.suit.title(),
-      "against",
-      enemy.title(),
-      "using",
-      this.attackStyle.title(),
-    ].join(" ");
-  }
-
   getAdjustments(): Adjustment[] {
-    return [...this.weapon.getAdjustments(), ...this.suit.getAdjustments()];
+    return [
+      ...this.weapon.getAdjustments(),
+      ...[this.suit?.getAdjustments() || []],
+    ];
   }
 
   calculateHit(): Hit {
@@ -436,16 +385,17 @@ export class Simulator {
   }
 
   createScenario(selected: Selectables): Scenario {
-    const gear = Gear.Factory(selected.gearName, selected.damage);
-    const damageType = DamageType.Factory(selected.damageTypeName);
+    const gear = Gear.Factory(selected.gearName.name, selected.damage);
+    const damageType = DamageType.Factory(selected.damageTypeName.name);
     const perk1 =
-      (selected.perk1Name && Perk.Factory(selected.perk1Name)) || null;
+      (selected.perk1Name && Perk.Factory(selected.perk1Name.name)) || null;
     const perk2 =
-      (selected.perk2Name && Perk.Factory(selected.perk2Name)) || null;
+      (selected.perk2Name && Perk.Factory(selected.perk2Name.name)) || null;
     const weapon = Weapon.Factory(gear, damageType, perk1, perk2);
-    const suit = Suit.Factory(selected.armEXOName);
-    const enemy = Enemy.Factory(selected.enemyName);
-    const attackStyle = AttackStyle.Factory(selected.attackStyle);
+    const suit =
+      (selected.armEXOName && Suit.Factory(selected.armEXOName.name)) || null;
+    const enemy = Enemy.Factory(selected.enemyName.name);
+    const attackStyle = AttackStyle.Factory(selected.attackStyle.name);
     return new Scenario(weapon, attackStyle, suit, enemy);
   }
 }

@@ -3,13 +3,17 @@ import type DungeonsOfEternityStatistics from "@/models/DungeonsOfEternityStatis
 import { exoDescriptions } from "@/models/DungeonsOfEternityPerkMatrices";
 
 export type Selectables = {
-  gearName: string;
+  gearName: { name: string; code: string };
   damage: number;
-  damageTypeName: string;
-  perk1Name: string;
-  perk2Name: string;
+  damageTypeName: { name: string; code: string };
+  perk1Name: { name: string; code: string };
+  perk2Name: { name: string; code: string };
   armEXOName: string;
   enemyName: string;
+  attackStyle: string;
+  baseDamageCalculus: { name: string; code: string };
+  adjustmentCalculus: { name: string; code: string };
+  criticalCalculus: { name: string; code: string };
 };
 
 export default class SimulatorSelectables {

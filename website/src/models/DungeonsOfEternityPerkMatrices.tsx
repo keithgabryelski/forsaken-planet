@@ -100,6 +100,7 @@ export const perkDescriptions = {
     "min multiplier": 1.05,
     "max chance": 1.0,
     "max multiplier": 1.3,
+    limitsAffectTo: "undead",
   },
   "monster damage": {
     description: "Increases damage by 5-30% to monsters",
@@ -108,6 +109,7 @@ export const perkDescriptions = {
     "min multiplier": 1.05,
     "max chance": 1.0,
     "max multiplier": 1.3,
+    limitsAffectTo: "monster",
   },
   "critter damage": {
     description: "Increases damage by 5-30% to critters",
@@ -116,6 +118,7 @@ export const perkDescriptions = {
     "min multiplier": 1.05,
     "max chance": 1.0,
     "max multiplier": 1.3,
+    limitsAffectTo: "critter",
   },
   "sorcerer damage": {
     description: "Increases damage by 5-30% to sorcerer enemies",
@@ -124,6 +127,7 @@ export const perkDescriptions = {
     "min multiplier": 1.05,
     "max chance": 1.0,
     "max multiplier": 1.3,
+    limitsAffectTo: "sorcerer",
   },
   "elemental damage": {
     description: "Increases damage by 5-30% to elemental enemies",
@@ -132,6 +136,7 @@ export const perkDescriptions = {
     "min multiplier": 1.05,
     "max chance": 1.0,
     "max multiplier": 1.3,
+    limitsAffectTo: "elemental",
   },
   "elite damage": {
     description: "Increases damage by 5-30% to elite enemies",
@@ -140,6 +145,7 @@ export const perkDescriptions = {
     "min multiplier": 1.05,
     "max chance": 1.0,
     "max multiplier": 1.3,
+    limitsAffectTo: "elite",
   },
   "throw distance": {
     description: "Increases throwing range by 10-60%",
