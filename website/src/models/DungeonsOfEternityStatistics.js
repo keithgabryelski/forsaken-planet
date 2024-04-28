@@ -1,9 +1,6 @@
-import {
-  perkSet,
-  gearPerksMatrix,
-  gearDamageTypesMaxtrix,
-  gearSlotPlacement,
-} from "./DungeonsOfEternityPerkMatrices";
+import { gearSlotPlacement } from "@/models/Gear";
+import { gearDamageTypesMaxtrix } from "@/models/DamageTypes";
+import { perkSet, gearPerksMatrix } from "@/models/Perks";
 
 export default class DungeonsOfEternityStatistics {
   constructor(drops = [], indexes = null) {

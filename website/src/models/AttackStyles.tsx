@@ -1,8 +1,18 @@
-const AttackStyles = {
-  thrown: ["might"],
-  melee: ["power", "critical"],
-  arrow: ["pullback", "impale"],
-  stab: ["pierce"],
-};
+export type AttackStyleType = "thrown" | "melee" | "arrow" | "stab";
 
-export default AttackStyles;
+export const AttackStyles = {
+  thrown: {
+    exo: ["might"],
+    perk: ["throw damage"],
+  },
+  melee: {
+    exo: ["power", "critical"],
+  },
+  arrow: {
+    exo: ["pullback", "impale"],
+  },
+  stab: {
+    exo: ["pierce"],
+    perk: ["stab damage"],
+  },
+};

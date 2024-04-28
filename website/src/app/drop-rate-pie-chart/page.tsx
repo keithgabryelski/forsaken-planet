@@ -1,9 +1,9 @@
 import { Chart } from "chart.js";
 import DungeonsOfEternityCache from "@/models/DungeonsOfEternityCache";
-import { gearSlotPlacement } from "@/models/DungeonsOfEternityCache";
+import { gearSlotPlacement } from "@/models/Gear";
 import Renderer from "./renderer.tsx";
 
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Drop Rate Pie Chart",

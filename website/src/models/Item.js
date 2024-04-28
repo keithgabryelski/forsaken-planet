@@ -1,7 +1,5 @@
-import {
-  gearPerksMatrix,
-  gearDamageTypesMaxtrix,
-} from "./DungeonsOfEternityPerkMatrices";
+import { gearPerksMatrix } from "./Perks";
+import { gearDamageTypesMaxtrix } from "./DamageTypes";
 
 export class Item {
   constructor(name, selectables) {

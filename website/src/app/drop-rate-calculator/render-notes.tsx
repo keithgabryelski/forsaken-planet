@@ -1,8 +1,3 @@
-import {
-  perkDescriptions,
-  damageTypeDescriptions,
-} from "@/models/DungeonsOfEternityCache";
-
 export default function RenderNotes({ selectables }) {
   const perks = selectables.selectedPerks();
   let notesHeader = null;

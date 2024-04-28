@@ -1,6 +1,6 @@
 import type DungeonsOfEternityCache from "@/models/DungeonsOfEternityCache";
 import type DungeonsOfEternityStatistics from "@/models/DungeonsOfEternityStatistics";
-import { exoDescriptions } from "@/models/DungeonsOfEternityPerkMatrices";
+import { exoDescriptions } from "@/models/EXOs";
 
 export type Selectables = {
   gearName: { name: string; code: string };

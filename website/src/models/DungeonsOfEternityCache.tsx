@@ -2,8 +2,6 @@ import DungeonsOfEternityIndexes from "./DungeonsOfEternityIndexes";
 import DungeonsOfEternityCatalog from "./DungeonsOfEternityCatalog";
 import DungeonsOfEternityStatistics from "./DungeonsOfEternityStatistics";
 
-export * from "./DungeonsOfEternityPerkMatrices";
-
 export type DOEReport = {
   rowID: number;
   Name: string;

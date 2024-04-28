@@ -1,10 +1,7 @@
-import Opponents from "@/models/Opponents";
-import AttackStyles from "@/models/AttackStyles";
-import {
-  damageTypeDescriptions,
-  perkDescriptions,
-  exoDescriptions,
-} from "@/models/DungeonsOfEternityPerkMatrices";
+import { AttackStyles } from "@/models/AttackStyles";
+import { damageTypeDescriptions } from "@/models/DamageTypes";
+import { perkDescriptions } from "@/models/Perks";
+import { exoDescriptions } from "@/models/EXOs";
 import { type Selectables } from "./SimulatorSelectables";
 
 const NUM_ATTACKS_TO_NORMALIZE = 1000;
@@ -20,40 +17,54 @@ class Actor {
   }
 }
 
+type LimitTypes = "attack-style" | "enemy";
+
+class EffectLimit extends Actor {
+  limitType: LimitTypes;
+  limitName: string;
+
+  constructor(
+    name: string,
+    description: string,
+    limitType: LimitTypes,
+    limitName: string,
+  ) {
+    super(name, description);
+    this.limitType = limitType;
+    this.limitName = limitName;
+  }
+}
+
 class Adjustment extends Actor {
   chance: number;
   multiplier: number;
-  limitsAffectTo: string;
+  limitTo: EffectLimit;
 
   constructor(
     name: string,
     description: string,
     chance: number,
     multiplier: number,
-    limitsAffectTo: string,
+    limitTo: EffectLimit,
   ) {
     super(name, description);
     this.chance = chance;
     this.multiplier = multiplier;
-    this.limitsAffectTo = limitsAffectTo;
+    this.limitTo = limitTo;
   }
 
-  isValidFor(enemy: Enemy, attackStyle: AttackStyle): boolean {
-    if (this.limitsAffectTo == null) {
+  buffsWhen(enemy: Enemy, _attackStyle: AttackStyle): boolean {
+    if (this.limitTo == null) {
       // no limiting parameter
       return true;
     }
-    const limitsToThisEnemy = enemy.identifiesAsEnemyType(this.limitsAffectTo);
-    if (limitsToThisEnemy) {
-      return true;
+    switch (this.limitTo?.limitType) {
+      case "enemy":
+        return enemy.identifiesAsEnemyType(this.limitTo.limitName);
+
+      default:
+        return true;
     }
-    const limitsToThisAttackStyle = attackStyle.affectedByExoName(
-      this.limitsAffectTo,
-    );
-    if (limitsToThisAttackStyle) {
-      return true;
-    }
-    return false;
   }
 }
 
@@ -69,33 +80,45 @@ class Enemy extends Actor {
     return this.enemyTypes.some((et: string) => et === enemyType);
   }
 
-  static Factory(name: string): Enemy {
-    const enemyTypes = Opponents[name];
-    if (!enemyTypes) {
-      throw new Error(`Invalid enemy name: ${name}`);
-    }
-    return new Enemy(name, name, enemyTypes);
+  static Factory(identities: string[]): Enemy {
+    return new Enemy("generic", "generic", identities);
   }
 }
 
 class AttackStyle extends Actor {
   exoNames: string[];
+  perkNames: string[];
 
-  constructor(name: string, description: string, exoNames: string[]) {
+  constructor(
+    name: string,
+    description: string,
+    exoNames: string[],
+    perkNames: string[],
+  ) {
     super(name, description);
     this.exoNames = exoNames;
+    this.perkNames = perkNames;
   }
 
-  affectedByExoName(exoName: string): boolean {
-    return this.exoNames.some((en: string) => en === exoName);
+  buffedByEXO(exoName: string): boolean {
+    return this.name === exoName;
+  }
+
+  buffedByPerk(perkName: string): boolean {
+    return this.perkNames.some((pn: string) => pn === perkName);
   }
 
   static Factory(name: string): Enemy {
-    const exoNames = AttackStyles[name];
-    if (!exoNames) {
+    let exo = [];
+    let perk = [];
+    try {
+      const attackStyle = AttackStyles[name];
+      exo = attackStyle.exo || [];
+      perk = attackStyle.perk || [];
+    } catch (_e) {
       throw new Error(`Invalid attackStyle name: ${name}`);
     }
-    return new AttackStyle(name, name, exoNames);
+    return new AttackStyle(name, name, exo, perk);
   }
 }
 
@@ -110,12 +133,22 @@ class DamageType extends Adjustment {
       damageType.description,
       damageType.chance || 0.0,
       damageType.multiplier || 1.0,
-      damageType.limitsAffectsTo,
     );
   }
 }
 
 class Perk extends Adjustment {
+  buffsWhen(enemy: Enemy, attackStyle: AttackStyle): boolean {
+    if (!super.buffsWhen(enemy, attackStyle)) {
+      return false;
+    }
+    if (this.limitTo?.limitType === "attack-style") {
+      return attackStyle.buffedByPerk(this.limitTo.limitName);
+    }
+
+    return true;
+  }
+
   static Factory(name: string): DamageType {
     if (!name) {
       return null;
@@ -124,17 +157,44 @@ class Perk extends Adjustment {
     if (!perkDescription) {
       throw new Error(`Invalid perk: ${name}`);
     }
+    let limit = null;
+    if (perkDescription.limitsEffectToEnemy) {
+      limit = new EffectLimit(
+        "perk",
+        name,
+        "enemy",
+        perkDescription.limitsEffectToEnemy,
+      );
+    } else if (perkDescription.limitsEffectToAttackStyle) {
+      limit = new EffectLimit(
+        "perk",
+        name,
+        "attack-style",
+        perkDescription.limitsEffectToAttackStyle,
+      );
+    }
     return new Perk(
       name,
       perkDescription.description,
       perkDescription["max chance"] || 0.0,
       perkDescription["max multiplier"] || 1.0,
-      perkDescription.limitsAffectTo,
+      limit,
     );
   }
 }
 
 class Exo extends Adjustment {
+  buffsWhen(enemy: Enemy, attackStyle: AttackStyle): boolean {
+    if (!super.buffsWhen(enemy, attackStyle)) {
+      return false;
+    }
+    if (this.limitTo?.limitType === "attack-style") {
+      return attackStyle.buffedByEXO(this.limitTo.limitName);
+    }
+
+    return true;
+  }
+
   static Factory(name: string): Exo {
     if (!name) {
       return null;
@@ -143,12 +203,29 @@ class Exo extends Adjustment {
     if (!exoDescription) {
       throw new Error(`Invalid EXO: ${name}`);
     }
+    let limit = null;
+    if (exoDescription.limitsEffectToEnemy) {
+      limit = new EffectLimit(
+        "exo",
+        name,
+        "enemy",
+        exoDescription.limitsEffectToEnemy,
+      );
+    } else if (exoDescription.limitsEffectToAttackStyle) {
+      limit = new EffectLimit(
+        "exo",
+        name,
+        "attack-style",
+        exoDescription.limitsEffectToAttackStyle,
+      );
+    }
+
     return new Exo(
       name,
       exoDescription.description,
       exoDescription["max chance"] || 0.0,
       exoDescription["max multiplier"] || 1.0,
-      exoDescription.limitsAffectTo /* currently not set */,
+      limit,
     );
   }
 }
@@ -278,7 +355,7 @@ class ProgrammedRandomOccurrence {
   }
 
   get damageScale(): number {
-    const doesAdjustment = this.fromAdjustment.isValidFor(
+    const doesAdjustment = this.fromAdjustment.buffsWhen(
       this.enemy,
       this.attackStyle,
     );
@@ -349,7 +426,7 @@ class Scenario {
   getAdjustments(): Adjustment[] {
     return [
       ...this.weapon.getAdjustments(),
-      ...[this.suit?.getAdjustments() || []],
+      ...(this.suit?.getAdjustments() || []),
     ];
   }
 
@@ -394,7 +471,7 @@ export class Simulator {
     const weapon = Weapon.Factory(gear, damageType, perk1, perk2);
     const suit =
       (selected.armEXOName && Suit.Factory(selected.armEXOName.name)) || null;
-    const enemy = Enemy.Factory(selected.enemyName.name);
+    const enemy = Enemy.Factory(selected.opponentIdentities.map((o) => o.name));
     const attackStyle = AttackStyle.Factory(selected.attackStyle.name);
     return new Scenario(weapon, attackStyle, suit, enemy);
   }

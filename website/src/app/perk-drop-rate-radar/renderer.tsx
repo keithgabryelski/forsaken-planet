@@ -2,11 +2,7 @@
 import { useState, useEffect } from "react";
 import { Chart } from "primereact/chart";
 import DungeonsOfEternityCache from "@/models/DungeonsOfEternityCache";
-import {
-  gearPerksMatrix,
-  perkGearMatrix,
-  weaponPerks,
-} from "@/models/DungeonsOfEternityCache";
+import { gearPerksMatrix, perkGearMatrix, weaponPerks } from "@/models/Perks";
 import styles from "./styles.module.css";
 
 function sortGear(a, b) {

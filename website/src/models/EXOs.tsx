@@ -1,282 +1,3 @@
-export const gearDamageTypesMaxtrix = {
-  axes: ["ice", "fire", "poison", "physical"],
-  bows: ["ice", "fire", "poison", "physical"],
-  crossbows: ["ice", "fire", "poison", "physical"],
-  daggers: ["ice", "fire", "poison", "physical"],
-  hammers: ["ice", "fire", "poison", "physical"],
-  shields: [],
-  staves: [],
-  swords: ["ice", "fire", "poison", "physical"],
-};
-
-export const weaponPerks = [
-  "attack power",
-  "criticals",
-  "undead damage",
-  "monster damage",
-  "critter damage",
-  "sorcerer damage",
-  "elemental damage",
-  "elite damage",
-];
-
-export const axePerks = ["throw distance", "throw damage", "explosions"];
-export const bowPerks = ["shot distance", "slowing"];
-export const crossbowPerks = ["slowing", "reload"];
-export const daggerPerks = ["throw distance", "vampire", "poison"];
-export const hammerPerks = ["throw distance", "slowing", "area damage"];
-export const shieldPerks = ["knockback distance", "absorb"];
-export const swordPerks = ["vampire", "throwable", "stab damage"];
-
-export const gearPerksMatrix = {
-  axes: [...axePerks, ...weaponPerks],
-  bows: [...bowPerks, ...weaponPerks],
-  crossbows: [...crossbowPerks, ...weaponPerks],
-  daggers: [...daggerPerks, ...weaponPerks],
-  hammers: [...hammerPerks, ...weaponPerks],
-  shields: [...shieldPerks, ...weaponPerks],
-  staves: [],
-  swords: [...swordPerks, ...weaponPerks],
-};
-
-export const perkSet = new Set([
-  ...weaponPerks,
-  ...axePerks,
-  ...bowPerks,
-  ...crossbowPerks,
-  ...daggerPerks,
-  ...hammerPerks,
-  ...shieldPerks,
-  ...swordPerks,
-]);
-
-export const gearSlotPlacement = {
-  axes: "hip",
-  bows: "back",
-  crossbows: "back",
-  daggers: "hip",
-  hammers: "hip",
-  shields: "back",
-  staves: "back",
-  swords: "hip",
-};
-
-export const perkGearMatrix = Object.entries(gearPerksMatrix).reduce(
-  (accumulator, item) => {
-    const [gearName, perkNames] = item;
-    const newStuff = perkNames.reduce((acc, perkname) => {
-      acc[perkname] = gearName;
-      return acc;
-    }, {});
-    for (const [g, ps] of Object.entries(newStuff)) {
-      accumulator[g] = (accumulator[g] ?? []).concat(ps);
-    }
-    return accumulator;
-  },
-  {},
-);
-
-export const perkDescriptions = {
-  "attack power": {
-    description: "Increases damage by 5-30%",
-    type: "weapons",
-    "min chance": 1.0,
-    "min multiplier": 1.05,
-    "max chance": 1.0,
-    "max multiplier": 1.3,
-  },
-  criticals: {
-    description: "Gives 20-30% chance to critically strike for 300% damage",
-    type: "weapons",
-    "min chance": 0.2,
-    "min multiplier": 3,
-    "max chance": 0.3,
-    "max multiplier": 3,
-  },
-  "undead damage": {
-    description: "Increases damage by 5-30% to undead enemies",
-    type: "weapons",
-    "min chance": 1.0,
-    "min multiplier": 1.05,
-    "max chance": 1.0,
-    "max multiplier": 1.3,
-    limitsAffectTo: "undead",
-  },
-  "monster damage": {
-    description: "Increases damage by 5-30% to monsters",
-    type: "weapons",
-    "min chance": 1.0,
-    "min multiplier": 1.05,
-    "max chance": 1.0,
-    "max multiplier": 1.3,
-    limitsAffectTo: "monster",
-  },
-  "critter damage": {
-    description: "Increases damage by 5-30% to critters",
-    type: "weapons",
-    "min chance": 1.0,
-    "min multiplier": 1.05,
-    "max chance": 1.0,
-    "max multiplier": 1.3,
-    limitsAffectTo: "critter",
-  },
-  "sorcerer damage": {
-    description: "Increases damage by 5-30% to sorcerer enemies",
-    type: "weapons",
-    "min chance": 1.0,
-    "min multiplier": 1.05,
-    "max chance": 1.0,
-    "max multiplier": 1.3,
-    limitsAffectTo: "sorcerer",
-  },
-  "elemental damage": {
-    description: "Increases damage by 5-30% to elemental enemies",
-    type: "weapons",
-    "min chance": 1.0,
-    "min multiplier": 1.05,
-    "max chance": 1.0,
-    "max multiplier": 1.3,
-    limitsAffectTo: "elemental",
-  },
-  "elite damage": {
-    description: "Increases damage by 5-30% to elite enemies",
-    type: "weapons",
-    "min chance": 1.0,
-    "min multiplier": 1.05,
-    "max chance": 1.0,
-    "max multiplier": 1.3,
-    limitsAffectTo: "elite",
-  },
-  "throw distance": {
-    description: "Increases throwing range by 10-60%",
-    type: "hammers",
-    "min chance": "",
-    "min multiplier": "",
-    "max chance": "",
-    "max multiplier": "",
-  },
-  "throw damage": {
-    description: "Increases throwing damage by 5-30%",
-    type: "axes",
-    "min chance": 1.0,
-    "min multiplier": 1.05,
-    "max chance": 1.0,
-    "max multiplier": 1.3,
-  },
-  explosions: {
-    description: "Gives 20-30% chance to explode for 200% damage",
-    type: "axes",
-    "min chance": 0.2,
-    "min multiplier": 2,
-    "max chance": 0.3,
-    "max multiplier": 2,
-  },
-  slowing: {
-    description: "Gives 20-30% chance to slow enemy",
-    type: "hammers",
-    "min chance": "",
-    "min multiplier": "",
-    "max chance": "",
-    "max multiplier": "",
-  },
-  reload: {
-    description: "Gives 1-6 extra shots per reload",
-    type: "crossbows",
-    "min chance": "",
-    "min multiplier": "",
-    "max chance": "",
-    "max multiplier": "",
-  },
-  "shot distance": {
-    description: "Increases shooting range by 10-60%",
-    type: "bows",
-    "min chance": "",
-    "min multiplier": "",
-    "max chance": "",
-    "max multiplier": "",
-  },
-  vampire: {
-    description: "Gives 20-30% chance to heal 25% of player health",
-    type: "swords",
-    "min chance": "",
-    "min multiplier": "",
-    "max chance": "",
-    "max multiplier": "",
-  },
-  poison: {
-    description: "Gives 20-30% chance to poison enemy",
-    type: "daggers",
-    "min chance": "",
-    "min multiplier": "",
-    "max chance": "",
-    "max multiplier": "",
-  },
-  "area damage": {
-    description: "Gives 20-30% chance to explode for 200% damage",
-    type: "hammers",
-    "min chance": 0.2,
-    "min multiplier": 2,
-    "max chance": 0.3,
-    "max multiplier": 2,
-  },
-  "knockback distance": {
-    description: "Knockback distance increases shield knockback by 10-60%",
-    type: "shields",
-    "min chance": "",
-    "min multiplier": "",
-    "max chance": "",
-    "max multiplier": "",
-  },
-  absorb: {
-    description: "Heals 4-25% of player health when blocking",
-    type: "shields",
-    "min chance": "",
-    "min multiplier": "",
-    "max chance": "",
-    "max multiplier": "",
-  },
-  throwable: {
-    description: "Allows sword to be thrown",
-    type: "swords",
-    "min chance": "",
-    "min multiplier": "",
-    "max chance": "",
-    "max multiplier": "",
-  },
-  "stab damage": {
-    description: "Increases damage by 50%",
-    type: "swords",
-    "min chance": 1.0,
-    "min multiplier": 1.5,
-    "max chance": 1.0,
-    "max multiplier": 1.5,
-  },
-};
-
-export const damageTypeDescriptions = {
-  ice: {
-    description:
-      "chance to freeze and cause embrittlement: frozen targets receive extra damage",
-    chance: "",
-    multiplier: "",
-  },
-  fire: {
-    description: "chance to explode for 200% damage",
-    chance: 0.3,
-    multiplier: 2,
-  },
-  poison: {
-    description: "chance to stun target for a few seconds",
-    chance: "",
-    multiplier: "",
-  },
-  physical: {
-    description: "no additional effect",
-    chance: "",
-    multiplier: "",
-  },
-};
-
 export const exoDescriptions = {
   absorb: {
     description: "Decreases fall damage",
@@ -361,6 +82,7 @@ export const exoDescriptions = {
     rank3: 160 / 100,
     rank4: 180 / 100,
     rank5: 200 / 100,
+    limitsEffectToAttackStyle: "stab",
   },
   antidote: {
     description: "Decreases poison damage taken",
@@ -389,6 +111,7 @@ export const exoDescriptions = {
     rank3: 130 / 100,
     rank4: 140 / 100,
     rank5: 150 / 100,
+    limitsEffectToAttackStyle: "melee",
   },
   leap: {
     description: "Increases movement speed in air",
@@ -529,6 +252,7 @@ export const exoDescriptions = {
     rank3: 160 / 100,
     rank4: 180 / 100,
     rank5: 200 / 100,
+    limitsEffectToAttackStyle: "thrown",
   },
   knockback: {
     description: "Increases shield knockback",
@@ -585,6 +309,7 @@ export const exoDescriptions = {
     rank3: 130 / 100,
     rank4: 140 / 100,
     rank5: 150 / 100,
+    limitsEffectToAttackStyle: "arrow",
   },
   stillness: {
     description: "Recover health every few seconds when not moving",
@@ -613,6 +338,7 @@ export const exoDescriptions = {
     rank3: 220 / 100,
     rank4: 260 / 100,
     rank5: 300 / 100,
+    limitsEffectToAttackStyle: "melee",
   },
   resilience: {
     description: "Increases last stand time",
@@ -641,5 +367,6 @@ export const exoDescriptions = {
     rank3: 220 / 100,
     rank4: 260 / 100,
     rank5: 300 / 100,
+    limitsEffectToAttackStyle: "arrow",
   },
 };

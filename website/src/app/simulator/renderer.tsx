@@ -13,13 +13,12 @@ import { Button } from "primereact/button";
 import chartTrendline from "chartjs-plugin-trendline";
 import update from "immutability-helper";
 import DungeonsOfEternityCache from "@/models/DungeonsOfEternityCache";
-import {
-  damageTypeDescriptions,
-  perkDescriptions,
-  exoDescriptions,
-} from "@/models/DungeonsOfEternityPerkMatrices";
-import Opponents from "@/models/Opponents";
-import AttackStyles from "@/models/AttackStyles";
+import { damageTypeDescriptions } from "@/models/DamageTypes";
+import { perkDescriptions } from "@/models/Perks";
+import { exoDescriptions } from "@/models/EXOs";
+import { MultiSelect } from "primereact/multiselect";
+import { OpponentIdentities } from "@/models/Opponents";
+import { AttackStyles } from "@/models/AttackStyles";
 import { Simulator } from "./Simulator";
 import SimulatorSelectables from "./SimulatorSelectables";
 import { MathJaxContext, MathJax } from "better-react-mathjax";
@@ -60,6 +59,10 @@ const armEXOAdjustments = Object.entries(exoDescriptions)
     name: armEXOName,
     ...armEXODescription,
   }));
+const opponentIdentityOptions = OpponentIdentities.map((identity) => ({
+  name: identity,
+  code: identity,
+}));
 
 export default function Renderer({ reports }) {
   const toast = useRef(null);
@@ -77,6 +80,7 @@ export default function Renderer({ reports }) {
     armEXOName: null,
     enemyName: null,
     attackStyle: null,
+    opponentIdentities: [],
   });
   const [damageTypeOptions, setDamageTypeOptions] = useState(true);
 
@@ -94,13 +98,12 @@ export default function Renderer({ reports }) {
     setDamageTypeOptions(!damageTypesExcluded);
   }, [selected.gearName]);
 
-  const onChange = (target: string, name: string) => {
+  const onChange = (target: string | Array<string>, name: string) => {
     const newSelected = update(selected, {
       [name]: { $set: target },
     });
     setSelected(newSelected);
   };
-
   function onClick() {
     const simulator = new Simulator();
     let scenario = null;
@@ -329,20 +332,21 @@ export default function Renderer({ reports }) {
                 className="p-3 shadow-2 mb-3 inline-block"
                 style={{ borderRadius: "10px" }}
               >
-                <Dropdown
-                  value={selected.enemyName}
-                  options={[...Object.keys(Opponents)].map((o) => ({
-                    name: o,
-                    code: o,
-                  }))}
-                  onChange={(e) => onChange(e.value, "enemyName")}
+                <MultiSelect
+                  value={selected.opponentIdentities}
+                  onChange={(e) => onChange(e.value, "opponentIdentities")}
+                  options={opponentIdentityOptions}
                   optionLabel="name"
-                  placeholder="Select Enemy"
+                  placeholder="Select Enemy Identities"
+                  maxSelectedLabels={3}
+                  className="w-full md:w-20rem"
                 />
               </span>
               <div className="text-900 text-xl mb-3 font-medium">Enemy</div>
               <span className="text-700 line-height-3">
-                Select Enemy you will simulate fighting against.
+                Select how your enemy identifies. This relates to which perks
+                (i.e., &ldquo;monster damage&rdquo;, &ldquo;sorcerer
+                damage&rdquo;, &ldquo;critter damage&rdquo;) can affect them.
               </span>
             </div>
 
@@ -366,7 +370,8 @@ export default function Renderer({ reports }) {
                 Attack Style
               </div>
               <span className="text-700 line-height-3">
-                Select the style of attack you&apos;ll use
+                Select the style of attack you&apos;ll use. This affects which
+                perks/EXOs can buff your attack.
               </span>
             </div>
 
