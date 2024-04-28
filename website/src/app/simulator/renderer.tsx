@@ -23,10 +23,46 @@ import { Simulator } from "./Simulator";
 import SimulatorSelectables from "./SimulatorSelectables";
 import { MathJaxContext, MathJax } from "better-react-mathjax";
 
+function addToEquation(
+  equation,
+  damage,
+  chance,
+  multiplier,
+  comment,
+  crossOut = false,
+) {
+  const className = crossOut ? "line-through" : null;
+  if (chance === 1) {
+    equation.push({
+      equationFragment: (
+        <span className={className}>
+          <span className="text-orange-300">{damage}</span> *{" "}
+          <span className="text-purple-300">{multiplier}</span>
+        </span>
+      ),
+      equationComment: <span>{comment}</span>,
+    });
+    return;
+  }
+
+  equation.push({
+    equationFragment: (
+      <span className={className}>
+        <span className="text-orange-300">{damage}</span> * ({" "}
+        <span className="text-yellow-300">Math.random()</span> &lt;{" "}
+        <span className="text-blue-300">{chance}</span> ) ?{" "}
+        <span className="text-purple-300">{multiplier}</span> :{" "}
+        <span className="text-purple-300">0</span>
+      </span>
+    ),
+    equationComment: <span>{comment}</span>,
+  });
+}
+
 const config = {
-  loader: { load: ["[tex]/html"] },
+  loader: { load: ["[tex]/html", "[tex]/color"] },
   tex: {
-    packages: { "[+]": ["html"] },
+    packages: { "[+]": ["html", "color"] },
     inlineMath: [
       ["$", "$"],
       ["\\(", "\\)"],
@@ -72,9 +108,8 @@ export default function Renderer({ reports }) {
     new SimulatorSelectables(cache),
   );
   const [selected, setSelected] = useState({
-    gearName: null,
     damage: 50,
-    damageTypeName: selectables.damageTypeNamesAsOptions[0],
+    damageTypeName: { name: "physical", code: "physical" },
     perk1Name: null,
     perk2Name: null,
     armEXOName: null,
@@ -82,7 +117,6 @@ export default function Renderer({ reports }) {
     attackStyle: null,
     opponentIdentities: [],
   });
-  const [damageTypeOptions, setDamageTypeOptions] = useState(true);
 
   useEffect(() => {
     const newCache = new DungeonsOfEternityCache(reports);
@@ -91,19 +125,114 @@ export default function Renderer({ reports }) {
     setSelectables(newSelectables);
   }, [reports]);
 
-  useEffect(() => {
-    const damageTypesExcluded = ["shields", "staves"].includes(
-      selected.gearName,
-    );
-    setDamageTypeOptions(!damageTypesExcluded);
-  }, [selected.gearName]);
-
   const onChange = (target: string | Array<string>, name: string) => {
     const newSelected = update(selected, {
       [name]: { $set: target },
     });
     setSelected(newSelected);
   };
+  const equation = [];
+  equation.push({
+    equationFragment: (
+      <span className="text-orange-300">{selected.damage}</span>
+    ),
+    equationComment: <span>normal damage</span>,
+  });
+  const dtDescription = damageTypeDescriptions[selected.damageTypeName?.name];
+  if (dtDescription) {
+    const { chance, multiplier } = dtDescription;
+    if (chance) {
+      addToEquation(
+        equation,
+        selected.damage,
+        chance,
+        multiplier,
+        <span>damage-type {selected.damageTypeName?.name}</span>,
+      );
+    }
+  }
+
+  const perk1Description = perkDescriptions[selected.perk1Name?.name];
+  if (perk1Description) {
+    const chance = perk1Description["max chance"];
+    const multiplier = perk1Description["max multiplier"];
+    if (chance) {
+      let crossOut = false;
+      if (perk1Description.limitsEffectToEnemy) {
+        crossOut = !selected.opponentIdentities
+          .map((oi) => oi.name)
+          .includes(perk1Description.limitsEffectToEnemy);
+      }
+      if (perk1Description.limitsEffectToAttackStyle) {
+        crossOut =
+          selected.attackStyle?.name !==
+          perk1Description.limitsEffectToAttackStyle;
+      }
+      addToEquation(
+        equation,
+        selected.damage,
+        chance,
+        multiplier,
+        <span>perk1 {selected.perk1Name?.name}</span>,
+        crossOut,
+      );
+    }
+  }
+
+  const perk2Description = perkDescriptions[selected.perk2Name?.name];
+  if (perk2Description) {
+    const chance = perk2Description["max chance"];
+    const multiplier = perk2Description["max multiplier"];
+    if (chance) {
+      let crossOut = false;
+      if (perk2Description.limitsEffectToEnemy) {
+        crossOut = !selected.opponentIdentities.includes(
+          perk2Description.limitsEffectToEnemy,
+        );
+      }
+      if (perk2Description.limitsEffectToAttackStyle) {
+        crossOut =
+          selected.attackStyle?.name !==
+          perk2Description.limitsEffectToAttackStyle;
+      }
+      addToEquation(
+        equation,
+        selected.damage,
+        chance,
+        multiplier,
+        <span>perk2 {selected.perk2Name?.name}</span>,
+        crossOut,
+      );
+    }
+  }
+
+  const exoDescription = exoDescriptions[selected.armEXOName?.name];
+  if (exoDescription) {
+    const chance = exoDescription["max chance"];
+    const multiplier = exoDescription["max multiplier"];
+    if (chance) {
+      let crossOut = false;
+      if (exoDescription.limitsEffectToEnemy) {
+        crossOut = !selected.opponentIdentities.includes(
+          exoDescription.limitsEffectToEnemy,
+        );
+      }
+      if (exoDescription.limitsEffectToAttackStyle) {
+        crossOut =
+          selected.attackStyle?.name !==
+          exoDescription.limitsEffectToAttackStyle;
+      }
+      addToEquation(
+        equation,
+        selected.damage,
+        chance,
+        multiplier,
+        <span>exo {selected.armEXOName?.name}</span>,
+        crossOut,
+      );
+    }
+  }
+
   function onClick() {
     const simulator = new Simulator();
     let scenario = null;
@@ -210,24 +339,6 @@ export default function Renderer({ reports }) {
                 className="p-3 shadow-2 mb-3 inline-block"
                 style={{ borderRadius: "10px" }}
               >
-                <Dropdown
-                  value={selected.gearName}
-                  onChange={(e) => onChange(e.value, "gearName")}
-                  options={selectables.groupNamesAsOptions}
-                  optionLabel="name"
-                  placeholder="Select A Weapon"
-                />
-              </span>
-              <div className="text-900 text-xl mb-3 font-medium">Weapon</div>
-              <span className="text-700 line-height-3">
-                Select the weapon your simulant will use in this fight scenario.
-              </span>
-            </div>
-            <div className="col-12 md:col-4 mb-4 px-5">
-              <span
-                className="p-3 shadow-2 mb-3 inline-block"
-                style={{ borderRadius: "10px" }}
-              >
                 <InputText
                   value={selected.damage}
                   onChange={(e) => onChange(e.target.value, "damage")}
@@ -250,11 +361,7 @@ export default function Renderer({ reports }) {
                 <Dropdown
                   value={selected.damageTypeName}
                   onChange={(e) => onChange(e.value, "damageTypeName")}
-                  options={
-                    damageTypeOptions
-                      ? selectables.damageTypeNamesAsOptions
-                      : []
-                  }
+                  options={selectables.damageTypeNamesAsOptions}
                   optionLabel="name"
                   placeholder="Select Damage Type"
                 />
@@ -263,7 +370,9 @@ export default function Renderer({ reports }) {
                 Weapon&apos;s Damage Type
               </div>
               <span className="text-700 line-height-3">
-                Select which element your weapon has or &quot;physical&quot;
+                {damageTypeDescriptions[selected.damageTypeName?.name]
+                  ?.description ||
+                  'Select which element your weapon has or "physical"'}
               </span>
             </div>
             <div className="col-12 md:col-4 mb-4 px-5">
@@ -283,7 +392,8 @@ export default function Renderer({ reports }) {
                 First Weapon&apos;s Perk
               </div>
               <span className="text-700 line-height-3">
-                Select your weapon&apos;s first perk (if any)
+                {perkDescriptions[selected.perk1Name?.name]?.description ||
+                  "Select your weapon's first perk (if any)"}
               </span>
             </div>
             <div className="col-12 md:col-4 mb-4 px-5">
@@ -303,7 +413,8 @@ export default function Renderer({ reports }) {
                 Second Weapon&apos;s Perk
               </div>
               <span className="text-700 line-height-3">
-                Select your weapon&apos;s second perk (if any)
+                {perkDescriptions[selected.perk2Name?.name]?.description ||
+                  "Select your weapon's second perk (if any)"}
               </span>
             </div>
             <div className="col-12 md:col-4 md:mb-4 mb-0 px-3">
@@ -323,7 +434,8 @@ export default function Renderer({ reports }) {
                 Arm EXO Perk
               </div>
               <span className="text-700 line-height-3">
-                Select your EXO suit&apos;s arm perk
+                {exoDescriptions[selected.armEXOName?.name]?.description ||
+                  "Select your EXO suit's arm perk"}
               </span>
             </div>
 
@@ -339,6 +451,7 @@ export default function Renderer({ reports }) {
                   optionLabel="name"
                   placeholder="Select Enemy Identities"
                   maxSelectedLabels={3}
+                  showSelectAll={false}
                   className="w-full md:w-20rem"
                 />
               </span>
@@ -374,37 +487,44 @@ export default function Renderer({ reports }) {
                 perks/EXOs can buff your attack.
               </span>
             </div>
-
-            <div className="col-12 md:col-4 mb-4 px-5">
-              <span
-                className="p-3 shadow-2 mb-3 inline-block"
-                style={{ borderRadius: "10px" }}
-              ></span>
-            </div>
           </div>
-        </AccordionTab>
 
-        <AccordionTab header="Maths">
-          <MathJaxContext version={3} config={config}>
-            <MathJax hideUntilTypeset={"first"}>
-              {`$$\\sum_{a = adjustment_1}^{adjustment_n} f(a, baseDamage)$$`}
-            </MathJax>
-            <MathJax hideUntilTypeset={"first"}>
-              {`$$
-      \\begin{eqnarray} \\\
+          <Card title="Maths" className="border-white border-1">
+            <MathJaxContext version={3} config={config}>
+              <MathJax hideUntilTypeset={"first"}>
+                {`$$\\sum_{a = adjustment_1}^{adjustment_n} f(a, {\\color{orange} baseDamage}, {\\color{yellow} rng})$$`}
+              </MathJax>
+              <MathJax hideUntilTypeset={"first"}>
+                {`$$
+                \\begin{eqnarray} \\\
 
-      &&f(a, baseDamage) =  \\begin{array} \\\
-      baseDamage \\cdot a^{multiplier} &for& \\mathcal{rng} \\lt a^{chance},
-      \\mathcal{rng} \\in \\mathbb{R}, \\mathcal{rng} \\in [0,1]  \\\\
+                &&f(a,  {\\color{orange} baseDamage}, {\\color{yellow} rng}) =  \\begin{array} \\\
+                {\\color{orange} baseDamage } \\cdot {\\color{violet} a^{multiplier}} &for& {\\color{yellow} \\mathcal{rng}} \\lt {\\color{lightblue} a^{chance}}
 
-      \\end{array} \\\\
+                \\end{array} \\\\
 
+                \\end{eqnarray}
 
-      \\end{eqnarray}
+                $$`}
+              </MathJax>
+            </MathJaxContext>
 
-      $$`}
-            </MathJax>
-          </MathJaxContext>
+            {equation.map((e, i, array) => (
+              <div key={i.toString()} className="flex align-content-start">
+                <div className="flex align-items-center justify-content-left w-10rem font-bold"></div>
+                <div className="flex align-items-center justify-content-left w-20rem font-bold">
+                  {e.equationFragment}
+                </div>
+                <div className="flex align-items-center justify-content-left w-10rem font-bold">
+                  {i === array.length - 1 ? "" : "+"}
+                </div>
+                <div className="flex align-items-center justify-content-left w-20rem font-bold">
+                  ({e.equationComment})
+                </div>
+                <div className="flex align-items-center justify-content-left w-10rem font-bold"></div>
+              </div>
+            ))}
+          </Card>
         </AccordionTab>
 
         <AccordionTab header="Data Tables">

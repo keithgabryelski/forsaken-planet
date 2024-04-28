@@ -140,6 +140,7 @@ export const perkDescriptions = {
     "min multiplier": 1.05,
     "max chance": 1.0,
     "max multiplier": 1.3,
+    limitsEffectToAttackStyle: "thrown",
   },
   explosions: {
     description: "Gives 20-30% chance to explode for 200% damage",
@@ -228,5 +229,6 @@ export const perkDescriptions = {
     "min multiplier": 1.5,
     "max chance": 1.0,
     "max multiplier": 1.5,
+    limitsEffectToAttackStyle: "stab",
   },
 };

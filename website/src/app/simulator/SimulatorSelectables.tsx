@@ -11,9 +11,6 @@ export type Selectables = {
   armEXOName: string;
   enemyName: string;
   attackStyle: string;
-  baseDamageCalculus: { name: string; code: string };
-  adjustmentCalculus: { name: string; code: string };
-  criticalCalculus: { name: string; code: string };
 };
 
 export default class SimulatorSelectables {

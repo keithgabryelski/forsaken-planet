@@ -462,7 +462,7 @@ export class Simulator {
   }
 
   createScenario(selected: Selectables): Scenario {
-    const gear = Gear.Factory(selected.gearName.name, selected.damage);
+    const gear = Gear.Factory("generic", selected.damage);
     const damageType = DamageType.Factory(selected.damageTypeName.name);
     const perk1 =
       (selected.perk1Name && Perk.Factory(selected.perk1Name.name)) || null;
