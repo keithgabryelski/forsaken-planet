@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@next/third-parties": "^14.2.2",
+    "@sentry/nextjs": "^7.105.0",
     "better-react-mathjax": "^2.0.3",
     "chart.js": "^4.4.2",
     "chartjs-plugin-datalabels": "^2.2.0",
