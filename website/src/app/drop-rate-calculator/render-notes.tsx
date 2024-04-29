@@ -1,3 +1,6 @@
+import { perkDescriptions } from "@/models/Perks";
+import { damageTypeDescriptions } from "@/models/DamageTypes";
+
 export default function RenderNotes({ selectables }) {
   const perks = selectables.selectedPerks();
   let notesHeader = null;
@@ -19,7 +22,7 @@ export default function RenderNotes({ selectables }) {
         <li>
           <span className="fw-bold">{damageType}</span>
           {" (damage type): "}
-          {damageTypeDescriptions[damageType]}
+          {damageTypeDescriptions[damageType].description}
         </li>
       );
     }
