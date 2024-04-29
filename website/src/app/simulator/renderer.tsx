@@ -10,7 +10,6 @@ import { Dropdown } from "primereact/dropdown";
 import { Slider } from "primereact/slider";
 import { Toast } from "primereact/toast";
 import { Button } from "primereact/button";
-import chartTrendline from "chartjs-plugin-trendline";
 import update from "immutability-helper";
 import DungeonsOfEternityCache from "@/models/DungeonsOfEternityCache";
 import { damageTypeDescriptions } from "@/models/DamageTypes";
@@ -22,6 +21,7 @@ import { AttackStyles } from "@/models/AttackStyles";
 import { Simulator } from "./Simulator";
 import SimulatorSelectables from "./SimulatorSelectables";
 import { MathJaxContext, MathJax } from "better-react-mathjax";
+import regression from "regression";
 
 function addToEquation(
   equation,
@@ -260,17 +260,18 @@ export default function Renderer({ reports }) {
         labels: graphData.map((_d, i) => i.toString()),
         datasets: [
           {
-            label: "simulation",
+            label: "Attack Scenario",
             data: graphData,
             fill: false,
             tension: 0.4,
             borderColor: documentStyle.getPropertyValue("--blue-500"),
-            trendlineLinear: {
-              colorMin: "red",
-              colorMax: "red",
-              lineStyle: "solid",
-              width: 2,
-            },
+          },
+          {
+            label: "Trend",
+            borderColor: "rgba(200,0,0)",
+            backgroundColor: "rgba(200,0,0)",
+            data: [],
+            fill: false,
           },
         ],
       };
@@ -294,6 +295,10 @@ export default function Renderer({ reports }) {
         },
         scales: {
           x: {
+            title: {
+              display: true,
+              text: "Attack Round",
+            },
             ticks: {
               color: textColorSecondary,
             },
@@ -302,6 +307,10 @@ export default function Renderer({ reports }) {
             },
           },
           y: {
+            title: {
+              display: true,
+              text: "Damage",
+            },
             ticks: {
               color: textColorSecondary,
             },
@@ -311,14 +320,21 @@ export default function Renderer({ reports }) {
           },
         },
       };
-      setSimulation(
-        <Chart
-          type="line"
-          data={data}
-          options={options}
-          plugins={[chartTrendline]}
-        />,
-      );
+
+      // Declare the array which will contains calculated point of trend line
+      const arrayForRegression = data.datasets[0].data.map((datum, i) => [
+        i,
+        datum,
+      ]);
+      // Calculare linear regression
+      const regr = regression.linear(arrayForRegression);
+      const [gradient, yIntercept] = regr.equation;
+      data.datasets[1].data = data.datasets[0].data.map((_datum, i) => [
+        i,
+        i * gradient + yIntercept,
+      ]);
+
+      setSimulation(<Chart type="line" data={data} options={options} />);
     } catch (e) {
       toast.current.show({
         severity: "error",
