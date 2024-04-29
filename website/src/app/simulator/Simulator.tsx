@@ -108,7 +108,7 @@ class AttackStyle extends Actor {
     return this.perkNames.some((pn: string) => pn === perkName);
   }
 
-  static Factory(name: string): Enemy {
+  static Factory(name: string): AttackStyle {
     let exo = [];
     let perk = [];
     try {
@@ -116,7 +116,7 @@ class AttackStyle extends Actor {
       exo = attackStyle.exo || [];
       perk = attackStyle.perk || [];
     } catch (_e) {
-      throw new Error(`Invalid attackStyle name: ${name}`);
+      throw new Error(`Invalid attackStyle name: "${name || ""}"`);
     }
     return new AttackStyle(name, name, exo, perk);
   }
@@ -126,7 +126,7 @@ class DamageType extends Adjustment {
   static Factory(name: string): DamageType {
     const damageType = damageTypeDescriptions[name];
     if (!damageType) {
-      throw new Error(`Invalid damageType: "${name}"`);
+      throw new Error(`Invalid damageType: "${name || ""}"`);
     }
     return new DamageType(
       name,
@@ -472,7 +472,7 @@ export class Simulator {
     const suit =
       (selected.armEXOName && Suit.Factory(selected.armEXOName.name)) || null;
     const enemy = Enemy.Factory(selected.opponentIdentities.map((o) => o.name));
-    const attackStyle = AttackStyle.Factory(selected.attackStyle.name);
+    const attackStyle = AttackStyle.Factory(selected.attackStyle?.name);
     return new Scenario(weapon, attackStyle, suit, enemy);
   }
 }

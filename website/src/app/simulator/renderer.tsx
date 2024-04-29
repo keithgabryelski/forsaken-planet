@@ -113,8 +113,7 @@ export default function Renderer({ reports }) {
     perk1Name: null,
     perk2Name: null,
     armEXOName: null,
-    enemyName: null,
-    attackStyle: null,
+    attackStyle: { name: "melee", code: "melee" },
     opponentIdentities: [],
   });
 
@@ -253,7 +252,7 @@ export default function Renderer({ reports }) {
         "--text-color-secondary",
       );
       const surfaceBorder = documentStyle.getPropertyValue("--surface-border");
-      const output = simulator.simulate(scenario);
+      const output = (scenario && simulator.simulate(scenario)) || [[]];
       const graphData = output.map((data) => {
         return data.reduce((a, b) => a + b, 0) / data.length;
       });
@@ -280,6 +279,14 @@ export default function Renderer({ reports }) {
         aspectRatio: 0.6,
         plugins: {
           legend: {
+            title: {
+              text: "Simulation Run",
+              display: true,
+              color: "white",
+              font: {
+                size: 24,
+              },
+            },
             labels: {
               color: textColor,
             },

@@ -8,9 +8,9 @@ export type Selectables = {
   damageTypeName: { name: string; code: string };
   perk1Name: { name: string; code: string };
   perk2Name: { name: string; code: string };
-  armEXOName: string;
-  enemyName: string;
-  attackStyle: string;
+  armEXOName: { name: string; code: string };
+  attackStyle: { name: string; code: string };
+  opponentIdentities: string[];
 };
 
 export default class SimulatorSelectables {
