@@ -66,7 +66,7 @@ export default function Welcome() {
                 <Link
                   type="Primary"
                   className="mr-3 p-button pi pi-code no-underline"
-                  href="https://forsaken-planet.wordpress.com/"
+                  href="/blog"
                 >
                   &nbsp;Forsaken Blog
                 </Link>

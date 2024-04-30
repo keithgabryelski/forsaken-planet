@@ -1,0 +1,80 @@
+:root {
+  --p500: #5c6bc0;
+  --p700: #303f9f;
+  --p800: #283593;
+  --a700: #ffc400;
+}
+
+#siteTitle {
+  margin-right: auto;
+  margin-left: 5%;
+  color: black;
+  font-size: 40px;
+}
+
+.anchor {
+  position: relative;
+  display: block;
+  top: -100px;
+}
+
+.blog {
+  background: rgba(0, 0, 0, 0.9);
+  position: relative;
+  border-radius: 8px;
+  margin: 0px 5% 20px 5%;
+  padding: 8px 5%;
+  font-size: 24px;
+}
+@media screen and (max-width: 800px) {
+  #siteTitle {
+    font-size: 32px;
+  }
+}
+
+.sectionTitle {
+  width: 100%;
+  text-align: center;
+}
+
+.article {
+  position: relative;
+  background: black;
+  margin: 5%;
+  border-radius: 10px;
+  width: 90%;
+  padding: 5%;
+}
+
+.article {
+  width: 100%;
+  margin: 5% 0;
+}
+
+.content {
+  font-size: 18px;
+}
+
+.webpic {
+  width: 100%;
+  margin-bottom: 5%;
+  border-radius: 10px;
+}
+
+.p {
+  font-size: 18px;
+}
+
+img {
+  width: 100%;
+  height: auto;
+}
+
+.blackLink {
+  color: white;
+  text-decoration: inherit; /* no underline */
+}
+
+.blackLink:hover {
+  text-decoration: inherit; /* no underline */
+}

@@ -1,5 +1,6 @@
-import Newsfeed from "./newsfeed";
+import Blog from "./blog/page";
 import Welcome from "./welcome";
+import "./blog/articles.css";
 
 export default function Home() {
   return (
@@ -9,7 +10,7 @@ export default function Home() {
       <br />
       <br />
       <br />
-      <Newsfeed />
+      <Blog />
     </main>
   );
 }

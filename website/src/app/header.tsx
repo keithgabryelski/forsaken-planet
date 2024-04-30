@@ -17,7 +17,7 @@ export default function Header() {
     {
       label: "Blog",
       icon: "pi pi-link",
-      url: "https://forsaken-planet.wordpress.com/",
+      url: "/blog",
     },
     {
       label: "Attack Simulator",
