@@ -1,7 +1,7 @@
 "use client";
 import React, { Component } from "react";
-import { Image } from "primereact/image";
 import axios from "axios";
+import { getFeaturedImage } from "../blog-helpers";
 
 export default class Article extends Component {
   constructor(props) {
@@ -43,49 +43,19 @@ export default class Article extends Component {
       .catch((error) => console.log(error));
   }
 
-  parseOutScripts(_content) {}
-
   render() {
-    if (this.state.post) {
-      let featuredImage = null;
-      let height = 1024;
-      let width = 1024;
-      if (this.state.post.attachments != null) {
-        const attachment = Object.values(this.state.post.attachments)[0];
-        if (attachment != null) {
-          featuredImage = attachment.URL;
-          height = attachment.height;
-          width = attachment.width;
-        }
-      }
-      if (!featuredImage) {
-        featuredImage = this.state.post.featured_image;
-      }
-
-      return (
-        <div className="blog">
-          <div className="article">
-            {featuredImage ? (
-              <Image
-                className="img-responsive webpic"
-                alt="article header"
-                src={featuredImage}
-                width={width}
-                height={height}
-              />
-            ) : (
-              ""
-            )}
-            <h1 className="text-center">{this.state.post.title}</h1>
-            <div
-              className="content"
-              dangerouslySetInnerHTML={{ __html: this.state.post.content }}
-            />
-          </div>
+    const featuredImage = getFeaturedImage(this.state.post);
+    return (
+      <div className="blog">
+        <div className="article">
+          {featuredImage}
+          <h1 className="text-center">{this.state.post.title}</h1>
+          <div
+            className="content"
+            dangerouslySetInnerHTML={{ __html: this.state.post.content }}
+          />
         </div>
-      );
-    } else {
-      return null;
-    }
+      </div>
+    );
   }
 }
