@@ -475,4 +475,19 @@ export class Simulator {
     const attackStyle = AttackStyle.Factory(selected.attackStyle?.name);
     return new Scenario(weapon, attackStyle, suit, enemy);
   }
+
+  createScenarioSimple(selected: Selectables): Scenario {
+    const gear = Gear.Factory("generic", selected.damage);
+    const damageType = DamageType.Factory(selected.damageTypeName);
+    const perk1 =
+      (selected.perk1Name && Perk.Factory(selected.perk1Name)) || null;
+    const perk2 =
+      (selected.perk2Name && Perk.Factory(selected.perk2Name)) || null;
+    const weapon = Weapon.Factory(gear, damageType, perk1, perk2);
+    const suit =
+      (selected.armEXOName && Suit.Factory(selected.armEXOName)) || null;
+    const enemy = Enemy.Factory(selected.opponentIdentities);
+    const attackStyle = AttackStyle.Factory(selected.attackStyle);
+    return new Scenario(weapon, attackStyle, suit, enemy);
+  }
 }
