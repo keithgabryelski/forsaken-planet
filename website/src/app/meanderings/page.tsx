@@ -5,7 +5,7 @@ import DamageMINMAXGrouped from "../../assets/images/damage-min-max-grouped.png"
 import DropRatePieChart from "../../assets/images/drop-rate-pie-chart.png";
 import DamageScatterPlot from "../../assets/images/damage-scatter-plot.png";
 import DropsTable from "../../assets/images/drops-table.png";
-import DamageTypePieChart from "../../assets/images/damage-type-pie-chart.png";
+import ElementPieChart from "../../assets/images/damage-type-pie-chart.png";
 import PerkDropRateRadar from "../../assets/images/perk-drop-rate-radar.png";
 
 export default function Meanderings() {
@@ -138,19 +138,19 @@ export default function Meanderings() {
             className="p-3 shadow-2 mb-3 inline-block"
             style={{ borderRadius: "10px" }}
           >
-            <a href="/damage-type-pie-chart">
+            <a href="/element-pie-chart">
               <Image
-                src={DamageTypePieChart}
+                src={ElementPieChart}
                 width={128}
-                alt="damage type pie chart"
+                alt="element pie chart"
               />
             </a>
           </span>
           <div className="text-900 text-xl mb-3 font-medium">
-            Damage Type Pie Chart
+            Element Pie Chart
           </div>
           <span className="text-700 line-height-3">
-            Drop rate for damage types.
+            Drop rate for elements.
           </span>
         </div>
 

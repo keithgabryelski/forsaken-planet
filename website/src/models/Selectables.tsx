@@ -1,4 +1,4 @@
-import { GearItem, RarityItem, DamageTypeItem, PerkItem } from "./Item";
+import { GearItem, RarityItem, ElementItem, PerkItem } from "./Item";
 import type DungeonsOfEternityCache from "./DungeonsOfEternityCache";
 
 class Selectables {
@@ -36,10 +36,10 @@ class Selectables {
     return [];
   }
 
-  damageTypes() {
+  elements() {
     try {
-      return [...this.cache.catalog.damageTypes].map(
-        (g) => new DamageTypeItem(g, this),
+      return [...this.cache.catalog.elements].map(
+        (g) => new ElementItem(g, this),
       );
     } catch (_e) {
       // nothing
@@ -83,12 +83,12 @@ class Selectables {
     );
   }
 
-  selectedDamageTypes() {
-    return this.damageTypes().filter((g) => g.isTarget);
+  selectedElements() {
+    return this.elements().filter((g) => g.isTarget);
   }
 
-  selectedDamageTypesDropRate() {
-    return this.selectedDamageTypes().reduce(
+  selectedElementsDropRate() {
+    return this.selectedElements().reduce(
       (accumulator, item) => accumulator + item.dropRate(),
       0.0,
     );

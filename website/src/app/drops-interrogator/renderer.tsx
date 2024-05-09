@@ -78,14 +78,14 @@ export default function Renderer({ reports }: { reports: DOEReport[] }) {
       loading={false}
       header={header}
       filters={filters}
-      globalFilterFields={["Name", "Group", "Rarity", "DamageType", "perks"]}
+      globalFilterFields={["Name", "Group", "Rarity", "Element", "perks"]}
       emptyMessage="No drops found."
     >
       <Column field="Group" header="Group Name" sortable />
       <Column field="Name" header="Name" sortable />
       <Column field="Rarity" header="Rarity" sortable />
       <Column field="Damage" header="Damage" sortable />
-      <Column field="DamageType" header="Damage Type" sortable />
+      <Column field="Element" header="Element" sortable />
       <Column field="Cost" header="Cost" sortable />
       <Column field="perks" header="Perks" sortable />
     </DataTable>

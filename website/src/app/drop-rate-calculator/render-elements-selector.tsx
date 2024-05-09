@@ -1,17 +1,17 @@
 import { MultiSelect } from "primereact/multiselect";
-import { Item, DamageTypeItem } from "@/models/Item";
+import { Item, ElementItem } from "@/models/Item";
 
-export default function RenderDamageTypesSelector({ onChange, selectables }) {
-  let source = selectables.damageTypes().filter((s) => s.isSource);
-  const damageTypesExcluded = selectables
+export default function RenderElementsSelector({ onChange, selectables }) {
+  let source = selectables.elements().filter((s) => s.isSource);
+  const elementsExcluded = selectables
     .selectedGear()
     .some((item) => ["shields", "staves"].includes(item.name));
-  if (damageTypesExcluded) {
+  if (elementsExcluded) {
     source = [];
   }
-  const target = selectables.damageTypes().filter((s) => s.isTarget);
+  const target = selectables.elements().filter((s) => s.isTarget);
   const targetDropRate =
-    target.length === 0 ? 1.0 : selectables.selectedDamageTypesDropRate();
+    target.length === 0 ? 1.0 : selectables.selectedElementsDropRate();
   const { percent, humanText } = Item.dropRatePercent(targetDropRate);
   const panelFooterTemplate = Item.footerTemplateFunc(
     target.length,
@@ -25,8 +25,8 @@ export default function RenderDamageTypesSelector({ onChange, selectables }) {
       options={source}
       onChange={(event) => onChange(event.value)}
       optionLabel="name"
-      placeholder="Select Damage Types"
-      itemTemplate={DamageTypeItem.itemTemplate}
+      placeholder="Select Elements"
+      itemTemplate={ElementItem.itemTemplate}
       panelFooterTemplate={panelFooterTemplate}
       display="chip"
       showSelectAll={false}

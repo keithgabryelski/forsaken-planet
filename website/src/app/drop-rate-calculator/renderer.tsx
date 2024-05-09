@@ -9,7 +9,7 @@ import RenderNotes from "./render-notes";
 import RenderDropRate from "./render-drop-rate";
 import RenderGearNameSelector from "./render-gear-name-selector";
 import RenderRaritiesSelector from "./render-rarities-selector";
-import RenderDamageTypesSelector from "./render-damage-types-selector";
+import RenderElementsSelector from "./render-elements-selector";
 import RenderPerksSelector from "./render-perks-selector";
 
 export default function Renderer({ reports }) {
@@ -18,7 +18,7 @@ export default function Renderer({ reports }) {
   const [selected, setSelected] = useState({
     gearNames: [],
     rarities: [],
-    damageTypes: [],
+    elements: [],
     perks: [],
     damageMin: null,
     damageMax: null,
@@ -57,9 +57,9 @@ export default function Renderer({ reports }) {
         selectables={selectables}
         onChange={(targets) => onChange(targets, "rarities")}
       />
-      <RenderDamageTypesSelector
+      <RenderElementsSelector
         selectables={selectables}
-        onChange={(targets) => onChange(targets, "damageTypes")}
+        onChange={(targets) => onChange(targets, "elements")}
       />
       <RenderPerksSelector
         selectables={selectables}

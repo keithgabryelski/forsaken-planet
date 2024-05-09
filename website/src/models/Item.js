@@ -1,5 +1,5 @@
 import { gearPerksMatrix } from "./Perks";
-import { gearDamageTypesMaxtrix } from "./DamageTypes";
+import { gearElementsMaxtrix } from "./Elements";
 
 export class Item {
   constructor(name, selectables) {
@@ -153,9 +153,9 @@ export class GearItem extends Item {
   get itemNames() {
     return this.selected.gearNames;
   }
-  get isValidGearForDamageType() {
-    return this.selected.damageTypes.every((damageType) =>
-      gearDamageTypesMaxtrix[this.name]?.includes(damageType),
+  get isValidGearForElement() {
+    return this.selected.elements.every((element) =>
+      gearElementsMaxtrix[this.name]?.includes(element),
     );
   }
 
@@ -166,7 +166,7 @@ export class GearItem extends Item {
   }
 
   get isValidGearFor() {
-    return this.isValidGearForDamageType && this.isValidGearForPerk;
+    return this.isValidGearForElement && this.isValidGearForPerk;
   }
 
   get isTargetable() {
@@ -200,9 +200,9 @@ export class RarityItem extends Item {
   }
 }
 
-export class DamageTypeItem extends Item {
+export class ElementItem extends Item {
   get itemNames() {
-    return this.selected.damageTypes;
+    return this.selected.elements;
   }
 
   get isTargetable() {
@@ -210,7 +210,7 @@ export class DamageTypeItem extends Item {
   }
 
   dropRate() {
-    return Item.dropRate([this.name], this.statistics.byDamageType);
+    return Item.dropRate([this.name], this.statistics.byElement);
   }
 
   static itemTemplate(item) {

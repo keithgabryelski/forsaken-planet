@@ -15,76 +15,65 @@ export default function Header() {
       url: "/mediawiki",
     },
     {
-      label: "Blog",
-      icon: "pi pi-link",
-      url: "/blog",
-    },
-    {
       label: "Attack Simulator",
       icon: "pi pi-bullseye",
       url: "/simulator",
+    },
+    {
+      label: "Drop Rates",
+      icon: "pi pi-bolt",
+      items: [
+        {
+          label: "Gear Calcuator",
+          icon: "pi pi-calculator",
+          url: "/drop-rate-calculator",
+        },
+        {
+          label: "Gear Pie Chart",
+          icon: "pi pi-chart-pie",
+          url: "/drop-rate-pie-chart",
+        },
+        {
+          label: "Perk Radar Chart",
+          icon: "pi pi-star",
+          url: "/perk-drop-rate-radar",
+        },
+        {
+          label: "Drops Interrogator",
+          icon: "pi pi-table",
+          url: "/drops-interrogator",
+        },
+      ],
+    },
+    {
+      label: "Damage Ranges",
+      icon: "pi pi-asterisk",
+      items: [
+        {
+          label: "MIN/MAX",
+          icon: "pi pi-chart-bar",
+          url: "/damage-min-max",
+        },
+        {
+          label: "MIN/MAX Grouped",
+          icon: "pi pi-chart-bar",
+          url: "/damage-min-max-grouped",
+        },
+        {
+          label: "Scatter Plot",
+          icon: "pi pi-chart-scatter",
+          url: "/damage-scatter-plot",
+        },
+      ],
     },
     {
       label: "Meanderings",
       icon: "pi pi-code",
       items: [
         {
-          label: "Mystical Mumblings",
-          icon: "pi pi-ellipsis-h",
-          url: "/meanderings",
-          prefetch: false,
-        },
-        {
-          label: "Drop Rates",
-          icon: "pi pi-bolt",
-          items: [
-            {
-              label: "Gear Calcuator",
-              icon: "pi pi-calculator",
-              url: "/drop-rate-calculator",
-            },
-            {
-              label: "Gear Pie Chart",
-              icon: "pi pi-chart-pie",
-              url: "/drop-rate-pie-chart",
-            },
-            {
-              label: "Perk Radar Chart",
-              icon: "pi pi-star",
-              url: "/perk-drop-rate-radar",
-            },
-            {
-              label: "Drops Interrogator",
-              icon: "pi pi-table",
-              url: "/drops-interrogator",
-            },
-          ],
-        },
-        {
-          label: "Damage Ranges",
-          icon: "pi pi-asterisk",
-          items: [
-            {
-              label: "MIN/MAX",
-              icon: "pi pi-chart-bar",
-              url: "/damage-min-max",
-            },
-            {
-              label: "MIN/MAX Grouped",
-              icon: "pi pi-chart-bar",
-              url: "/damage-min-max-grouped",
-            },
-            {
-              label: "Scatter Plot",
-              icon: "pi pi-chart-scatter",
-              url: "/damage-scatter-plot",
-            },
-          ],
-        },
-        {
-          label: "Damage Type Pie Chart",
+          label: "Element Pie Chart",
           icon: "pi pi-chart-pie",
-          url: "/damage-type-pie-chart",
+          url: "/element-pie-chart",
         },
       ],
     },
@@ -92,6 +81,12 @@ export default function Header() {
       label: "What we're reading..",
       icon: "pi pi-book",
       items: [
+        {
+          label: "Mystical Mumblings",
+          icon: "pi pi-ellipsis-h",
+          url: "/meanderings",
+          prefetch: false,
+        },
         {
           label: "Statistics GitHub Repository (R Code)",
           icon: "pi pi-github",
@@ -109,6 +104,11 @@ export default function Header() {
           icon: "pi pi-github",
           url: "https://github.com/keithgabryelski/forsaken-planet",
           prefetch: false,
+        },
+        {
+          label: "Blog",
+          icon: "pi pi-link",
+          url: "/blog",
         },
       ],
     },

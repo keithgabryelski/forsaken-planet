@@ -1,3 +1,4 @@
+import PublicGoogleSheetsParser from "public-google-sheets-parser";
 import DungeonsOfEternityIndexes from "./DungeonsOfEternityIndexes";
 import DungeonsOfEternityCatalog from "./DungeonsOfEternityCatalog";
 import DungeonsOfEternityStatistics from "./DungeonsOfEternityStatistics";
@@ -39,12 +40,16 @@ export default class DungeonsOfEternityCache {
 
   static async FetchReports(): Promise<DOEReport[]> {
     try {
-      const url = new URL(process.env.FORSAKEN_REPORTS_URL);
-      const fetched = await fetch(url, {
-        method: "GET",
-        next: { revalidate: 3600 },
+      // lvl 50
+      // const spreadsheetId = '15XGevBozTrsKYo2EGDgq5onnf2fHgTcJfXuA5vTeSnY'
+      // lvl 60
+      const spreadsheetId = "1x9NlXY6hP0rW3-0F6-AJnJfk6phA4IGze5WE72grH9w";
+      const parser = new PublicGoogleSheetsParser(spreadsheetId, {
+        sheetName: "All Reports",
+        useFormat: false,
       });
-      return await fetched.json();
+      const data = await parser.parse();
+      return data;
     } catch (e) {
       console.error("fetch failed", e);
       return [];

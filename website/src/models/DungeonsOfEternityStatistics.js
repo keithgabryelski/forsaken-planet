@@ -1,11 +1,11 @@
 import { gearSlotPlacement } from "@/models/Gear";
-import { gearDamageTypesMaxtrix } from "@/models/DamageTypes";
+import { gearElementsMaxtrix } from "@/models/Elements";
 import { perkSet, gearPerksMatrix } from "@/models/Perks";
 
 export default class DungeonsOfEternityStatistics {
   constructor(drops = [], indexes = null) {
     this.totalDrops = 0;
-    this.numDamageTypeDrops = 0;
+    this.numElementDrops = 0;
     this.numDamageDrops = 0;
     this.slots = {
       hip: 0,
@@ -99,12 +99,11 @@ export default class DungeonsOfEternityStatistics {
         }
       }
 
-      const hasDamageType = Object.entries(gearDamageTypesMaxtrix).filter(
-        ([key, values]) =>
-          item.Group === key && values.includes(item.damageType),
+      const hasElement = Object.entries(gearElementsMaxtrix).filter(
+        ([key, values]) => item.Group === key && values.includes(item.element),
       );
-      if (hasDamageType) {
-        this.numDamageTypeDrops += 1;
+      if (hasElement) {
+        this.numElementDrops += 1;
       }
 
       this.slots[gearSlotPlacement[item.Group]] += 1;
@@ -137,10 +136,10 @@ export default class DungeonsOfEternityStatistics {
         drops.length / this.totalDrops,
       ]),
     );
-    this.byDamageType = new Map(
-      [...indexes.byDamageType.entries()].map(([name, drops]) => [
+    this.byElement = new Map(
+      [...indexes.byElement.entries()].map(([name, drops]) => [
         name,
-        drops.length / this.numDamageTypeDrops,
+        drops.length / this.numElementDrops,
       ]),
     );
     this.byPerk = new Map(

@@ -216,7 +216,7 @@ export default function Renderer({ reports }: { reports: DOEReport[] }) {
           options={dataSources}
           optionLabel="name"
           placeholder="Select a Datasource"
-          className="w-full md:w-14rem"
+          className="w-full md:w-20rem"
         />
       </div>
       <Chart

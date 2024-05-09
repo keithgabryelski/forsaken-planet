@@ -1,4 +1,4 @@
-export type DamageTypeType = "ice" | "fire" | "poison" | "physical";
+export type ElementType = "ice" | "fire" | "poison" | "physical";
 
 export type AdjustmentType = {
   description: string;
@@ -6,7 +6,7 @@ export type AdjustmentType = {
   multiplier: number;
 };
 
-export const gearDamageTypesMaxtrix: { [string]: DamageTypeType[] } = {
+export const gearElementsMaxtrix: { [string]: ElementType[] } = {
   axes: ["ice", "fire", "poison", "physical"],
   bows: ["ice", "fire", "poison", "physical"],
   crossbows: ["ice", "fire", "poison", "physical"],
@@ -15,9 +15,10 @@ export const gearDamageTypesMaxtrix: { [string]: DamageTypeType[] } = {
   shields: [],
   staves: [],
   swords: ["ice", "fire", "poison", "physical"],
+  "two-handed swords": ["ice", "fire", "poison", "physical"],
 };
 
-export const damageTypeDescriptions: { [DamageTypeType]: AdjustmentType } = {
+export const elementDescriptions: { [ElementType]: AdjustmentType } = {
   ice: {
     description:
       "chance to freeze and cause embrittlement: frozen targets receive extra damage",

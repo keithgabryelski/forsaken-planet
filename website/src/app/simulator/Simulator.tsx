@@ -1,5 +1,5 @@
 import { AttackStyles } from "@/models/AttackStyles";
-import { damageTypeDescriptions } from "@/models/DamageTypes";
+import { elementDescriptions } from "@/models/Elements";
 import { perkDescriptions } from "@/models/Perks";
 import { exoDescriptions } from "@/models/EXOs";
 import { type Selectables } from "./SimulatorSelectables";
@@ -122,17 +122,17 @@ class AttackStyle extends Actor {
   }
 }
 
-class DamageType extends Adjustment {
-  static Factory(name: string): DamageType {
-    const damageType = damageTypeDescriptions[name];
-    if (!damageType) {
-      throw new Error(`Invalid damageType: "${name || ""}"`);
+class Element extends Adjustment {
+  static Factory(name: string): Element {
+    const element = elementDescriptions[name];
+    if (!element) {
+      throw new Error(`Invalid element: "${name || ""}"`);
     }
-    return new DamageType(
+    return new Element(
       name,
-      damageType.description,
-      damageType.chance || 0.0,
-      damageType.multiplier || 1.0,
+      element.description,
+      element.chance || 0.0,
+      element.multiplier || 1.0,
     );
   }
 }
@@ -149,7 +149,7 @@ class Perk extends Adjustment {
     return true;
   }
 
-  static Factory(name: string): DamageType {
+  static Factory(name: string): Element {
     if (!name) {
       return null;
     }
@@ -248,13 +248,13 @@ class Gear extends Actor {
 
 class Weapon {
   gear: Gear;
-  damageType: DamageType;
+  element: Element;
   perk1: Perk;
   perk2: Perk;
 
-  constructor(gear: Gear, damageType: DamageType, perk1: Perk, perk2: Perk) {
+  constructor(gear: Gear, element: Element, perk1: Perk, perk2: Perk) {
     this.gear = gear;
-    this.damageType = damageType;
+    this.element = element;
     this.perk1 = perk1;
     this.perk2 = perk2;
   }
@@ -264,12 +264,12 @@ class Weapon {
   }
 
   getAdjustments(): Adjustment[] {
-    return [this.damageType, this.perk1, this.perk2].filter(Boolean);
+    return [this.element, this.perk1, this.perk2].filter(Boolean);
   }
 
   static Factory(
     gear: Gear,
-    damageType: DamageType,
+    element: Element,
     perk1: Perk,
     perk2: Perk,
   ): Weapon {
@@ -278,7 +278,7 @@ class Weapon {
         `Can't have two of the same perk (${perk1.name}) on a single weapon`,
       );
     }
-    return new Weapon(gear, damageType, perk1, perk2);
+    return new Weapon(gear, element, perk1, perk2);
   }
 }
 
@@ -463,12 +463,12 @@ export class Simulator {
 
   createScenario(selected: Selectables): Scenario {
     const gear = Gear.Factory("generic", selected.damage);
-    const damageType = DamageType.Factory(selected.damageTypeName.name);
+    const element = Element.Factory(selected.elementName.name);
     const perk1 =
       (selected.perk1Name && Perk.Factory(selected.perk1Name.name)) || null;
     const perk2 =
       (selected.perk2Name && Perk.Factory(selected.perk2Name.name)) || null;
-    const weapon = Weapon.Factory(gear, damageType, perk1, perk2);
+    const weapon = Weapon.Factory(gear, element, perk1, perk2);
     const suit =
       (selected.armEXOName && Suit.Factory(selected.armEXOName.name)) || null;
     const enemy = Enemy.Factory(selected.opponentIdentities.map((o) => o.name));
@@ -478,12 +478,12 @@ export class Simulator {
 
   createScenarioSimple(selected: Selectables): Scenario {
     const gear = Gear.Factory("generic", selected.damage);
-    const damageType = DamageType.Factory(selected.damageTypeName);
+    const element = Element.Factory(selected.elementName);
     const perk1 =
       (selected.perk1Name && Perk.Factory(selected.perk1Name)) || null;
     const perk2 =
       (selected.perk2Name && Perk.Factory(selected.perk2Name)) || null;
-    const weapon = Weapon.Factory(gear, damageType, perk1, perk2);
+    const weapon = Weapon.Factory(gear, element, perk1, perk2);
     const suit =
       (selected.armEXOName && Suit.Factory(selected.armEXOName)) || null;
     const enemy = Enemy.Factory(selected.opponentIdentities);

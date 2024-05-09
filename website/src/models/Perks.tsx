@@ -16,6 +16,12 @@ export const daggerPerks = ["throw distance", "vampire", "poison"];
 export const hammerPerks = ["throw distance", "slowing", "area damage"];
 export const shieldPerks = ["knockback distance", "absorb"];
 export const swordPerks = ["vampire", "throwable", "stab damage"];
+export const twoHandedSwordPerks = [
+  "knockback distance",
+  "vampire",
+  "unblockable",
+  "stab damage",
+];
 
 export const gearPerksMatrix = {
   axes: [...axePerks, ...weaponPerks],
@@ -26,6 +32,7 @@ export const gearPerksMatrix = {
   shields: [...shieldPerks, ...weaponPerks],
   staves: [],
   swords: [...swordPerks, ...weaponPerks],
+  "two-handed swords": [...twoHandedSwordPerks, ...weaponPerks],
 };
 
 export const perkSet = new Set([
@@ -37,6 +44,7 @@ export const perkSet = new Set([
   ...hammerPerks,
   ...shieldPerks,
   ...swordPerks,
+  ...twoHandedSwordPerks,
 ]);
 
 export const perkGearMatrix = Object.entries(gearPerksMatrix).reduce(
@@ -217,6 +225,14 @@ export const perkDescriptions = {
   throwable: {
     description: "Allows sword to be thrown",
     type: "swords",
+    "min chance": "",
+    "min multiplier": "",
+    "max chance": "",
+    "max multiplier": "",
+  },
+  unblockable: {
+    description: "Allows sword to be thrown",
+    type: "two-handed swords",
     "min chance": "",
     "min multiplier": "",
     "max chance": "",

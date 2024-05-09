@@ -12,7 +12,7 @@ import { Toast } from "primereact/toast";
 import { Button } from "primereact/button";
 import update from "immutability-helper";
 import DungeonsOfEternityCache from "@/models/DungeonsOfEternityCache";
-import { damageTypeDescriptions } from "@/models/DamageTypes";
+import { elementDescriptions } from "@/models/Elements";
 import { perkDescriptions } from "@/models/Perks";
 import { exoDescriptions } from "@/models/EXOs";
 import { MultiSelect } from "primereact/multiselect";
@@ -74,11 +74,11 @@ const config = {
   },
 };
 
-const damageTypeAdjustments = Object.entries(damageTypeDescriptions).map(
-  ([damageTypeName, damageTypeDescription]) => ({
-    id: damageTypeName,
-    name: damageTypeName,
-    ...damageTypeDescription,
+const elementAdjustments = Object.entries(elementDescriptions).map(
+  ([elementName, elementDescription]) => ({
+    id: elementName,
+    name: elementName,
+    ...elementDescription,
   }),
 );
 const perkAdjustments = Object.entries(perkDescriptions).map(
@@ -108,8 +108,8 @@ export default function Renderer({ reports }) {
     new SimulatorSelectables(cache),
   );
   const [selected, setSelected] = useState({
-    damage: 50,
-    damageTypeName: { name: "physical", code: "physical" },
+    damage: 100,
+    elementName: { name: "physical", code: "physical" },
     perk1Name: null,
     perk2Name: null,
     armEXOName: null,
@@ -137,7 +137,7 @@ export default function Renderer({ reports }) {
     ),
     equationComment: <span>normal damage</span>,
   });
-  const dtDescription = damageTypeDescriptions[selected.damageTypeName?.name];
+  const dtDescription = elementDescriptions[selected.elementName?.name];
   if (dtDescription) {
     const { chance, multiplier } = dtDescription;
     if (chance) {
@@ -146,7 +146,7 @@ export default function Renderer({ reports }) {
         selected.damage,
         chance,
         multiplier,
-        <span>damage-type {selected.damageTypeName?.name}</span>,
+        <span>element {selected.elementName?.name}</span>,
       );
     }
   }
@@ -368,6 +368,8 @@ export default function Renderer({ reports }) {
                 />
                 <Slider
                   value={selected.damage}
+                  min={1}
+                  max={200}
                   onChange={(e) => onChange(e.value, "damage")}
                 />
               </span>
@@ -382,19 +384,18 @@ export default function Renderer({ reports }) {
                 style={{ borderRadius: "10px" }}
               >
                 <Dropdown
-                  value={selected.damageTypeName}
-                  onChange={(e) => onChange(e.value, "damageTypeName")}
-                  options={selectables.damageTypeNamesAsOptions}
+                  value={selected.elementName}
+                  onChange={(e) => onChange(e.value, "elementName")}
+                  options={selectables.elementNamesAsOptions}
                   optionLabel="name"
-                  placeholder="Select Damage Type"
+                  placeholder="Select Element"
                 />
               </span>
               <div className="text-900 text-xl mb-3 font-medium">
-                Weapon&apos;s Damage Type
+                Weapon&apos;s Element
               </div>
               <span className="text-700 line-height-3">
-                {damageTypeDescriptions[selected.damageTypeName?.name]
-                  ?.description ||
+                {elementDescriptions[selected.elementName?.name]?.description ||
                   'Select which element your weapon has or "physical"'}
               </span>
             </div>
@@ -552,9 +553,9 @@ export default function Renderer({ reports }) {
 
         <AccordionTab header="Data Tables">
           <div className="grid">
-            <Card title="Damage Type Adjustments">
+            <Card title="Element Adjustments">
               <DataTable
-                value={damageTypeAdjustments}
+                value={elementAdjustments}
                 stripedRows
                 tableStyle={{ minWidth: "50rem" }}
               >

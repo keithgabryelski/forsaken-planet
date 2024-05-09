@@ -120,7 +120,7 @@ export default function Renderer({ reports }) {
           options={chartTypes}
           optionLabel="name"
           placeholder="Select a Chart Type"
-          className="w-full md:w-14rem"
+          className="w-full md:w-20rem"
         />
       </div>
       <Chart type={chartType} data={chartData} options={chartOptions} />

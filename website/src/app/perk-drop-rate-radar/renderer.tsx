@@ -63,6 +63,7 @@ export default function Renderer({ reports }) {
       "#554400",
       "#550044",
       "#005544",
+      "#004455",
     ];
 
     const data = {

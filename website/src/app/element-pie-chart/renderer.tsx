@@ -5,7 +5,7 @@ import ChartDataLabels from "chartjs-plugin-datalabels";
 import DungeonsOfEternityCache from "@/models/DungeonsOfEternityCache";
 import styles from "./styles.module.css";
 
-export default function DamageTypePieChart({ reports }) {
+export default function ElementPieChart({ reports }) {
   const [chartData, setChartData] = useState({
     labels: [],
     datasets: [
@@ -54,13 +54,13 @@ export default function DamageTypePieChart({ reports }) {
     setChartOptions(options);
 
     const labels = ["physical", "poison", "fire", "ice"];
-    const collatedDataTypes = cache.indexes.byDamageType.entries().reduce(
+    const collatedDataTypes = cache.indexes.byElement.entries().reduce(
       (accumulator, [_name, drops]) => {
         return drops.reduce((acc, drop) => {
           if (["shields", "staves"].includes(drop.Group)) {
             return acc;
           }
-          acc[drop.DamageType].push(drop);
+          acc[drop.Element].push(drop);
           return acc;
         }, accumulator);
       },
@@ -74,12 +74,12 @@ export default function DamageTypePieChart({ reports }) {
       (accumulator, drops) => accumulator + drops.length,
       0,
     );
-    const damageTypeEntries = [...Object.entries(collatedDataTypes)].map(
-      ([damageType, drops]) => {
-        return [damageType, drops.length / total];
+    const elementEntries = [...Object.entries(collatedDataTypes)].map(
+      ([element, drops]) => {
+        return [element, drops.length / total];
       },
     );
-    const values = damageTypeEntries.map((a) => a[1]);
+    const values = elementEntries.map((a) => a[1]);
     const documentStyle = getComputedStyle(document.documentElement);
     const data = {
       labels: labels,

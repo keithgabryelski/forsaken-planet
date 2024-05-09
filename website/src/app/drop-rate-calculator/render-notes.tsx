@@ -1,11 +1,11 @@
 import { perkDescriptions } from "@/models/Perks";
-import { damageTypeDescriptions } from "@/models/DamageTypes";
+import { elementDescriptions } from "@/models/Elements";
 
 export default function RenderNotes({ selectables }) {
   const perks = selectables.selectedPerks();
   let notesHeader = null;
   let perkNotes = null;
-  let damageTypeNotes = null;
+  let elementNotes = null;
   if (perks.length > 0) {
     perkNotes = perks.map((perk) => {
       return (
@@ -16,17 +16,17 @@ export default function RenderNotes({ selectables }) {
         </li>
       );
     });
-    const damageType = selectables.selectedDamageTypes()[0]?.name;
-    if (damageType) {
-      damageTypeNotes = (
+    const element = selectables.selectedElements()[0]?.name;
+    if (element) {
+      elementNotes = (
         <li>
-          <span className="fw-bold">{damageType}</span>
-          {" (damage type): "}
-          {damageTypeDescriptions[damageType].description}
+          <span className="fw-bold">{element}</span>
+          {" (element): "}
+          {elementDescriptions[element].description}
         </li>
       );
     }
-    if (perkNotes || damageTypeNotes) {
+    if (perkNotes || elementNotes) {
       notesHeader = <h2>Notes:</h2>;
     }
     return (
@@ -34,7 +34,7 @@ export default function RenderNotes({ selectables }) {
         {notesHeader}
         <ul>
           {perkNotes}
-          {damageTypeNotes}
+          {elementNotes}
         </ul>
       </div>
     );

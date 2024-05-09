@@ -6,7 +6,7 @@ export default class DungeonsOfEternityIndexes {
   byName: Map<string, DOEReport>;
   byIcon: Map<string, DOEReport>;
   byRarity: Map<string, DOEReport>;
-  byDamageType: Map<string, DOEReport>;
+  byElement: Map<string, DOEReport>;
   byPerk: Map<string, DOEReport>;
   byCost: Map<string, DOEReport>;
   byDamage: Map<string, DOEReport>;
@@ -17,12 +17,15 @@ export default class DungeonsOfEternityIndexes {
     this.byName = new Map();
     this.byIcon = new Map();
     this.byRarity = new Map();
-    this.byDamageType = new Map();
+    this.byElement = new Map();
     this.byPerk = new Map();
     this.byCost = new Map();
     this.byDamage = new Map();
 
     for (const item of drops) {
+      if (!item.Element) {
+        item.Element = "physical";
+      }
       this.byGroup.set(
         item.Group,
         (this.byGroup.get(item.Group) ?? []).concat(item),
@@ -43,9 +46,9 @@ export default class DungeonsOfEternityIndexes {
         item.Rarity,
         (this.byRarity.get(item.Rarity) ?? []).concat(item),
       );
-      this.byDamageType.set(
-        item.DamageType,
-        (this.byDamageType.get(item.DamageType) ?? []).concat(item),
+      this.byElement.set(
+        item.Element,
+        (this.byElement.get(item.Element) ?? []).concat(item),
       );
       if (item.Cost) {
         this.byCost[item.Cost] = (this.byCost[item.Cost] ?? []).concat(item);

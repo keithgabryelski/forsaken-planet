@@ -5,7 +5,7 @@ import { exoDescriptions } from "@/models/EXOs";
 export type Selectables = {
   gearName: { name: string; code: string };
   damage: number;
-  damageTypeName: { name: string; code: string };
+  elementName: { name: string; code: string };
   perk1Name: { name: string; code: string };
   perk2Name: { name: string; code: string };
   armEXOName: { name: string; code: string };
@@ -54,11 +54,11 @@ export default class SimulatorSelectables {
     return this.rarities.map((o) => ({ name: o, code: o }));
   }
 
-  get damageTypeNames() {
-    return [...this.cache.catalog.damageTypes];
+  get elementNames() {
+    return [...this.cache.catalog.elements];
   }
-  get damageTypeNamesAsOptions() {
-    return this.damageTypeNames.map((o) => ({ name: o, code: o }));
+  get elementNamesAsOptions() {
+    return this.elementNames.map((o) => ({ name: o, code: o }));
   }
 
   get perkNames() {
