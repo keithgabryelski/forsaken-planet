@@ -32,7 +32,7 @@ export const gearPerksMatrix = {
   shields: [...shieldPerks, ...weaponPerks],
   staves: [],
   swords: [...swordPerks, ...weaponPerks],
-  "two-handed swords": [...twoHandedSwordPerks, ...weaponPerks],
+  "two-handed": [...twoHandedSwordPerks, ...weaponPerks],
 };
 
 export const perkSet = new Set([
@@ -232,7 +232,7 @@ export const perkDescriptions = {
   },
   unblockable: {
     description: "Allows sword to be thrown",
-    type: "two-handed swords",
+    type: "two-handed",
     "min chance": "",
     "min multiplier": "",
     "max chance": "",

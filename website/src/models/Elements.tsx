@@ -15,7 +15,7 @@ export const gearElementsMaxtrix: { [string]: ElementType[] } = {
   shields: [],
   staves: [],
   swords: ["ice", "fire", "poison", "physical"],
-  "two-handed swords": ["ice", "fire", "poison", "physical"],
+  "two-handed": ["ice", "fire", "poison", "physical"],
 };
 
 export const elementDescriptions: { [ElementType]: AdjustmentType } = {
