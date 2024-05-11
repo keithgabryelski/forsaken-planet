@@ -29,9 +29,9 @@ export default function Header() {
           url: "/drop-rate-calculator",
         },
         {
-          label: "Gear Pie Chart",
+          label: "Gear Sunburst",
           icon: "pi pi-chart-pie",
-          url: "/drop-rate-pie-chart",
+          url: "/drop-rate-sunburst",
         },
         {
           label: "Perk Radar Chart",
@@ -94,7 +94,13 @@ export default function Header() {
           prefetch: false,
         },
         {
-          label: "Original data (google sheets)",
+          label: "Original data (google sheets) level 60",
+          icon: "pi pi-table",
+          url: "https://docs.google.com/spreadsheets/d/1x9NlXY6hP0rW3-0F6-AJnJfk6phA4IGze5WE72grH9w",
+          prefetch: false,
+        },
+        {
+          label: "Original data (google sheets) level 50",
           icon: "pi pi-table",
           url: "http://bit.ly/dungeons-of-eternity-statistics",
           prefetch: false,

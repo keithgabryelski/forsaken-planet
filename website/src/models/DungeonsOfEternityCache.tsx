@@ -49,7 +49,9 @@ export default class DungeonsOfEternityCache {
         useFormat: false,
       });
       const data = await parser.parse();
-      return data;
+      return data.filter(
+        (datum) => Boolean(datum.Group) && datum.Group !== "#N/A",
+      );
     } catch (e) {
       console.error("fetch failed", e);
       return [];

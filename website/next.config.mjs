@@ -24,8 +24,15 @@ const nextConfig = {
       },
     ],
   },
-
-
+  async redirects() {
+    return [
+      {
+        source: '/drop-rate-pie-chart',
+        destination: '/drop-rate-sunburst',
+        permanent: true,
+      },
+    ]
+  },
 };
 
 export default withSentryConfig(nextConfig, {
