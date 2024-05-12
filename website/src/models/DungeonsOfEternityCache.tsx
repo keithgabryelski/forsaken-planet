@@ -50,7 +50,12 @@ export default class DungeonsOfEternityCache {
       });
       const data = await parser.parse();
       return data.filter(
-        (datum) => Boolean(datum.Group) && datum.Group !== "#N/A",
+        (datum) =>
+          Boolean(datum.Rarity) &&
+          Boolean(datum.Name) &&
+          Boolean(datum.Cost) &&
+          Boolean(datum.Group) &&
+          datum.Group !== "#N/A",
       );
     } catch (e) {
       console.error("fetch failed", e);
