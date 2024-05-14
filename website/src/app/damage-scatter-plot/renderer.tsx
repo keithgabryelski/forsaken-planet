@@ -20,6 +20,17 @@ export default function Renderer({ reports }) {
     setCache(newCache);
   }, [reports]);
 
+  const colors = [
+    ["#8a033e", "#e63584"],
+    ["#57a3fd", "#87defd"],
+    ["#9a2001", "#fa4557"],
+    ["#194e31", "#91db8b"],
+    ["#5a1ba9", "#ad7bee"],
+    ["#3a49da", "#5867e8"],
+    ["#1af9ff", "#90f0fe"],
+    ["#6d003d", "#cc00cc"],
+  ];
+
   useEffect(() => {
     const labels = [...cache.indexes.byGroup.keys()]
       .filter((g) => g !== "shields")
@@ -28,16 +39,21 @@ export default function Renderer({ reports }) {
       const drops = cache.indexes.byGroup.get(label);
       if (chartType === "scatter") {
         const data = drops.map((drop) => {
-          const x = i * 20 + Math.random() * 18 - 9;
+          const offset = drop.Rarity === "rare" ? 9 : 18;
+          const x = i * 20 + Math.random() * 9 + offset;
           const y = drop.Damage;
           return {
             x,
             y,
+            drop,
           };
         });
         return {
           label,
           data,
+          backgroundColor: data.map(
+            (datum) => colors[i][datum.drop.Rarity === "rare" ? 0 : 1],
+          ),
         };
       } else {
         const dataMap = drops.reduce((accumulator, drop) => {
@@ -48,16 +64,19 @@ export default function Renderer({ reports }) {
             x,
             y,
             r: 0,
+            drop,
           };
           datum.r += 1;
           accumulator.set(key, datum);
           return accumulator;
         }, new Map());
+        const data = [...dataMap.entries()]
+          .sort((a, b) => b[0] - a[0])
+          .map(([_a, b]) => b);
         return {
           label,
-          data: [...dataMap.entries()]
-            .sort((a, b) => b[0] - a[0])
-            .map(([_a, b]) => b),
+          data,
+          backgroundColor: data.map((datum) => colors[i][1]),
         };
       }
     });
@@ -88,19 +107,28 @@ export default function Renderer({ reports }) {
           text: "Weapon's Damage Scatter Plot",
         },
         legend: {
-          display: false,
+          display: true,
         },
         tooltip: {
           enabled: true,
           callbacks: {
             label: function (context) {
-              const label = labels[context.datasetIndex];
+              let label = labels[context.datasetIndex];
+              if (context.raw.drop.Group === "crossbows") {
+                if (
+                  context.raw.drop.Perk1 === "reload" ||
+                  context.raw.drop.Perk2 === "reload"
+                ) {
+                  label = `reload ${label}`;
+                }
+              }
               const damage = context.raw.y;
+              const rarity = context.raw.drop.Rarity;
               if (chartType === "scatter") {
-                return ` ${label}: ${damage}`;
+                return ` ${rarity} ${label}: ${damage}`;
               }
               const numDrops = context.raw.r;
-              return ` ${label}: ${damage} (drops seen: ${numDrops})`;
+              return ` ${rarity} ${label}: ${damage} (drops seen: ${numDrops})`;
             },
           },
         },
