@@ -231,7 +231,7 @@ export const perkDescriptions = {
     "max multiplier": "",
   },
   unblockable: {
-    description: "Allows sword to be thrown",
+    description: "Attacks can not be blocked/parried by enemies",
     type: "two-handed",
     "min chance": "",
     "min multiplier": "",
