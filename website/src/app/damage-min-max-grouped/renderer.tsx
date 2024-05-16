@@ -7,7 +7,10 @@ import DungeonsOfEternityCache from "@/models/DungeonsOfEternityCache";
 import { type DOEReport } from "@/models/DungeonsOfEternityCache";
 
 export default function Renderer({ reports }: { reports: DOEReport[] }) {
-  const [chartDataSource, setChartDataSource] = useState("legendary");
+  const [chartDataSource, setChartDataSource] = useState({
+    name: "All Rarities",
+    code: "all",
+  });
   const [chartData, setChartData] = useState({});
   const [chartOptions, setChartOptions] = useState({});
   const [cache, setCache] = useState(new DungeonsOfEternityCache());
@@ -17,48 +20,77 @@ export default function Renderer({ reports }: { reports: DOEReport[] }) {
     setCache(newCache);
   }, [reports]);
 
+  if (cache == null) {
+    return null;
+  }
+
   const dataSources = [
+    { name: "All Rarities", code: "all" },
     { name: "Rare", code: "rare" },
     { name: "Legendary", code: "legendary" },
   ];
 
+  const topLabels = {
+    id: "topLabels",
+    afterDatasetsDraw(chart, _args, _pluginOptions) {
+      const {
+        ctx,
+        scales: { x, y },
+      } = chart;
+      if (x != null) {
+        ctx.font = "bold 16px sans-serif";
+        ctx.fillStyle = "white";
+        ctx.textAlign = "center";
+
+        chart.data.datasets[0].data.forEach(([min, max], index) => {
+          console.info("index min/max", index, min, max, "---", x, y);
+          ctx.fillText(
+            min.toString(),
+            x.getPixelForValue(index),
+            20 + y.getPixelForValue(min),
+          );
+          ctx.fillText(
+            max.toString(),
+            x.getPixelForValue(index),
+            y.getPixelForValue(max) - 8,
+          );
+          //ctx.fillText(max.toString(), x.getPixelForValue(index), min + max);
+        });
+      }
+    },
+  };
+  const bottomLabels = {};
+
   useEffect(() => {
-    const names = [...cache.indexes.byName.entries()]
-      .filter(
-        ([n, drops]) =>
-          drops[0]?.Group !== "shields" &&
-          !["ice staff", "healing staff"].includes(n),
-      )
+    const names = [...cache.indexes.byHuman.entries()]
+      .filter(([n, drops]) => drops[0].doesDamage)
       .map((e) => e[0]);
 
-    const index = cache.indexes.byName;
+    const index = cache.indexes.byHuman;
     const initializer = names.reduce((accumulator, name) => {
-      const drops = cache.indexes.byName.get(name);
+      const drops = cache.indexes.byHuman.get(name);
       const drop = drops[0];
-      const groupName = drop.Group;
-      (accumulator[groupName] = accumulator[groupName] ?? {})[name] = [
-        null,
-        null,
-      ];
+      const groupName = drop.Human;
+      accumulator[groupName] = accumulator[groupName] ?? [null, null];
       return accumulator;
     }, {});
 
     const datasetEntries = [...index.entries()].reduce((damages, entry) => {
       const [groupName, drops] = entry;
       for (const drop of drops) {
-        const { Rarity, Damage, Name, Group } = drop;
-        if (Rarity === chartDataSource && Damage) {
-          const minmax = damages[Group][Name];
+        const { Rarity, Damage, Name, Human } = drop;
+        if (
+          (chartDataSource.code === "all" || Rarity === chartDataSource.code) &&
+          Damage
+        ) {
+          const minmax = damages[Human];
           if (minmax == null) {
-            console.warn("!!!no data for named", groupName, Name);
+            console.warn("!!!no data for named", Human);
           } else if (minmax[0] == null) {
-            damages[Group][Name] = [Damage, Damage];
+            damages[Human] = [Damage, Damage];
           } else {
             const [min, max] = minmax;
-            damages[Group][Name] = [
-              Math.min(min, Damage),
-              Math.max(max, Damage),
-            ];
+            damages[Human] = [Math.min(min, Damage), Math.max(max, Damage)];
           }
         }
       }
@@ -66,7 +98,15 @@ export default function Renderer({ reports }: { reports: DOEReport[] }) {
       return damages;
     }, initializer);
 
-    const labels = [...Object.keys(datasetEntries)];
+    const labels = [...Object.keys(datasetEntries)].sort((a, b) => {
+      const aMinMax = datasetEntries[a];
+      const bMinMax = datasetEntries[b];
+      const diff = bMinMax[1] - aMinMax[1];
+      if (diff !== 0) {
+        return diff;
+      }
+      return bMinMax[0] - aMinMax[0];
+    });
     const colors = [
       "#990000",
       "#ff6600",
@@ -81,47 +121,33 @@ export default function Renderer({ reports }: { reports: DOEReport[] }) {
     const tooltips = [];
     const datasets = [];
     const datas = [];
-    for (let i = 0; i < 6; ++i) {
-      let label = "unknown";
-      const tooltip = [];
-      const data = labels.map((groupName, ii) => {
-        label = groupName;
-        const datasetEntry = datasetEntries[groupName];
-        const namedEntries = Object.entries(datasetEntry).sort((a, b) => {
-          const aminmax = a[1];
-          const bminmax = b[1];
-          const diff = aminmax[1] - bminmax[1];
-          if (diff) {
-            return diff;
-          }
-          return aminmax[0] - bminmax[0];
-        });
-        let stackEntry = namedEntries[i];
-        if (!stackEntry) {
-          stackEntry = ["unknown", [0, 0]];
-        }
-        tooltip.push({
-          i,
-          label,
-          groupName,
-          stackEntry,
-          name: stackEntry[0],
-        });
-        (datas[i] = datas[i] || [])[ii] = tooltip;
-        return stackEntry[1];
-      });
-      //        .filter(Boolean);
-      tooltips.push(tooltip);
-      datasets.push({
+
+    let label = "unknown";
+    const tooltip = [];
+    const datasetData = labels.map((groupName, ii) => {
+      label = groupName;
+      const datasetEntry = datasetEntries[groupName];
+      tooltip.push({
         label,
-        backgroundColor: colors,
-        borderColor: ["#ffffff"],
-        borderWidth: 1,
-        borderSkipped: false,
-        data,
+        groupName,
+        stackEntry: datasetEntry,
+        name: groupName,
       });
-    }
-    datasets.map((dataset) => (dataset.opaque = datasets));
+      datas[ii] = tooltip;
+      return datasetEntry;
+    });
+
+    tooltips.push(tooltip);
+    datasets.push({
+      label,
+      backgroundColor: colors,
+      borderColor: ["#ffffff"],
+      borderWidth: 1,
+      borderSkipped: false,
+      data: datasetData,
+    });
+
+    //    datasets.map((dataset) => (dataset.opaque = datasets));
 
     const documentStyle = getComputedStyle(document.documentElement);
     const textColorSecondary = documentStyle.getPropertyValue(
@@ -137,17 +163,10 @@ export default function Renderer({ reports }: { reports: DOEReport[] }) {
       plugins: {
         title: {
           display: true,
-          text: "Weapon's Damage MIN/MAX Grouped",
+          text: "Weapon's Damage MIN/MAX by Grouping",
         },
         datalabels: {
-          weight: "bold",
-          color: "white",
-          formatter: function (value) {
-            if (value.length === 0 || value[0] === 0) {
-              return "";
-            }
-            return `${value[1]}\n${value[0]}`;
-          },
+          display: false,
         },
         tooltip: {
           enabled: true,
@@ -159,10 +178,9 @@ export default function Renderer({ reports }: { reports: DOEReport[] }) {
               if (!datum) {
                 return "";
               }
-              const { stackEntry } = datum;
-              const [name, minmax] = stackEntry;
-              const [min, max] = minmax;
-              return ` ${name} range: ${min}-${max}`;
+              const { name, stackEntry } = datum;
+              const [min, max] = stackEntry;
+              return ` range: ${min}-${max}`;
             },
           },
         },
@@ -193,9 +211,6 @@ export default function Renderer({ reports }: { reports: DOEReport[] }) {
             display: true,
             text: "Damage",
           },
-          ticks: {
-            color: textColorSecondary,
-          },
           grid: {
             color: surfaceBorder,
           },
@@ -205,14 +220,14 @@ export default function Renderer({ reports }: { reports: DOEReport[] }) {
 
     setChartData(data);
     setChartOptions(options);
-  }, [chartDataSource, cache.indexes.byGroup, cache.indexes.byName]);
+  }, [chartDataSource, cache.indexes.byHuman]);
 
   return (
     <div>
       <div className="card flex justify-content-center">
         <Dropdown
           value={chartDataSource}
-          onChange={(e) => setChartDataSource(e.value.code)}
+          onChange={(e) => setChartDataSource(e.value)}
           options={dataSources}
           optionLabel="name"
           placeholder="Select a Datasource"
@@ -220,7 +235,7 @@ export default function Renderer({ reports }: { reports: DOEReport[] }) {
         />
       </div>
       <Chart
-        plugins={[ChartDataLabels]}
+        plugins={[ChartDataLabels, topLabels]}
         type="bar"
         data={chartData}
         options={chartOptions}

@@ -1,6 +1,7 @@
 import { type DOEReport } from "./DungeonsOfEternityCache";
 
 export default class DungeonsOfEternityIndexes {
+  byHuman: Map<string, DOEReport>;
   byGroup: Map<string, DOEReport>;
   byCategory: Map<string, DOEReport>;
   byName: Map<string, DOEReport>;
@@ -12,6 +13,7 @@ export default class DungeonsOfEternityIndexes {
   byDamage: Map<string, DOEReport>;
 
   constructor(drops: DOEReport[] = []) {
+    this.byHuman = new Map();
     this.byGroup = new Map();
     this.byCategory = new Map();
     this.byName = new Map();
@@ -26,10 +28,27 @@ export default class DungeonsOfEternityIndexes {
       if (!item.Element) {
         item.Element = "physical";
       }
+
+      item.doesDamage = !(
+        item.Group === "shields" ||
+        ["ice staff", "healing staff"].includes(item.Name)
+      );
+
+      item.Human = item.Group;
+      if (item.Human === "crossbows" && item.reload === 1) {
+        item.Human = "crossbows+reload";
+      }
+
       this.byGroup.set(
         item.Group,
         (this.byGroup.get(item.Group) ?? []).concat(item),
       );
+
+      this.byHuman.set(
+        item.Human,
+        (this.byHuman.get(item.Human) ?? []).concat(item),
+      );
+
       this.byCategory.set(
         item.Category,
         (this.byCategory.get(item.Category) ?? []).concat(item),
