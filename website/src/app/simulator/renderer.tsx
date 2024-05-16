@@ -22,79 +22,10 @@ import { Simulator } from "./Simulator";
 import SimulatorSelectables from "./SimulatorSelectables";
 import { MathJaxContext, MathJax } from "better-react-mathjax";
 import regression from "regression";
+import RenderEquation from "./render-equation";
+import RenderDatatables from "./render-datatables";
+import { createEquation } from "./Equation";
 
-function addToEquation(
-  equation,
-  damage,
-  chance,
-  multiplier,
-  comment,
-  crossOut = false,
-) {
-  const className = crossOut ? "line-through" : null;
-  if (chance === 1) {
-    equation.push({
-      equationFragment: (
-        <span className={className}>
-          <span className="text-orange-300">{damage}</span> *{" "}
-          <span className="text-purple-300">{multiplier}</span>
-        </span>
-      ),
-      equationComment: <span>{comment}</span>,
-    });
-    return;
-  }
-
-  equation.push({
-    equationFragment: (
-      <span className={className}>
-        <span className="text-orange-300">{damage}</span> * ({" "}
-        <span className="text-yellow-300">Math.random()</span> &lt;{" "}
-        <span className="text-blue-300">{chance}</span> ) ?{" "}
-        <span className="text-purple-300">{multiplier}</span> :{" "}
-        <span className="text-purple-300">0</span>
-      </span>
-    ),
-    equationComment: <span>{comment}</span>,
-  });
-}
-
-const config = {
-  loader: { load: ["[tex]/html", "[tex]/color"] },
-  tex: {
-    packages: { "[+]": ["html", "color"] },
-    inlineMath: [
-      ["$", "$"],
-      ["\\(", "\\)"],
-    ],
-    displayMath: [
-      ["$$", "$$"],
-      ["\\[", "\\]"],
-    ],
-  },
-};
-
-const elementAdjustments = Object.entries(elementDescriptions).map(
-  ([elementName, elementDescription]) => ({
-    id: elementName,
-    name: elementName,
-    ...elementDescription,
-  }),
-);
-const perkAdjustments = Object.entries(perkDescriptions).map(
-  ([perkName, perkDescription]) => ({
-    id: perkName,
-    name: perkName,
-    ...perkDescription,
-  }),
-);
-const armEXOAdjustments = Object.entries(exoDescriptions)
-  .filter(([_exoName, exoDescription]) => exoDescription.placement === "Arms")
-  .map(([armEXOName, armEXODescription]) => ({
-    id: armEXOName,
-    name: armEXOName,
-    ...armEXODescription,
-  }));
 const opponentIdentityOptions = OpponentIdentities.map((identity) => ({
   name: identity,
   code: identity,
@@ -130,107 +61,6 @@ export default function Renderer({ reports }) {
     });
     setSelected(newSelected);
   };
-  const equation = [];
-  equation.push({
-    equationFragment: (
-      <span className="text-orange-300">{selected.damage}</span>
-    ),
-    equationComment: <span>normal damage</span>,
-  });
-  const dtDescription = elementDescriptions[selected.elementName?.name];
-  if (dtDescription) {
-    const { chance, multiplier } = dtDescription;
-    if (chance) {
-      addToEquation(
-        equation,
-        selected.damage,
-        chance,
-        multiplier,
-        <span>element {selected.elementName?.name}</span>,
-      );
-    }
-  }
-
-  const perk1Description = perkDescriptions[selected.perk1Name?.name];
-  if (perk1Description) {
-    const chance = perk1Description["max chance"];
-    const multiplier = perk1Description["max multiplier"];
-    if (chance) {
-      let crossOut = false;
-      if (perk1Description.limitsEffectToEnemy) {
-        crossOut = !selected.opponentIdentities
-          .map((oi) => oi.name)
-          .includes(perk1Description.limitsEffectToEnemy);
-      }
-      if (perk1Description.limitsEffectToAttackStyle) {
-        crossOut =
-          selected.attackStyle?.name !==
-          perk1Description.limitsEffectToAttackStyle;
-      }
-      addToEquation(
-        equation,
-        selected.damage,
-        chance,
-        multiplier,
-        <span>perk1 {selected.perk1Name?.name}</span>,
-        crossOut,
-      );
-    }
-  }
-
-  const perk2Description = perkDescriptions[selected.perk2Name?.name];
-  if (perk2Description) {
-    const chance = perk2Description["max chance"];
-    const multiplier = perk2Description["max multiplier"];
-    if (chance) {
-      let crossOut = false;
-      if (perk2Description.limitsEffectToEnemy) {
-        crossOut = !selected.opponentIdentities.includes(
-          perk2Description.limitsEffectToEnemy,
-        );
-      }
-      if (perk2Description.limitsEffectToAttackStyle) {
-        crossOut =
-          selected.attackStyle?.name !==
-          perk2Description.limitsEffectToAttackStyle;
-      }
-      addToEquation(
-        equation,
-        selected.damage,
-        chance,
-        multiplier,
-        <span>perk2 {selected.perk2Name?.name}</span>,
-        crossOut,
-      );
-    }
-  }
-
-  const exoDescription = exoDescriptions[selected.armEXOName?.name];
-  if (exoDescription) {
-    const chance = exoDescription["max chance"];
-    const multiplier = exoDescription["max multiplier"];
-    if (chance) {
-      let crossOut = false;
-      if (exoDescription.limitsEffectToEnemy) {
-        crossOut = !selected.opponentIdentities.includes(
-          exoDescription.limitsEffectToEnemy,
-        );
-      }
-      if (exoDescription.limitsEffectToAttackStyle) {
-        crossOut =
-          selected.attackStyle?.name !==
-          exoDescription.limitsEffectToAttackStyle;
-      }
-      addToEquation(
-        equation,
-        selected.damage,
-        chance,
-        multiplier,
-        <span>exo {selected.armEXOName?.name}</span>,
-        crossOut,
-      );
-    }
-  }
 
   function onClick() {
     const simulator = new Simulator();
@@ -514,85 +344,12 @@ export default function Renderer({ reports }) {
           </div>
 
           <Card title="Maths" className="border-white border-1">
-            <MathJaxContext version={3} config={config}>
-              <MathJax hideUntilTypeset={"first"}>
-                {`$$\\sum_{a = adjustment_1}^{adjustment_n} f(a, {\\color{orange} baseDamage}, {\\color{yellow} rng})$$`}
-              </MathJax>
-              <MathJax hideUntilTypeset={"first"}>
-                {`$$
-                \\begin{eqnarray} \\\
-
-                &&f(a,  {\\color{orange} baseDamage}, {\\color{yellow} rng}) =  \\begin{array} \\\
-                {\\color{orange} baseDamage } \\cdot {\\color{violet} a^{multiplier}} &for& {\\color{yellow} \\mathcal{rng}} \\lt {\\color{lightblue} a^{chance}}
-
-                \\end{array} \\\\
-
-                \\end{eqnarray}
-
-                $$`}
-              </MathJax>
-            </MathJaxContext>
-
-            {equation.map((e, i, array) => (
-              <div key={i.toString()} className="flex align-content-start">
-                <div className="flex align-items-center justify-content-left w-10rem font-bold"></div>
-                <div className="flex align-items-center justify-content-left w-20rem font-bold">
-                  {e.equationFragment}
-                </div>
-                <div className="flex align-items-center justify-content-left w-10rem font-bold">
-                  {i === array.length - 1 ? "" : "+"}
-                </div>
-                <div className="flex align-items-center justify-content-left w-20rem font-bold">
-                  ({e.equationComment})
-                </div>
-                <div className="flex align-items-center justify-content-left w-10rem font-bold"></div>
-              </div>
-            ))}
+            <RenderEquation equation={createEquation(selected)} />
           </Card>
         </AccordionTab>
 
         <AccordionTab header="Data Tables">
-          <div className="grid">
-            <Card title="Element Adjustments">
-              <DataTable
-                value={elementAdjustments}
-                stripedRows
-                tableStyle={{ minWidth: "50rem" }}
-              >
-                <Column field="name" header="Name"></Column>
-                <Column field="chance" header="Chance"></Column>
-                <Column field="multiplier" header="Multiplier"></Column>
-                <Column field="description" header="Description"></Column>
-              </DataTable>
-            </Card>
-
-            <Card title="Perk Adjustments">
-              <DataTable
-                value={perkAdjustments}
-                stripedRows
-                tableStyle={{ minWidth: "50rem" }}
-              >
-                <Column field="name" header="Name"></Column>
-                <Column field="type" header="Type"></Column>
-                <Column field="max chance" header="Chance"></Column>
-                <Column field="max multiplier" header="Multiplier"></Column>
-                <Column field="description" header="Description"></Column>
-              </DataTable>
-            </Card>
-
-            <Card title="Arm EXO Adjustments">
-              <DataTable
-                value={armEXOAdjustments}
-                stripedRows
-                tableStyle={{ minWidth: "50rem" }}
-              >
-                <Column field="name" header="Name"></Column>
-                <Column field="max chance" header="Chance"></Column>
-                <Column field="max multiplier" header="Multiplier"></Column>
-                <Column field="description" header="Description"></Column>
-              </DataTable>
-            </Card>
-          </div>
+          <RenderDatatables />
         </AccordionTab>
       </Accordion>
 
