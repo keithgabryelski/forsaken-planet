@@ -66,10 +66,10 @@ export default function DamageMINMAX({ reports }) {
   }, [reports]);
 
   useEffect(() => {
-    const groupNames = [...cache.indexes.byGroup.keys()].filter(
+    const groupNames = [...cache.indexes.byHuman.keys()].filter(
       (n) => n !== "shields",
     );
-    const names = [...cache.indexes.byName.entries()]
+    const names = [...cache.indexes.byHumanName.entries()]
       .filter(
         ([n, drops]) =>
           drops[0]?.Group !== "shields" &&
@@ -79,7 +79,7 @@ export default function DamageMINMAX({ reports }) {
 
     const chartDataSourceOptions = {
       group: {
-        index: cache.indexes.byGroup,
+        index: cache.indexes.byHuman,
         initializer: {
           rare: Object.fromEntries(groupNames.map((n) => [n, [null, null]])),
           legendary: Object.fromEntries(
@@ -88,7 +88,7 @@ export default function DamageMINMAX({ reports }) {
         },
       },
       name: {
-        index: cache.indexes.byName,
+        index: cache.indexes.byHumanName,
         initializer: {
           rare: Object.fromEntries(names.map((n) => [n, [null, null]])),
           legendary: Object.fromEntries(names.map((n) => [n, [null, null]])),
@@ -126,7 +126,38 @@ export default function DamageMINMAX({ reports }) {
       "--text-color-secondary",
     );
     const surfaceBorder = documentStyle.getPropertyValue("--surface-border");
-    const labels = [...Object.keys(ds.rare)];
+    const labels = [...Object.keys(ds.rare)].sort((a, b) => {
+      let alMinMax = ds.legendary[a];
+      let blMinMax = ds.legendary[b];
+      let arMinMax = ds.rare[a];
+      let brMinMax = ds.rare[b];
+
+      if (alMinMax[0] == null) {
+        alMinMax = arMinMax;
+      }
+      if (blMinMax[0] == null) {
+        blMinMax = brMinMax;
+      }
+      if (arMinMax[0] == null) {
+        arMinMax = alMinMax;
+      }
+      if (brMinMax[0] == null) {
+        brMinMax = blMinMax;
+      }
+
+      let diff = blMinMax[1] - alMinMax[1];
+      if (diff !== 0) {
+        return diff;
+      }
+      diff = brMinMax[1] - arMinMax[1];
+      if (diff !== 0) {
+        return diff;
+      }
+      return diff;
+    });
+    console.info("labels", labels);
+    console.info("ds.l", ds.legendary);
+    console.info("ds.r", ds.rare);
 
     const data = {
       labels,
@@ -173,6 +204,19 @@ export default function DamageMINMAX({ reports }) {
           display: false,
         },
         tooltip: {
+          mode: "index",
+          intersect: false,
+          enabled: true,
+          callbacks: {
+            label: function (context) {
+              const [min, max] = context.raw;
+              return ` range: ${min}-${max}`;
+            },
+          },
+        },
+        hover: {
+          mode: "index",
+          intersect: false,
           enabled: true,
           callbacks: {
             label: function (context) {
@@ -218,7 +262,7 @@ export default function DamageMINMAX({ reports }) {
 
     setChartData(data);
     setChartOptions(options);
-  }, [chartDataSource, cache.indexes.byGroup, cache.indexes.byName]);
+  }, [chartDataSource, cache.indexes.byHuman, cache.indexes.byHumanName]);
 
   return (
     <div>
