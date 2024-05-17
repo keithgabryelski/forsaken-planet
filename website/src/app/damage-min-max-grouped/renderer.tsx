@@ -112,8 +112,9 @@ export default function Renderer({ reports }: { reports: DOEReport[] }) {
       "#194e31",
       "#5a1ba9",
       "#3a49da",
+      "#91db8b",
+      "#ad7bee",
       "#1af9ff",
-      "#6d003d",
     ];
 
     const tooltips = [];
