@@ -79,11 +79,15 @@ export default class DungeonsOfEternityIndexes {
         (this.byElement.get(item.Element) ?? []).concat(item),
       );
       if (item.Cost) {
-        this.byCost[item.Cost] = (this.byCost[item.Cost] ?? []).concat(item);
+        this.byCost.set(
+          item.Cost,
+          (this.byCost.get(item.Cost) ?? []).concat(item),
+        );
       }
       if (item.Damage) {
-        this.byDamage[item.Damage] = (this.byDamage[item.Damage] ?? []).concat(
-          item,
+        this.byDamage.set(
+          item.Damage,
+          (this.byDamage.get(item.Damage) ?? []).concat(item),
         );
       }
 

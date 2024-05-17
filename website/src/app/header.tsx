@@ -15,6 +15,11 @@ export default function Header() {
       url: "/mediawiki",
     },
     {
+      label: "Gear Calcuator",
+      icon: "pi pi-calculator",
+      url: "/drop-rate-calculator",
+    },
+    {
       label: "Attack Simulator",
       icon: "pi pi-bullseye",
       url: "/simulator",
@@ -23,11 +28,6 @@ export default function Header() {
       label: "Drop Rates",
       icon: "pi pi-bolt",
       items: [
-        {
-          label: "Gear Calcuator",
-          icon: "pi pi-calculator",
-          url: "/drop-rate-calculator",
-        },
         {
           label: "Gear Sunburst",
           icon: "pi pi-chart-pie",
@@ -64,16 +64,10 @@ export default function Header() {
           icon: "pi pi-chart-scatter",
           url: "/damage-scatter-plot",
         },
-      ],
-    },
-    {
-      label: "Meanderings",
-      icon: "pi pi-code",
-      items: [
         {
-          label: "Element Pie Chart",
-          icon: "pi pi-chart-pie",
-          url: "/element-pie-chart",
+          label: "Histogram",
+          icon: "pi pi-chart-bar",
+          url: "/damage-histogram",
         },
       ],
     },
@@ -115,6 +109,11 @@ export default function Header() {
           label: "Blog",
           icon: "pi pi-link",
           url: "/blog",
+        },
+        {
+          label: "Element Pie Chart",
+          icon: "pi pi-chart-pie",
+          url: "/element-pie-chart",
         },
       ],
     },
