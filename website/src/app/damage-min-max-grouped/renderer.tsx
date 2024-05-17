@@ -30,8 +30,8 @@ export default function Renderer({ reports }: { reports: DOEReport[] }) {
     { name: "Legendary", code: "legendary" },
   ];
 
-  const topLabels = {
-    id: "topLabels",
+  const topAndBottomLabels = {
+    id: "topAndBottomLabels",
     afterDatasetsDraw(chart, _args, _pluginOptions) {
       const {
         ctx,
@@ -43,7 +43,6 @@ export default function Renderer({ reports }: { reports: DOEReport[] }) {
         ctx.textAlign = "center";
 
         chart.data.datasets[0].data.forEach(([min, max], index) => {
-          console.info("index min/max", index, min, max, "---", x, y);
           ctx.fillText(
             min.toString(),
             x.getPixelForValue(index),
@@ -59,7 +58,6 @@ export default function Renderer({ reports }: { reports: DOEReport[] }) {
       }
     },
   };
-  const bottomLabels = {};
 
   useEffect(() => {
     const names = [...cache.indexes.byHuman.entries()]
@@ -108,14 +106,14 @@ export default function Renderer({ reports }: { reports: DOEReport[] }) {
       return bMinMax[0] - aMinMax[0];
     });
     const colors = [
-      "#990000",
-      "#ff6600",
-      "#009900",
-      "#000099",
-      "#0066ff",
-      "#ff0066",
-      "#6600ff",
-      "#33aa66",
+      "#8a033e",
+      "#57a3fd",
+      "#9a2001",
+      "#194e31",
+      "#5a1ba9",
+      "#3a49da",
+      "#1af9ff",
+      "#6d003d",
     ];
 
     const tooltips = [];
@@ -144,6 +142,7 @@ export default function Renderer({ reports }: { reports: DOEReport[] }) {
       borderColor: ["#ffffff"],
       borderWidth: 1,
       borderSkipped: false,
+      minBarLength: 2,
       data: datasetData,
     });
 
@@ -235,7 +234,7 @@ export default function Renderer({ reports }: { reports: DOEReport[] }) {
         />
       </div>
       <Chart
-        plugins={[ChartDataLabels, topLabels]}
+        plugins={[ChartDataLabels, topAndBottomLabels]}
         type="bar"
         data={chartData}
         options={chartOptions}

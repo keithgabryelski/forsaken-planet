@@ -11,7 +11,51 @@ export default function DamageMINMAX({ reports }) {
     { name: "Name", code: "name" },
   ];
 
-  const [chartDataSource, setChartDataSource] = useState("group");
+  const [chartDataSource, setChartDataSource] = useState({
+    name: "Name",
+    code: "name",
+  });
+
+  const topAndBottomLabels = {
+    id: "topAndBottomLabels",
+    afterDatasetsDraw(chart, _args, _pluginOptions) {
+      const {
+        ctx,
+        scales: { x, y },
+      } = chart;
+      if (x != null) {
+        ctx.font = "bold 12px sans-serif";
+        ctx.fillStyle = "white";
+        ctx.textAlign = "center";
+
+        chart.legend.legendItems.forEach(({ hidden }, datasetIndex) => {
+          if (!hidden) {
+            let xOffset = 0;
+            if (datasetIndex === 0) {
+              xOffset = -10;
+            } else {
+              xOffset = 10;
+            }
+            chart.data.datasets[datasetIndex].data.forEach(
+              ([min, max], index) => {
+                ctx.fillText(
+                  min.toString(),
+                  x.getPixelForValue(index) + xOffset,
+                  y.getPixelForValue(min) + 10,
+                );
+                ctx.fillText(
+                  max.toString(),
+                  x.getPixelForValue(index) + xOffset,
+                  y.getPixelForValue(max) - 8,
+                );
+              },
+            );
+          }
+        });
+      }
+    },
+  };
+
   const [chartData, setChartData] = useState({});
   const [chartOptions, setChartOptions] = useState({});
   const [cache, setCache] = useState(new DungeonsOfEternityCache());
@@ -52,7 +96,7 @@ export default function DamageMINMAX({ reports }) {
       },
     };
 
-    const { index, initializer } = chartDataSourceOptions[chartDataSource];
+    const { index, initializer } = chartDataSourceOptions[chartDataSource.code];
 
     const ds = [...index.entries()].reduce((damages, entry) => {
       const [groupName, drops] = entry;
@@ -94,6 +138,7 @@ export default function DamageMINMAX({ reports }) {
           borderColor: ["#ffffff"],
           borderWidth: 1,
           borderSkipped: false,
+          minBarLength: 2,
           data: labels
             .map((g) => [ds.rare[g][0], ds.rare[g][1]])
             .map((l, i) =>
@@ -109,6 +154,7 @@ export default function DamageMINMAX({ reports }) {
           borderColor: ["#ffffff"],
           borderWidth: 1,
           borderSkipped: false,
+          minBarLength: 2,
           data: labels
             .map((g) => [ds.legendary[g][0], ds.legendary[g][1]])
             .map((l, i) =>
@@ -124,11 +170,7 @@ export default function DamageMINMAX({ reports }) {
           text: "Weapon's Damage MIN/MAX",
         },
         datalabels: {
-          weight: "bold",
-          color: "white",
-          formatter: function (value) {
-            return `${value[1]}\n${value[0]}`;
-          },
+          display: false,
         },
         tooltip: {
           enabled: true,
@@ -183,7 +225,7 @@ export default function DamageMINMAX({ reports }) {
       <div className="card flex justify-content-center">
         <Dropdown
           value={chartDataSource}
-          onChange={(e) => setChartDataSource(e.value.code)}
+          onChange={(e) => setChartDataSource(e.value)}
           options={dataSources}
           optionLabel="name"
           placeholder="Select a Datasource"
@@ -191,7 +233,7 @@ export default function DamageMINMAX({ reports }) {
         />
       </div>
       <Chart
-        plugins={[ChartDataLabels]}
+        plugins={[ChartDataLabels, topAndBottomLabels]}
         type="bar"
         data={chartData}
         options={chartOptions}
