@@ -1,7 +1,5 @@
 "use client";
 import { useRef, useState, useEffect } from "react";
-import { DataTable } from "primereact/datatable";
-import { Column } from "primereact/column";
 import { Accordion, AccordionTab } from "primereact/accordion";
 import { InputText } from "primereact/inputtext";
 import { Chart } from "primereact/chart";
@@ -20,7 +18,6 @@ import { OpponentIdentities } from "@/models/Opponents";
 import { AttackStyles } from "@/models/AttackStyles";
 import { Simulator } from "./Simulator";
 import SimulatorSelectables from "./SimulatorSelectables";
-import { MathJaxContext, MathJax } from "better-react-mathjax";
 import regression from "regression";
 import RenderEquation from "./render-equation";
 import RenderDatatables from "./render-datatables";

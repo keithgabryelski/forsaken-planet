@@ -20,10 +20,6 @@ export default function Renderer({ reports }: { reports: DOEReport[] }) {
     setCache(newCache);
   }, [reports]);
 
-  if (cache == null) {
-    return null;
-  }
-
   const dataSources = [
     { name: "All Rarities", code: "all" },
     { name: "Rare", code: "rare" },
@@ -61,7 +57,7 @@ export default function Renderer({ reports }: { reports: DOEReport[] }) {
 
   useEffect(() => {
     const names = [...cache.indexes.byHuman.entries()]
-      .filter(([n, drops]) => drops[0].doesDamage)
+      .filter(([_n, drops]) => drops[0].doesDamage)
       .map((e) => e[0]);
 
     const index = cache.indexes.byHuman;
@@ -74,9 +70,9 @@ export default function Renderer({ reports }: { reports: DOEReport[] }) {
     }, {});
 
     const datasetEntries = [...index.entries()].reduce((damages, entry) => {
-      const [groupName, drops] = entry;
+      const [_groupName, drops] = entry;
       for (const drop of drops) {
-        const { Rarity, Damage, Name, Human } = drop;
+        const { Rarity, Damage, Human } = drop;
         if (
           (chartDataSource.code === "all" || Rarity === chartDataSource.code) &&
           Damage
@@ -178,7 +174,7 @@ export default function Renderer({ reports }: { reports: DOEReport[] }) {
               if (!datum) {
                 return "";
               }
-              const { name, stackEntry } = datum;
+              const { _name, stackEntry } = datum;
               const [min, max] = stackEntry;
               return ` range: ${min}-${max}`;
             },

@@ -1,19 +1,22 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Chart } from "primereact/chart";
+import { Slider } from "primereact/slider";
+import { InputText } from "primereact/inputtext";
 import DungeonsOfEternityCache from "@/models/DungeonsOfEternityCache";
 import { type DOEReport } from "@/models/DungeonsOfEternityCache";
+import update from "immutability-helper";
+import { colors } from "@/models/Colors";
 
 const NUM_VALUES = 200;
 const NUM_BUCKETS = 200;
 const NUM_BUCKET_SIZE = NUM_VALUES / NUM_BUCKETS;
 
 export default function Renderer({ reports }: { reports: DOEReport[] }) {
-  const [chartDataSource, setChartDataSource] = useState({
-    name: "All Rarities",
-    code: "all",
-  });
   const [chartData, setChartData] = useState({});
+  const [legendItems, setLegendItems] = useState([]);
+  const [numBuckets, setNumBuckets] = useState(NUM_BUCKETS);
+  const [bucketSize, setBucketSize] = useState(NUM_BUCKET_SIZE);
   const [chartOptions, setChartOptions] = useState({});
   const [cache, setCache] = useState(new DungeonsOfEternityCache());
 
@@ -22,18 +25,39 @@ export default function Renderer({ reports }: { reports: DOEReport[] }) {
     setCache(newCache);
   }, [reports]);
 
-  if (cache == null) {
-    return null;
-  }
+  useEffect(() => {
+    setLegendItems(
+      [...cache.indexes.byHuman.keys()]
+        .filter((name) => name !== "shields")
+        .map((name, index) => ({
+          text: name,
+          datasetIndex: 0,
+          index,
+          hidden: false,
+          fillStyle: colors[index * 3 + 1],
+          fontColor: "grey",
+          lineWidth: 1,
+          strokeStyle: "white",
+        })),
+    );
+  }, [cache]);
+
+  useEffect(() => {
+    setBucketSize(NUM_VALUES / numBuckets);
+  }, [numBuckets]);
 
   useEffect(() => {
     let minDamage = -1;
     let maxDamage = -1;
 
-    const buckets = Array(NUM_BUCKETS).fill(0);
+    const legendNames = legendItems
+      .filter((item) => !item.hidden)
+      .map((item) => item.text);
+
+    const buckets = Array(numBuckets).fill(0);
 
     const damageDrops = [...cache.indexes.byDamage.entries()].filter(
-      ([n, drops]) => drops[0].doesDamage,
+      ([_n, drops]) => drops[0].doesDamage,
     );
     for (const [damage, drops] of damageDrops) {
       if (minDamage === -1 || damage < minDamage) {
@@ -42,18 +66,14 @@ export default function Renderer({ reports }: { reports: DOEReport[] }) {
       if (maxDamage < damage) {
         maxDamage = damage;
       }
-      buckets[Math.floor(damage / NUM_BUCKET_SIZE)] = drops.length;
+      buckets[Math.floor(damage / bucketSize)] = drops.filter((drop) =>
+        legendNames.includes(drop.Human),
+      ).length;
     }
 
-    const documentStyle = getComputedStyle(document.documentElement);
-    const textColorSecondary = documentStyle.getPropertyValue(
-      "--text-color-secondary",
-    );
-    const surfaceBorder = documentStyle.getPropertyValue("--surface-border");
-
     const x_vals = Array.from(
-      { length: NUM_BUCKETS },
-      (value, index) => index * NUM_BUCKET_SIZE + 0.5 * NUM_BUCKET_SIZE,
+      { length: numBuckets },
+      (_value, index) => index * bucketSize + 0.5 * bucketSize,
     );
     const y_vals = buckets;
     const dataVals = x_vals.map((k, i) => ({ x: k, y: y_vals[i] }));
@@ -66,15 +86,11 @@ export default function Renderer({ reports }: { reports: DOEReport[] }) {
     // backgroundColor[parseInt(x_vals.length / 2)] = "rgba(54, 162, 235, 0.2)";
     // borderColor[parseInt(x_vals.length / 2)] = "rgba(54, 162, 235, 1)";
 
-    const minBucket = Math.floor(minDamage / NUM_BUCKET_SIZE);
-    const maxBucket = Math.floor(maxDamage / NUM_BUCKET_SIZE);
+    const minBucket = Math.floor(minDamage / bucketSize);
+    const maxBucket = Math.floor(maxDamage / bucketSize);
     const median = minBucket + (maxBucket - minBucket) / 2;
-    const medianFloorBucket = Math.floor(
-      minBucket + (maxBucket - minBucket) / 2,
-    );
-    const medianCeilingBucket = Math.ceil(
-      minBucket + (maxBucket - minBucket) / 2,
-    );
+    const medianFloorBucket = Math.floor(median);
+    const medianCeilingBucket = Math.ceil(median);
 
     backgroundColor[medianFloorBucket] = "rgba(54, 162, 235, 0.2)";
     borderColor[medianFloorBucket] = "rgba(54, 162, 235, 1)";
@@ -82,6 +98,8 @@ export default function Renderer({ reports }: { reports: DOEReport[] }) {
     borderColor[medianCeilingBucket] = "rgba(54, 162, 235, 1)";
 
     const data = {
+      legendItems,
+
       datasets: [
         {
           label: "Number of drops seen",
@@ -127,7 +145,33 @@ export default function Renderer({ reports }: { reports: DOEReport[] }) {
       },
       plugins: {
         legend: {
-          display: false,
+          title: {
+            text: "Damage Histogram",
+            display: true,
+            color: "white",
+            font: {
+              size: 24,
+            },
+          },
+
+          display: true,
+          onClick: (_event, legendItem, legend) => {
+            const newItems = update(legendItems, {
+              [legendItem.index]: {
+                hidden: {
+                  $set: !legendItems[legendItem.index].hidden,
+                },
+              },
+            });
+            setLegendItems(newItems);
+            legend.chart.update();
+          },
+
+          labels: {
+            generateLabels: (_chart) => {
+              return legendItems;
+            },
+          },
         },
         tooltip: {
           callbacks: {
@@ -148,7 +192,27 @@ export default function Renderer({ reports }: { reports: DOEReport[] }) {
 
     setChartData(data);
     setChartOptions(options);
-  }, [cache.indexes.byDamage]);
+  }, [cache.indexes.byDamage, legendItems, numBuckets, bucketSize]);
 
-  return <Chart type="bar" data={chartData} options={chartOptions} />;
+  return (
+    <div>
+      <label>Buckets:</label>
+      <span
+        className="p-3 shadow-2 mb-3 inline-block"
+        style={{ borderRadius: "10px" }}
+      >
+        <InputText
+          value={numBuckets}
+          onChange={(e) => setNumBuckets(e.target.value)}
+        />
+        <Slider
+          value={numBuckets}
+          min={1}
+          max={NUM_VALUES}
+          onChange={(e) => setNumBuckets(e.value)}
+        />
+      </span>
+      <Chart type="bar" data={chartData} options={chartOptions} />
+    </div>
+  );
 }

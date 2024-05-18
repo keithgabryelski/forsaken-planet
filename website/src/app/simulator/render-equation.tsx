@@ -1,4 +1,3 @@
-import { Card } from "primereact/card";
 import { MathJaxContext, MathJax } from "better-react-mathjax";
 
 const config = {

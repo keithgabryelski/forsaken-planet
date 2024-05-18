@@ -208,14 +208,13 @@ export default Kapsule({
     const transition = d3Transition().duration(state.transitionDuration);
 
     const levelYDelta = state.layoutData[0].y1 - state.layoutData[0].y0;
+    const has = Object.prototype.hasOwnProperty.call(focusD, "height");
     const maxY = Math.min(
       1,
       focusD.y0 +
         levelYDelta *
           Math.min(
-            Object.prototype.hasOwnProperty(focusD, "height")
-              ? focusD.height + 1
-              : Infinity,
+            has ? focusD.height + 1 : Infinity,
             state.maxLevels || Infinity,
           ),
     );

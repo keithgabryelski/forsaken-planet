@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { Chart } from "primereact/chart";
 import { Dropdown } from "primereact/dropdown";
 import DungeonsOfEternityCache from "@/models/DungeonsOfEternityCache";
+import { ColorPairs as colors } from "@/models/Colors";
 
 export default function Renderer({ reports }) {
   const [cache, setCache] = useState(new DungeonsOfEternityCache());
@@ -19,17 +20,6 @@ export default function Renderer({ reports }) {
     const newCache = new DungeonsOfEternityCache(reports);
     setCache(newCache);
   }, [reports]);
-
-  const colors = [
-    ["#8a033e", "#e63584"],
-    ["#57a3fd", "#87defd"],
-    ["#9a2001", "#fa4557"],
-    ["#194e31", "#91db8b"],
-    ["#5a1ba9", "#ad7bee"],
-    ["#3a49da", "#5867e8"],
-    ["#1af9ff", "#90f0fe"],
-    ["#6d003d", "#cc00cc"],
-  ];
 
   useEffect(() => {
     const labels = [...cache.indexes.byGroup.keys()]
@@ -76,7 +66,7 @@ export default function Renderer({ reports }) {
         return {
           label,
           data,
-          backgroundColor: data.map((datum) => colors[i][1]),
+          backgroundColor: data.map((_datum) => colors[i][1]),
         };
       }
     });
