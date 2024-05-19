@@ -20,59 +20,44 @@ export default function Welcome() {
             Welcome to Forsaken Planet!
           </span>
           <div className="text-6xl text-primary font-bold mb-3">
-            Fan dedicated resources for Dungeons Of Eternity.
+            Dungeons Of Eternity resources and meanderings.
           </div>
-          <div className="p-grid p-nogutter p-d-flex p-justify-center p-ai-center text-center">
-            <p>How will you join the fray!?</p>
-            <div className="flex flex-column">
-              <div className="flex align-items-center justify-content-center h-4rem bg-primary font-bold border-round m-2">
-                <Link
-                  label="Primary"
-                  className="mr-3 p-button pi pi-discord no-underline"
-                  href="https://discord.gg/Wwc22C2KCS"
-                >
-                  &nbsp;Dungeons Of Eternity Discord
-                </Link>
-              </div>
-              <div className="flex align-items-center justify-content-center h-4rem bg-primary font-bold border-round m-2">
-                <Link
-                  type="Primary"
-                  className="mr-3 p-button pi pi-book no-underline"
-                  href="/mediawiki"
-                >
-                  &nbsp;Forsaken Wiki
-                </Link>
-              </div>
-              <div className="flex align-items-center justify-content-center h-4rem bg-primary font-bold border-round m-2">
-                <Link
-                  type="Primary"
-                  className="mr-3 p-button pi pi-chart-bar no-underline"
-                  href="/gallery"
-                >
-                  &nbsp;Forsaken Gallery
-                </Link>
-              </div>
-
-              <div className="flex align-items-center justify-content-center h-4rem bg-primary font-bold border-round m-2">
-                <Link
-                  type="Primary"
-                  className="mr-3 p-button pi pi-code no-underline"
-                  href="/meanderings"
-                >
-                  &nbsp;Forsaken Meanderings
-                </Link>
-              </div>
-              <div className="flex align-items-center justify-content-center h-4rem bg-primary font-bold border-round m-2">
-                <Link
-                  type="Primary"
-                  className="mr-3 p-button pi pi-code no-underline"
-                  href="/blog"
-                >
-                  &nbsp;Forsaken Blog
-                </Link>
-              </div>
-            </div>
-          </div>
+          <p>How will you join the fray!?</p>
+          <Link
+            label="Primary"
+            className="mr-3 p-button pi pi-discord no-underline"
+            href="https://discord.gg/Wwc22C2KCS"
+          >
+            &nbsp;Dungeons Of Eternity Discord
+          </Link>
+          <Link
+            type="Primary"
+            className="mr-3 p-button pi pi-book no-underline"
+            href="https://forsaken-planet.com/mediawiki/index.php?title=Dungeons_Of_Eternity"
+          >
+            &nbsp;Forsaken Wiki
+          </Link>
+          <Link
+            type="Primary"
+            className="mr-3 p-button pi pi-chart-bar no-underline"
+            href="/gallery"
+          >
+            &nbsp;Forsaken Gallery
+          </Link>
+          <Link
+            type="Primary"
+            className="mr-3 p-button pi pi-code no-underline"
+            href="/meanderings"
+          >
+            &nbsp;Forsaken Meanderings
+          </Link>
+          <Link
+            type="Primary"
+            className="mr-3 p-button pi pi-code no-underline"
+            href="/blog"
+          >
+            &nbsp;Forsaken Blog
+          </Link>
         </section>
       </div>
     </div>

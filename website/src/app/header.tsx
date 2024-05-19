@@ -12,7 +12,7 @@ export default function Header() {
     {
       label: "Wiki",
       icon: "pi pi-book",
-      url: "/mediawiki",
+      url: "https://forsaken-planet.com/mediawiki/index.php?title=Dungeons_Of_Eternity",
     },
     {
       label: "Gear Calcuator",
