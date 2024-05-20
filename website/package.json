@@ -12,7 +12,7 @@
     "@next/third-parties": "^14.2.2",
     "@sentry/nextjs": "^8.2.1",
     "@vercel/otel": "^1.8.2",
-    "axios": "^1.6.8",
+    "axios": "^1.7.1",
     "better-react-mathjax": "^2.0.3",
     "chart.js": "^4.4.3",
     "chartjs-plugin-datalabels": "^2.2.0",
@@ -42,7 +42,7 @@
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5",
-    "typescript-eslint": "^7.9.0",
+    "typescript-eslint": "^7.10.0",
     "web-vitals": "^4.0.0"
   }
 }
