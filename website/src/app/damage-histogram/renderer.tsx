@@ -12,9 +12,20 @@ const NUM_VALUES = 200;
 const NUM_BUCKETS = 200;
 const NUM_BUCKET_SIZE = NUM_VALUES / NUM_BUCKETS;
 
+type LegendItem = {
+  text: string;
+  datasetIndex: number;
+  index: number;
+  hidden: boolean;
+  fillStyle: string;
+  fontColor: string;
+  lineWidth: number;
+  strokeStyle: string;
+};
+
 export default function Renderer({ reports }: { reports: DOEReport[] }) {
   const [chartData, setChartData] = useState({});
-  const [legendItems, setLegendItems] = useState([]);
+  const [legendItems, setLegendItems] = useState<LegendItem[]>([]);
   const [numBuckets, setNumBuckets] = useState(NUM_BUCKETS);
   const [bucketSize, setBucketSize] = useState(NUM_BUCKET_SIZE);
   const [chartOptions, setChartOptions] = useState({});
@@ -26,8 +37,9 @@ export default function Renderer({ reports }: { reports: DOEReport[] }) {
   }, [reports]);
 
   useEffect(() => {
+    const keys: string[] = [...cache.indexes.byHuman.keys()];
     setLegendItems(
-      [...cache.indexes.byHuman.keys()]
+      keys
         .filter((name) => name !== "shields")
         .map((name, index) => ({
           text: name,

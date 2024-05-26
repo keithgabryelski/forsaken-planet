@@ -1,7 +1,20 @@
 import * as React from "react";
 import Image from "next/image";
 
-export function getFeaturedImage(post) {
+export type Post = {
+  attachments?: {
+    URL: string;
+    width: number;
+    height: number;
+  }[];
+  featured_image?: string;
+  title?: string;
+  content?: string | TrustedHTML;
+  excerpt?: string;
+  ID?: number;
+};
+
+export function getFeaturedImage(post: Post) {
   let featuredImage = null;
   let height = 1024;
   let width = 1024;

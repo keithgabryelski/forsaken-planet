@@ -58,7 +58,7 @@ export function createEquation(scenario) {
         scenario.damage,
         chance,
         multiplier,
-        <span>element {scenario.elementName}</span>,
+        <span>element {scenario.elementName.name}</span>,
       );
     }
   }
@@ -83,7 +83,7 @@ export function createEquation(scenario) {
         scenario.damage,
         chance,
         multiplier,
-        <span>perk1 {scenario.perk1Name}</span>,
+        <span>perk1 {scenario.perk1Name.name}</span>,
         crossOut,
       );
     }
@@ -109,7 +109,7 @@ export function createEquation(scenario) {
         scenario.damage,
         chance,
         multiplier,
-        <span>perk2 {scenario.perk2Name}</span>,
+        <span>perk2 {scenario.perk2Name.name}</span>,
         crossOut,
       );
     }
@@ -135,7 +135,7 @@ export function createEquation(scenario) {
         scenario.damage,
         chance,
         multiplier,
-        <span>exo {scenario.armEXOName}</span>,
+        <span>exo {scenario.armEXOName.name}</span>,
         crossOut,
       );
     }

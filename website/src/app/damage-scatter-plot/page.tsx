@@ -1,5 +1,6 @@
 import DungeonsOfEternityCache from "@/models/DungeonsOfEternityCache";
 import Renderer from "./renderer";
+import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {

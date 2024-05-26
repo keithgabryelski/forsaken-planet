@@ -20,7 +20,7 @@ export default function Header() {
       url: "/drop-rate-calculator",
     },
     {
-      label: "Attack Simulator",
+      label: "Combat Simulator",
       icon: "pi pi-bullseye",
       url: "/simulator",
     },

@@ -2,10 +2,16 @@
 import React, { Component } from "react";
 import axios from "axios";
 
+import { type Post } from "./blog-helpers";
 import ArticlePreview from "./articlePreview";
 
-export default class Blog extends Component {
-  constructor(props) {
+type Props = NonNullable<unknown>;
+type State = {
+  posts: Post[];
+};
+
+export default class Blog extends Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = {
       posts: [],

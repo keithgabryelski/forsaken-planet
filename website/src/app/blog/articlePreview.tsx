@@ -2,18 +2,23 @@
 import React, { Component } from "react";
 import Link from "next/link";
 import { getFeaturedImage } from "./blog-helpers";
+import { type Post } from "./blog-helpers";
 
-export default class ArticlePreview extends Component {
-  removeUnicode(string) {
+type Props = {
+  post: Post;
+};
+
+export default class ArticlePreview extends Component<Props> {
+  removeUnicode(string: string): string {
     if (string.indexOf("&#8217;") >= 0) {
       return this.removeUnicode(string.replace("&#8217;", "'"));
-    } else {
-      return string.replace("<p>", "").replace("[&hellip;]</p>", "...");
     }
+
+    return string.replace("<p>", "").replace("[&hellip;]</p>", "...");
   }
 
   render() {
-    const excerpt = this.removeUnicode(this.props.post.excerpt);
+    const excerpt = this.removeUnicode(this.props.post.excerpt ?? "");
     const featuredImage = getFeaturedImage(this.props.post);
 
     return (
