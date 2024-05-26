@@ -28,7 +28,7 @@ export default function Renderer({ reports }: { reports: DOEReport[] }) {
 
   const topAndBottomLabels = {
     id: "topAndBottomLabels",
-    afterDatasetsDraw(chart, _args, _pluginOptions) {
+    afterDatasetsDraw(chart: any) {
       const {
         ctx,
         scales: { x, y },
@@ -38,19 +38,21 @@ export default function Renderer({ reports }: { reports: DOEReport[] }) {
         ctx.fillStyle = "white";
         ctx.textAlign = "center";
 
-        chart.data.datasets[0].data.forEach(([min, max], index) => {
-          ctx.fillText(
-            min.toString(),
-            x.getPixelForValue(index),
-            20 + y.getPixelForValue(min),
-          );
-          ctx.fillText(
-            max.toString(),
-            x.getPixelForValue(index),
-            y.getPixelForValue(max) - 8,
-          );
-          //ctx.fillText(max.toString(), x.getPixelForValue(index), min + max);
-        });
+        chart.data.datasets[0].data.forEach(
+          ([min, max]: [number, number], index: number) => {
+            ctx.fillText(
+              min.toString(),
+              x.getPixelForValue(index),
+              20 + y.getPixelForValue(min),
+            );
+            ctx.fillText(
+              max.toString(),
+              x.getPixelForValue(index),
+              y.getPixelForValue(max) - 8,
+            );
+            //ctx.fillText(max.toString(), x.getPixelForValue(index), min + max);
+          },
+        );
       }
     },
   };

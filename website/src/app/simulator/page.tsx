@@ -4,9 +4,9 @@ import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
-  title: "Attack Simulator",
+  title: "Combat Simulator",
   description:
-    "Forsaken Planet: Dungeons Of Eternity attack simulator for a given weapon with specific perks, " +
+    "Forsaken Planet: Dungeons Of Eternity combat simulator for a given weapon with specific perks, " +
     "exo suit perks, against a specific enemy.",
 };
 

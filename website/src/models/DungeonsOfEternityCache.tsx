@@ -12,6 +12,13 @@ export type DOEReport = {
   Cost: number;
   DamageType: string;
   perks: string;
+  Human: string;
+  HumanName: string;
+  doesDamage: boolean;
+  reload: number;
+  Category: string;
+  Perk1: string;
+  Perk2: string;
 };
 
 export default class DungeonsOfEternityCache {

@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Chart } from "primereact/chart";
 import { Slider } from "primereact/slider";
-import { InputText } from "primereact/inputtext";
+import { InputNumber } from "primereact/inputnumber";
 import DungeonsOfEternityCache from "@/models/DungeonsOfEternityCache";
 import { type DOEReport } from "@/models/DungeonsOfEternityCache";
 import update from "immutability-helper";
@@ -71,7 +71,9 @@ export default function Renderer({ reports }: { reports: DOEReport[] }) {
     const damageDrops = [...cache.indexes.byDamage.entries()].filter(
       ([_n, drops]) => drops[0].doesDamage,
     );
-    for (const [damage, drops] of damageDrops) {
+
+    for (const [damageKey, drops] of damageDrops) {
+      const damage = parseInt(damageKey);
       if (minDamage === -1 || damage < minDamage) {
         minDamage = damage;
       }
@@ -167,7 +169,11 @@ export default function Renderer({ reports }: { reports: DOEReport[] }) {
           },
 
           display: true,
-          onClick: (_event, legendItem, legend) => {
+          onClick: (
+            _event: object,
+            legendItem: LegendItem,
+            legend: { chart: { update: () => undefined } },
+          ) => {
             const newItems = update(legendItems, {
               [legendItem.index]: {
                 hidden: {
@@ -180,14 +186,14 @@ export default function Renderer({ reports }: { reports: DOEReport[] }) {
           },
 
           labels: {
-            generateLabels: (_chart) => {
+            generateLabels: (_chart: Chart) => {
               return legendItems;
             },
           },
         },
         tooltip: {
           callbacks: {
-            title: (items) => {
+            title: (items: { parsed: { x: number } }[]) => {
               if (!items.length) {
                 return "";
               }
@@ -213,15 +219,22 @@ export default function Renderer({ reports }: { reports: DOEReport[] }) {
         className="p-3 shadow-2 mb-3 inline-block"
         style={{ borderRadius: "10px" }}
       >
-        <InputText
+        <InputNumber
           value={numBuckets}
-          onChange={(e) => setNumBuckets(e.target.value)}
+          onValueChange={(e) => setNumBuckets(e.value ?? NUM_VALUES / 2)}
+          min={1}
+          max={NUM_VALUES}
         />
         <Slider
           value={numBuckets}
           min={1}
           max={NUM_VALUES}
-          onChange={(e) => setNumBuckets(e.value)}
+          onChange={(e) => {
+            const value = e.value;
+            if (typeof value === "number") {
+              setNumBuckets(value);
+            }
+          }}
         />
       </span>
       <Chart type="bar" data={chartData} options={chartOptions} />
