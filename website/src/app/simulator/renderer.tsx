@@ -1,7 +1,7 @@
 "use client";
 import { useRef, useState, useEffect } from "react";
 import { Accordion, AccordionTab } from "primereact/accordion";
-import { InputText } from "primereact/inputtext";
+import { InputNumber } from "primereact/inputnumber";
 import { Chart } from "primereact/chart";
 import { Card } from "primereact/card";
 import { Dropdown } from "primereact/dropdown";
@@ -189,9 +189,9 @@ export default function Renderer({ reports }) {
                 className="p-3 shadow-2 mb-3 inline-block"
                 style={{ borderRadius: "10px" }}
               >
-                <InputText
+                <InputNumber
                   value={selected.damage}
-                  onChange={(e) => onChange(e.target.value, "damage")}
+                  onValueChange={(e) => onChange(e.value, "damage")}
                 />
                 <Slider
                   value={selected.damage}
@@ -285,7 +285,7 @@ export default function Renderer({ reports }) {
                 Arm EXO Perk
               </div>
               <span className="text-700 line-height-3">
-                {exoDescriptions[selected.armEXOName?.name]?.description ||
+                {exoDescriptions[selected.armEXOName?.code]?.description ||
                   "Select your EXO suit's arm perk"}
               </span>
             </div>

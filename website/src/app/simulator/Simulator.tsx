@@ -325,7 +325,7 @@ class HitResult {
   get damageAdjustmentScale(): number {
     return this.procs.reduce((accumulator, proc) => {
       if (proc.didOccur) {
-        return accumulator + this.baseDamage * proc.damageScale;
+        return accumulator + this.baseDamage * (proc.damageScale - 1);
       }
       return accumulator;
     }, 0.0);
@@ -470,7 +470,7 @@ export class Simulator {
       (selected.perk2Name && Perk.Factory(selected.perk2Name.name)) || null;
     const weapon = Weapon.Factory(gear, element, perk1, perk2);
     const suit =
-      (selected.armEXOName && Suit.Factory(selected.armEXOName.name)) || null;
+      (selected.armEXOName && Suit.Factory(selected.armEXOName.code)) || null;
     const enemy = Enemy.Factory(selected.opponentIdentities.map((o) => o.name));
     const attackStyle = AttackStyle.Factory(selected.attackStyle?.name);
     return new Scenario(weapon, attackStyle, suit, enemy);

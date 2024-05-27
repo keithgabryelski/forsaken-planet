@@ -13,6 +13,16 @@ export type Selectables = {
   opponentIdentities: string[];
 };
 
+const nameSort = (a, b) => {
+  if (a.name < b.name) {
+    return -1;
+  }
+  if (a.name > b.name) {
+    return 1;
+  }
+  return 0;
+};
+
 export default class SimulatorSelectables {
   cache: DungeonsOfEternityCache;
 
@@ -28,7 +38,7 @@ export default class SimulatorSelectables {
     return [...Object.keys(exoDescriptions)];
   }
   get exoNamesAsOptions() {
-    return this.exoNames.map((o) => ({ name: o, code: o }));
+    return this.exoNames.map((o) => ({ name: o, code: o })).sort(nameSort);
   }
 
   get armEXONames() {
@@ -37,34 +47,43 @@ export default class SimulatorSelectables {
       .map(([name, _details]) => name);
   }
   get armEXONamesAsOptions() {
-    return this.armEXONames.map((o) => ({ name: o, code: o }));
+    return this.armEXONames
+      .map((code) => {
+        let name = code;
+        const exoDescription = exoDescriptions[name];
+        if (exoDescription?.limitsEffectToAttackStyle) {
+          name = `${code} (${exoDescription.limitsEffectToAttackStyle})`;
+        }
+        return { name, code };
+      })
+      .sort(nameSort);
   }
 
   get groupNames() {
     return [...this.cache.catalog.groupNames];
   }
   get groupNamesAsOptions() {
-    return this.groupNames.map((o) => ({ name: o, code: o }));
+    return this.groupNames.map((o) => ({ name: o, code: o })).sort(nameSort);
   }
 
   get rarities() {
     return [...this.cache.catalog.rarities];
   }
   get raritiesAsOptions() {
-    return this.rarities.map((o) => ({ name: o, code: o }));
+    return this.rarities.map((o) => ({ name: o, code: o })).sort(nameSort);
   }
 
   get elementNames() {
     return [...this.cache.catalog.elements];
   }
   get elementNamesAsOptions() {
-    return this.elementNames.map((o) => ({ name: o, code: o }));
+    return this.elementNames.map((o) => ({ name: o, code: o })).sort(nameSort);
   }
 
   get perkNames() {
     return [...this.cache.catalog.perks];
   }
   get perkNamesAsOptions() {
-    return this.perkNames.map((o) => ({ name: o, code: o }));
+    return this.perkNames.map((o) => ({ name: o, code: o })).sort(nameSort);
   }
 }

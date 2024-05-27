@@ -96,9 +96,9 @@ export function createEquation(scenario) {
     if (chance) {
       let crossOut = false;
       if (perk2Description.limitsEffectToEnemy) {
-        crossOut = !scenario.opponentIdentities.includes(
-          perk2Description.limitsEffectToEnemy,
-        );
+        crossOut = !scenario.opponentIdentities
+          .map((oi) => oi.name)
+          .includes(perk2Description.limitsEffectToEnemy);
       }
       if (perk2Description.limitsEffectToAttackStyle) {
         crossOut =
@@ -115,27 +115,28 @@ export function createEquation(scenario) {
     }
   }
 
-  const exoDescription = exoDescriptions[scenario.armEXOName?.name];
+  const exoDescription = exoDescriptions[scenario.armEXOName?.code];
   if (exoDescription) {
     const chance = exoDescription["max chance"];
     const multiplier = exoDescription["max multiplier"];
     if (chance) {
       let crossOut = false;
       if (exoDescription.limitsEffectToEnemy) {
-        crossOut = !scenario.opponentIdentities.includes(
-          exoDescription.limitsEffectToEnemy,
-        );
+        crossOut = !scenario.opponentIdentities
+          .map((oi) => oi.code)
+          .includes(exoDescription.limitsEffectToEnemy);
       }
       if (exoDescription.limitsEffectToAttackStyle) {
         crossOut =
-          scenario.attackStyle !== exoDescription.limitsEffectToAttackStyle;
+          scenario.attackStyle.code !==
+          exoDescription.limitsEffectToAttackStyle;
       }
       addToEquation(
         equation,
         scenario.damage,
         chance,
         multiplier,
-        <span>exo {scenario.armEXOName.name}</span>,
+        <span>exo {scenario.armEXOName.code}</span>,
         crossOut,
       );
     }
