@@ -76,7 +76,8 @@ export function createEquation(scenario) {
       }
       if (perk1Description.limitsEffectToAttackStyle) {
         crossOut =
-          scenario.attackStyle !== perk1Description.limitsEffectToAttackStyle;
+          scenario.attackStyle.name !==
+          perk1Description.limitsEffectToAttackStyle;
       }
       addToEquation(
         equation,
@@ -102,7 +103,8 @@ export function createEquation(scenario) {
       }
       if (perk2Description.limitsEffectToAttackStyle) {
         crossOut =
-          scenario.attackStyle !== perk2Description.limitsEffectToAttackStyle;
+          scenario.attackStyle.name !==
+          perk2Description.limitsEffectToAttackStyle;
       }
       addToEquation(
         equation,

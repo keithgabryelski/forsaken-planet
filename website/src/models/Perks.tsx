@@ -15,6 +15,7 @@ export const crossbowPerks = ["slowing", "reload"];
 export const daggerPerks = ["throw distance", "vampire", "poison"];
 export const hammerPerks = ["throw distance", "slowing", "area damage"];
 export const shieldPerks = ["knockback distance", "absorb"];
+export const spearPerks = ["throw distance", "throw damage", "explosions"];
 export const swordPerks = ["vampire", "throwable", "stab damage"];
 export const twoHandedSwordPerks = [
   "knockback distance",
@@ -30,6 +31,7 @@ export const gearPerksMatrix = {
   daggers: [...daggerPerks, ...weaponPerks],
   hammers: [...hammerPerks, ...weaponPerks],
   shields: [...shieldPerks, ...weaponPerks],
+  spears: [...spearPerks, ...weaponPerks],
   staves: [],
   swords: [...swordPerks, ...weaponPerks],
   "two-handed": [...twoHandedSwordPerks, ...weaponPerks],
@@ -43,6 +45,7 @@ export const perkSet = new Set([
   ...daggerPerks,
   ...hammerPerks,
   ...shieldPerks,
+  ...spearPerks,
   ...swordPerks,
   ...twoHandedSwordPerks,
 ]);
