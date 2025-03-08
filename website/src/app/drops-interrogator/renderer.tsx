@@ -1,11 +1,12 @@
 "use client";
 import { useRef, useState, useEffect } from "react";
-import DungeonsOfEternityCache from "@/models/DungeonsOfEternityCache";
+import { DungeonsOfEternityCache } from "@/models/DungeonsOfEternityCache";
 import { FilterMatchMode } from "primereact/api";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
+import { type DOEReport } from "@/models/DungeonsOfEternityCache";
 
 export default function Renderer({ reports }: { reports: DOEReport[] }) {
   const [cache, setCache] = useState(new DungeonsOfEternityCache());

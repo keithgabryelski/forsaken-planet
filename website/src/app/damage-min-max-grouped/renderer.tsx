@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { Chart } from "primereact/chart";
 import { Dropdown } from "primereact/dropdown";
 import ChartDataLabels from "chartjs-plugin-datalabels";
-import DungeonsOfEternityCache from "@/models/DungeonsOfEternityCache";
+import { DungeonsOfEternityCache } from "@/models/DungeonsOfEternityCache";
 import { type DOEReport } from "@/models/DungeonsOfEternityCache";
 
 export default function Renderer({ reports }: { reports: DOEReport[] }) {
@@ -63,13 +63,20 @@ export default function Renderer({ reports }: { reports: DOEReport[] }) {
       .map((e) => e[0]);
 
     const index = cache.indexes.byHuman;
-    const initializer = names.reduce((accumulator, name) => {
-      const drops = cache.indexes.byHuman.get(name);
-      const drop = drops[0];
-      const groupName = drop.Human;
-      accumulator[groupName] = accumulator[groupName] ?? [null, null];
-      return accumulator;
-    }, {});
+    const initializer = names.reduce(
+      (accumulator, name) => {
+        const drops: DOEReport[] | undefined | null =
+          cache.indexes.byHuman.get(name);
+        if (!drops || drops.length === 0) {
+          return accumulator;
+        }
+        const drop = drops[0];
+        const groupName = drop.Human;
+        accumulator[groupName] = accumulator[groupName] ?? [null, null];
+        return accumulator;
+      },
+      {} as { [key: string]: [number, number] },
+    );
 
     const datasetEntries = [...index.entries()].reduce((damages, entry) => {
       const [_groupName, drops] = entry;
@@ -115,12 +122,12 @@ export default function Renderer({ reports }: { reports: DOEReport[] }) {
       "#1af9ff",
     ];
 
-    const tooltips = [];
+    const tooltips: any = [];
     const datasets = [];
     const datas = [];
 
     let label = "unknown";
-    const tooltip = [];
+    const tooltip: any = [];
     const datasetData = labels.map((groupName, ii) => {
       label = groupName;
       const datasetEntry = datasetEntries[groupName];
@@ -169,7 +176,7 @@ export default function Renderer({ reports }: { reports: DOEReport[] }) {
         tooltip: {
           enabled: true,
           callbacks: {
-            label: function (context) {
+            label: function (context: any) {
               //const [min, max] = context.raw;
               const data = tooltips[context.datasetIndex];
               const datum = data[context.dataIndex];

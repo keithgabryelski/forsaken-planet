@@ -13,30 +13,20 @@ import "primeflex/primeflex.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Forsaken Planet | All Things Dungeons Of Eternity",
-  description:
-    "Forsaken Planet -- statistics, wiki and resources for Dungeons Of Eternity",
+  title: "Dungeons Of Eternity: Forsaken Planet",
+  description: "Dungeons Of Eternity: statistics, wiki and resources.",
   openGraph: {
     type: "website",
     url: "https://forsaken-planet.com/",
-    title: "Forsaken Planet | All Things Dungeons Of Eternity",
-    description:
-      "Forsaken Planet -- statistics, wiki and resources for Dungeons Of Eternity",
-    image:
+    title: "Dungeons Of Eternity: Forsaken Planet",
+    description: "Dungeons Of Eternity: statistics, wiki and resources.",
+    images: [
       "https://forsaken-planet.com/static/media/forsaken-planet-mint.4068ab575e8e887e9302.png",
+    ],
   },
   robots: {
-    index: false,
+    index: true,
     follow: true,
-    nocache: true,
-    googleBot: {
-      index: true,
-      follow: false,
-      noimageindex: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
   },
 };
 

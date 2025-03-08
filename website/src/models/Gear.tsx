@@ -7,5 +7,6 @@ export const gearSlotPlacement = {
   shields: "back",
   staves: "back",
   swords: "hip",
-  "two-handed": "back",
+  longswords: "back",
+  spears: "back",
 };

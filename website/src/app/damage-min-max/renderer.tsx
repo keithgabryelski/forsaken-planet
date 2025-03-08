@@ -3,9 +3,10 @@ import { useState, useEffect } from "react";
 import { Chart } from "primereact/chart";
 import { Dropdown } from "primereact/dropdown";
 import ChartDataLabels from "chartjs-plugin-datalabels";
-import DungeonsOfEternityCache from "@/models/DungeonsOfEternityCache";
+import { DungeonsOfEternityCache } from "@/models/DungeonsOfEternityCache";
+import { type DOEReport } from "@/models/DungeonsOfEternityCache";
 
-export default function DamageMINMAX({ reports }) {
+export default function DamageMINMAX({ reports }: { reports: DOEReport[] }) {
   const dataSources = [
     { name: "Group", code: "group" },
     { name: "Name", code: "name" },
@@ -18,7 +19,7 @@ export default function DamageMINMAX({ reports }) {
 
   const topAndBottomLabels = {
     id: "topAndBottomLabels",
-    afterDatasetsDraw(chart, _args, _pluginOptions) {
+    afterDatasetsDraw(chart: any, _args: any, _pluginOptions: any) {
       const {
         ctx,
         scales: { x, y },
@@ -28,30 +29,32 @@ export default function DamageMINMAX({ reports }) {
         ctx.fillStyle = "white";
         ctx.textAlign = "center";
 
-        chart.legend.legendItems.forEach(({ hidden }, datasetIndex) => {
-          if (!hidden) {
-            let xOffset = 0;
-            if (datasetIndex === 0) {
-              xOffset = -10;
-            } else {
-              xOffset = 10;
+        chart.legend.legendItems.forEach(
+          ({ hidden }: { hidden: boolean }, datasetIndex: number) => {
+            if (!hidden) {
+              let xOffset = 0;
+              if (datasetIndex === 0) {
+                xOffset = -10;
+              } else {
+                xOffset = 10;
+              }
+              chart.data.datasets[datasetIndex].data.forEach(
+                ([min, max]: [number, number], index: number) => {
+                  ctx.fillText(
+                    min.toString(),
+                    x.getPixelForValue(index) + xOffset,
+                    y.getPixelForValue(min) + 10,
+                  );
+                  ctx.fillText(
+                    max.toString(),
+                    x.getPixelForValue(index) + xOffset,
+                    y.getPixelForValue(max) - 8,
+                  );
+                },
+              );
             }
-            chart.data.datasets[datasetIndex].data.forEach(
-              ([min, max], index) => {
-                ctx.fillText(
-                  min.toString(),
-                  x.getPixelForValue(index) + xOffset,
-                  y.getPixelForValue(min) + 10,
-                );
-                ctx.fillText(
-                  max.toString(),
-                  x.getPixelForValue(index) + xOffset,
-                  y.getPixelForValue(max) - 8,
-                );
-              },
-            );
-          }
-        });
+          },
+        );
       }
     },
   };

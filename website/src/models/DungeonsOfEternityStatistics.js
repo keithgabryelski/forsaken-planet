@@ -124,12 +124,6 @@ export default class DungeonsOfEternityStatistics {
         return [name, drops.length / this.totalDrops];
       }),
     );
-    this.byIcon = new Map(
-      [...indexes.byIcon.entries()].map(([name, drops]) => [
-        name,
-        drops.length / this.totalDrops,
-      ]),
-    );
     this.byRarity = new Map(
       [...indexes.byRarity.entries()].map(([name, drops]) => [
         name,

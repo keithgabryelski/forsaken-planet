@@ -2,7 +2,8 @@
 import { useState, useEffect } from "react";
 import { Chart } from "primereact/chart";
 import ChartDataLabels from "chartjs-plugin-datalabels";
-import DungeonsOfEternityCache from "@/models/DungeonsOfEternityCache";
+import { DungeonsOfEternityCache } from "@/models/DungeonsOfEternityCache";
+import { type DOEReport } from "@/models/DungeonsOfEternityCache";
 import styles from "./styles.module.css";
 
 export default function ElementPieChart({ reports }) {
@@ -64,10 +65,13 @@ export default function ElementPieChart({ reports }) {
           return acc;
         }, accumulator);
       },
-      labels.reduce((a, i) => {
-        a[i] = [];
-        return a;
-      }, {}),
+      labels.reduce(
+        (a, i) => {
+          a[i] = [];
+          return a;
+        },
+        {} as { [key: string]: DOEReport[] },
+      ),
     );
     const dataTypeValues = [...Object.values(collatedDataTypes)];
     const total = dataTypeValues.reduce(
@@ -96,7 +100,7 @@ export default function ElementPieChart({ reports }) {
       ],
     };
 
-    setChartData(data);
+    setChartData(data as any);
     setChartOptions(options);
   }, [cache]);
 

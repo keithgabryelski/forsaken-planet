@@ -6,7 +6,7 @@ export type AdjustmentType = {
   multiplier: number;
 };
 
-export const gearElementsMaxtrix: { [string]: ElementType[] } = {
+export const gearElementsMaxtrix: { [key: string]: ElementType[] } = {
   axes: ["ice", "fire", "poison", "physical"],
   bows: ["ice", "fire", "poison", "physical"],
   crossbows: ["ice", "fire", "poison", "physical"],
@@ -15,15 +15,15 @@ export const gearElementsMaxtrix: { [string]: ElementType[] } = {
   shields: [],
   staves: [],
   swords: ["ice", "fire", "poison", "physical"],
-  "two-handed": ["ice", "fire", "poison", "physical"],
+  longswords: ["ice", "fire", "poison", "physical"],
 };
 
-export const elementDescriptions: { [ElementType]: AdjustmentType } = {
+export const elementDescriptions: { [key: string]: AdjustmentType } = {
   ice: {
     description:
       "chance to freeze and cause embrittlement: frozen targets receive extra damage",
-    chance: "",
-    multiplier: "",
+    chance: 0.0,
+    multiplier: 0.0,
   },
   fire: {
     description: "chance to explode for 200% damage",
@@ -32,12 +32,12 @@ export const elementDescriptions: { [ElementType]: AdjustmentType } = {
   },
   poison: {
     description: "chance to stun target for a few seconds",
-    chance: "",
-    multiplier: "",
+    chance: 0.0,
+    multiplier: 0.0,
   },
   physical: {
     description: "no additional effect",
-    chance: "",
-    multiplier: "",
+    chance: 0.0,
+    multiplier: 0.0,
   },
 };

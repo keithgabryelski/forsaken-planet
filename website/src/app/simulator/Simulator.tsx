@@ -38,14 +38,14 @@ class EffectLimit extends Actor {
 class Adjustment extends Actor {
   chance: number;
   multiplier: number;
-  limitTo: EffectLimit;
+  limitTo: EffectLimit | null;
 
   constructor(
     name: string,
     description: string,
     chance: number,
     multiplier: number,
-    limitTo: EffectLimit,
+    limitTo: EffectLimit | null = null,
   ) {
     super(name, description);
     this.chance = chance;
@@ -276,11 +276,16 @@ class Weapon {
 
 class Suit {
   armEXO: Exo;
-  mindEXO: Exo;
-  legEXO: Exo;
-  chestEXO: Exo;
+  mindEXO: Exo | null;
+  legEXO: Exo | null;
+  chestEXO: Exo | null;
 
-  constructor(armEXO: Exo, mindEXO: Exo, legEXO: Exo, chestEXO: Exo) {
+  constructor(
+    armEXO: Exo,
+    mindEXO: Exo | null = null,
+    legEXO: Exo | null = null,
+    chestEXO: Exo | null = null,
+  ) {
     this.armEXO = armEXO;
     this.mindEXO = mindEXO;
     this.legEXO = legEXO;
@@ -464,23 +469,23 @@ export class Simulator {
     const weapon = Weapon.Factory(gear, element, perk1, perk2);
     const suit =
       (selected.armEXOName && Suit.Factory(selected.armEXOName.code)) || null;
-    const enemy = Enemy.Factory(selected.opponentIdentities.map((o) => o.name));
+    const enemy = Enemy.Factory(selected.opponentIdentities);
     const attackStyle = AttackStyle.Factory(selected.attackStyle?.name);
     return new Scenario(weapon, attackStyle, suit, enemy);
   }
 
   createScenarioSimple(selected: Selectables): Scenario {
     const gear = Gear.Factory("generic", selected.damage);
-    const element = Element.Factory(selected.elementName);
+    const element = Element.Factory(selected.elementName.name);
     const perk1 =
-      (selected.perk1Name && Perk.Factory(selected.perk1Name)) || null;
+      (selected.perk1Name && Perk.Factory(selected.perk1Name.name)) || null;
     const perk2 =
-      (selected.perk2Name && Perk.Factory(selected.perk2Name)) || null;
+      (selected.perk2Name && Perk.Factory(selected.perk2Name.name)) || null;
     const weapon = Weapon.Factory(gear, element, perk1, perk2);
     const suit =
       (selected.armEXOName && Suit.Factory(selected.armEXOName)) || null;
     const enemy = Enemy.Factory(selected.opponentIdentities);
-    const attackStyle = AttackStyle.Factory(selected.attackStyle);
+    const attackStyle = AttackStyle.Factory(selected.attackStyle.name);
     return new Scenario(weapon, attackStyle, suit, enemy);
   }
 }

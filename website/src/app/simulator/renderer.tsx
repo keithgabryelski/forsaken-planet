@@ -9,7 +9,7 @@ import { Slider } from "primereact/slider";
 import { Toast } from "primereact/toast";
 import { Button } from "primereact/button";
 import update from "immutability-helper";
-import DungeonsOfEternityCache from "@/models/DungeonsOfEternityCache";
+import { DungeonsOfEternityCache } from "@/models/DungeonsOfEternityCache";
 import { elementDescriptions } from "@/models/Elements";
 import { perkDescriptions } from "@/models/Perks";
 import { exoDescriptions } from "@/models/EXOs";
@@ -36,6 +36,7 @@ export default function Renderer({ reports }) {
     new SimulatorSelectables(cache),
   );
   const [selected, setSelected] = useState({
+    gearName: { name: "", code: "" },
     damage: 100,
     elementName: { name: "physical", code: "physical" },
     perk1Name: null,
@@ -52,7 +53,10 @@ export default function Renderer({ reports }) {
     setSelectables(newSelectables);
   }, [reports]);
 
-  const onChange = (target: string | Array<string>, name: string) => {
+  const onChange = (
+    target: number | [number, number] | string | Array<string>,
+    name: string,
+  ) => {
     const newSelected = update(selected, {
       [name]: { $set: target },
     });

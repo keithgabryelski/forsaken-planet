@@ -6,12 +6,11 @@ export default class DungeonsOfEternityIndexes {
   byGroup: Map<string, DOEReport[]>;
   byCategory: Map<string, DOEReport[]>;
   byName: Map<string, DOEReport[]>;
-  byIcon: Map<string, DOEReport[]>;
   byRarity: Map<string, DOEReport[]>;
   byElement: Map<string, DOEReport[]>;
   byPerk: Map<string, DOEReport[]>;
-  byCost: Map<string, DOEReport[]>;
-  byDamage: Map<string, DOEReport[]>;
+  byCost: Map<number, DOEReport[]>;
+  byDamage: Map<number, DOEReport[]>;
 
   constructor(drops: DOEReport[] = []) {
     this.byHumanName = new Map();
@@ -19,7 +18,6 @@ export default class DungeonsOfEternityIndexes {
     this.byGroup = new Map();
     this.byCategory = new Map();
     this.byName = new Map();
-    this.byIcon = new Map();
     this.byRarity = new Map();
     this.byElement = new Map();
     this.byPerk = new Map();
@@ -65,10 +63,6 @@ export default class DungeonsOfEternityIndexes {
       this.byName.set(
         item.Name,
         (this.byName.get(item.Name) ?? []).concat(item),
-      );
-      this.byIcon.set(
-        item.Icon,
-        (this.byIcon.get(item.Icon) ?? []).concat(item),
       );
       this.byRarity.set(
         item.Rarity,

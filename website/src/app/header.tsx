@@ -4,10 +4,9 @@ import { MenuItem } from "primereact/menuitem";
 export default function Header() {
   const items: MenuItem[] = [
     {
-      label: "Home",
+      label: "Dungeons of Eternity",
       icon: "pi pi-home",
       url: "/",
-      prefetch: false,
     },
     {
       label: "Wiki",
@@ -79,31 +78,26 @@ export default function Header() {
           label: "Mystical Mumblings",
           icon: "pi pi-ellipsis-h",
           url: "/meanderings",
-          prefetch: false,
         },
         {
           label: "Statistics GitHub Repository (R Code)",
           icon: "pi pi-github",
           url: "https://github.com/keithgabryelski/dungeons-of-eternity-statistics",
-          prefetch: false,
         },
         {
           label: "Original data (google sheets) level 60",
           icon: "pi pi-table",
           url: "https://docs.google.com/spreadsheets/d/1x9NlXY6hP0rW3-0F6-AJnJfk6phA4IGze5WE72grH9w",
-          prefetch: false,
         },
         {
           label: "Original data (google sheets) level 50",
           icon: "pi pi-table",
           url: "http://bit.ly/dungeons-of-eternity-statistics",
-          prefetch: false,
         },
         {
           label: "This Site's GitHub Repository",
           icon: "pi pi-github",
           url: "https://github.com/keithgabryelski/forsaken-planet",
-          prefetch: false,
         },
         {
           label: "Blog",

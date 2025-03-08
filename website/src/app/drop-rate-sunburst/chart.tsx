@@ -14,7 +14,7 @@ export default function Sunburst({ chartref, tree }) {
     while (element.childElementCount > 0) {
       element.removeChild(element.children[0]);
     }
-    SunburstChart()
+    (SunburstChart as any)()
       .data(tree)
       .label("name")
       .size("size")

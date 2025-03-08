@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Chart } from "primereact/chart";
 import { Dropdown } from "primereact/dropdown";
-import DungeonsOfEternityCache from "@/models/DungeonsOfEternityCache";
+import { DungeonsOfEternityCache } from "@/models/DungeonsOfEternityCache";
 import { ColorPairs as colors } from "@/models/Colors";
 
 export default function Renderer({ reports }) {

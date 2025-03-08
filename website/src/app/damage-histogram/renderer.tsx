@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { Chart } from "primereact/chart";
 import { Slider } from "primereact/slider";
 import { InputNumber } from "primereact/inputnumber";
-import DungeonsOfEternityCache from "@/models/DungeonsOfEternityCache";
+import { DungeonsOfEternityCache } from "@/models/DungeonsOfEternityCache";
 import { type DOEReport } from "@/models/DungeonsOfEternityCache";
 import update from "immutability-helper";
 import { colors } from "@/models/Colors";
@@ -73,7 +73,7 @@ export default function Renderer({ reports }: { reports: DOEReport[] }) {
     );
 
     for (const [damageKey, drops] of damageDrops) {
-      const damage = parseInt(damageKey);
+      const damage = parseInt(String(damageKey));
       if (minDamage === -1 || damage < minDamage) {
         minDamage = damage;
       }

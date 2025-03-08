@@ -1,12 +1,12 @@
-import DungeonsOfEternityCache from "@/models/DungeonsOfEternityCache";
+import { DungeonsOfEternityCache } from "@/models/DungeonsOfEternityCache";
 import Renderer from "./renderer";
 import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
-  title: "Combat Simulator",
+  title: "Dungeons Of Externity Combat Simulator",
   description:
-    "Forsaken Planet: Dungeons Of Eternity combat simulator for a given weapon with specific perks, " +
+    "Dungeons Of Eternity combat simulator for a given weapon with specific perks, " +
     "exo suit perks, against a specific enemy.",
 };
 

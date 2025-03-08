@@ -9,7 +9,7 @@ const elementAdjustments = Object.entries(elementDescriptions).map(
   ([elementName, elementDescription]) => ({
     id: elementName,
     name: elementName,
-    ...elementDescription,
+    ...(elementDescription as object),
   }),
 );
 const perkAdjustments = Object.entries(perkDescriptions).map(

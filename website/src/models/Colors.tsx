@@ -90,6 +90,7 @@ export const ColorPairs = [
   ["#3a49da", "#5867e8"],
   ["#1af9ff", "#90f0fe"],
   ["#6d003d", "#cc00cc"],
+  ["#ff6600", "#ffffff"],
 ];
 
 export const Colors9 = [

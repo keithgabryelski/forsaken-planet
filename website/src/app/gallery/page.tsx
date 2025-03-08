@@ -2,6 +2,7 @@
 import React from "react";
 import { useState } from "react";
 import ImageGallery from "react-image-gallery";
+import Link from "next/link";
 import "react-image-gallery/styles/css/image-gallery.css";
 import image01 from "@/assets/charts/drop-rates.png";
 import image02 from "@/assets/charts/Damage MIN_MAX by Category.png";
@@ -29,7 +30,7 @@ const charts = [
         <h3>Notes:</h3>
         <p>
           This is an older drop rate pie chart which can be easier to read than
-          the <a href="/#/drop-rate-pie-chart">LIVE chart</a>, but can be
+          the <Link href={"/drop-rate-pie-chart"}>LIVE chart</Link>, but can be
           out-of-date.
         </p>
       </div>
@@ -45,8 +46,8 @@ const charts = [
         <h3>Notes:</h3>
         <p>
           Minimum/Maximum damage by weapon&apos;s category. This is an older
-          chart than the <a href="/#/damage-min-max">LIVE chart</a>, and is
-          probably out-of-date.
+          chart than the <Link href={"/damage-min-max"}>LIVE chart</Link>, and
+          is probably out-of-date.
         </p>
       </div>
     ),
@@ -59,8 +60,8 @@ const charts = [
         <h3>Notes:</h3>
         <p>
           Minimum/Maximum damage by weapon&apos;s category. This is an older
-          chart than the <a href="/#/damage-min-max">LIVE chart</a>, and is
-          probably out-of-date.
+          chart than the <Link href={"/damage-min-max"}>LIVE chart</Link>, and
+          is probably out-of-date.
         </p>
       </div>
     ),
@@ -114,8 +115,9 @@ const charts = [
         <h3>Notes:</h3>
         <p>
           Minimum/Maximum damage by weapon&apos;s category. This is an older
-          chart than the <a href="/#/damage-min-max-grouped">LIVE chart</a>, and
-          is probably out-of-date.
+          chart than the{" "}
+          <Link href={"/damage-min-max-grouped"}>LIVE chart</Link>, and is
+          probably out-of-date.
         </p>
       </div>
     ),
@@ -128,8 +130,9 @@ const charts = [
         <h3>Notes:</h3>
         <p>
           Minimum/Maximum damage by weapon&apos;s category. This is an older
-          chart than the <a href="/#/damage-min-max-grouped">LIVE chart</a>, and
-          is probably out-of-date.
+          chart than the{" "}
+          <Link href={"/damage-min-max-grouped"}>LIVE chart</Link>, and is
+          probably out-of-date.
         </p>
       </div>
     ),

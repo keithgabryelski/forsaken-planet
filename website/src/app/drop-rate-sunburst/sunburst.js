@@ -168,8 +168,9 @@ export default Kapsule({
       maxRadius,
     ]);
 
-    state.radiusScaleExponent > 0 &&
+    if (state.radiusScaleExponent > 0) {
       state.radiusScale.exponent(state.radiusScaleExponent);
+    }
 
     state.svg
       .style("width", state.width + "px")
@@ -254,7 +255,9 @@ export default Kapsule({
       })
       .on("mouseover", (ev, d) => {
         ev.stopPropagation();
-        state.onHover && state.onHover(d.data, ev);
+        if (state.onHover) {
+          state.onHover(d.data, ev);
+        }
 
         try {
           state.tooltip.content(
@@ -409,20 +412,22 @@ export default Kapsule({
         });
 
       // Set labels
-      computeAngularLabels &&
+      if (computeAngularLabels) {
         allSlices
           .selectAll("text.angular-label")
           .selectAll("textPath")
           .transition(transition)
           .textTween((d) => () => labelMetaCache.get(d).label);
+      }
 
-      computeRadialLabels &&
+      if (computeRadialLabels) {
         allSlices
           .selectAll("g.radial-label")
           .selectAll("text")
           .transition(transition)
           .textTween((d) => () => labelMetaCache.get(d).label)
           .attrTween("transform", (d) => () => radialTextTransform(d));
+      }
 
       //
     } catch (_e) {
@@ -465,9 +470,9 @@ export default Kapsule({
       const y = r * Math.sin(middleAngle);
       let rot = (middleAngle * 180) / Math.PI;
 
-      middleAngle > Math.PI / 2 &&
-        middleAngle < (Math.PI * 3) / 2 &&
-        (rot += 180); // prevent upside down text
+      if (middleAngle > Math.PI / 2 && middleAngle < (Math.PI * 3) / 2) {
+        rot += 180; // prevent upside down text
+      }
 
       return `translate(${x}, ${y}) rotate(${rot})`;
     }

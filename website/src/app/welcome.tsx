@@ -24,7 +24,6 @@ export default function Welcome() {
           </div>
           <p>How will you join the fray!?</p>
           <Link
-            label="Primary"
             className="mr-3 p-button pi pi-discord no-underline"
             href="https://discord.gg/Wwc22C2KCS"
           >

@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import DungeonsOfEternityCache from "@/models/DungeonsOfEternityCache";
+import { DungeonsOfEternityCache } from "@/models/DungeonsOfEternityCache";
 import Selectables from "@/models/Selectables";
 import update from "immutability-helper";
 import { Item } from "@/models/Item";

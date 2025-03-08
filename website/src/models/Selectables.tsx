@@ -1,5 +1,5 @@
 import { GearItem, RarityItem, ElementItem, PerkItem } from "./Item";
-import type DungeonsOfEternityCache from "./DungeonsOfEternityCache";
+import { type DungeonsOfEternityCache } from "./DungeonsOfEternityCache";
 
 class Selectables {
   cache: DungeonsOfEternityCache;

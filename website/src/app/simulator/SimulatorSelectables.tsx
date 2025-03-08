@@ -1,4 +1,4 @@
-import type DungeonsOfEternityCache from "@/models/DungeonsOfEternityCache";
+import { type DungeonsOfEternityCache } from "@/models/DungeonsOfEternityCache";
 import type DungeonsOfEternityStatistics from "@/models/DungeonsOfEternityStatistics";
 import { exoDescriptions } from "@/models/EXOs";
 

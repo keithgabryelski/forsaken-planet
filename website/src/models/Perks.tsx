@@ -17,7 +17,7 @@ export const hammerPerks = ["throw distance", "slowing", "area damage"];
 export const shieldPerks = ["knockback distance", "absorb"];
 export const spearPerks = ["throw distance", "throw damage", "explosions"];
 export const swordPerks = ["vampire", "throwable", "stab damage"];
-export const twoHandedSwordPerks = [
+export const longswordPerks = [
   "knockback distance",
   "vampire",
   "unblockable",
@@ -34,7 +34,7 @@ export const gearPerksMatrix = {
   spears: [...spearPerks, ...weaponPerks],
   staves: [],
   swords: [...swordPerks, ...weaponPerks],
-  "two-handed": [...twoHandedSwordPerks, ...weaponPerks],
+  longswords: [...longswordPerks, ...weaponPerks],
 };
 
 export const perkSet = new Set([
@@ -47,7 +47,7 @@ export const perkSet = new Set([
   ...shieldPerks,
   ...spearPerks,
   ...swordPerks,
-  ...twoHandedSwordPerks,
+  ...longswordPerks,
 ]);
 
 export const perkGearMatrix = Object.entries(gearPerksMatrix).reduce(
@@ -235,7 +235,7 @@ export const perkDescriptions = {
   },
   unblockable: {
     description: "Attacks can not be blocked/parried by enemies",
-    type: "two-handed",
+    type: "longswords",
     "min chance": "",
     "min multiplier": "",
     "max chance": "",

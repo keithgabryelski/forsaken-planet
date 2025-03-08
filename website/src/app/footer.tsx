@@ -16,7 +16,7 @@ export default function Footer() {
               style={{ textDecoration: "none", color: "#fff" }}
               href="https://forsaken-planet.com"
             >
-              forsaken-planet.com
+              Dungeons of Eternity: forsaken-planet.com
             </Link>
           </div>
           <div>

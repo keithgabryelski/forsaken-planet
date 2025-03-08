@@ -2,6 +2,7 @@
 import { useRef, useState, useEffect } from "react";
 import { gearSlotPlacement } from "@/models/Gear";
 import Chart from "./chart";
+import { type DOEReport } from "@/models/DungeonsOfEternityCache";
 
 const colors = [
   "grey",
@@ -104,7 +105,7 @@ export default function Renderer({ drops }) {
 
     const slots = Object.groupBy(
       drops,
-      ({ Group }) => gearSlotPlacement[Group],
+      ({ Group }: { Group: string }) => gearSlotPlacement[Group],
     );
 
     for (const [slotName, ungrouped] of Object.entries(slots)) {
@@ -121,7 +122,10 @@ export default function Renderer({ drops }) {
 
       const groups = Object.groupBy(ungrouped, ({ Group }) => Group);
 
-      for (const [groupName, unnamed] of Object.entries(groups)) {
+      for (const [groupName, unnamed] of Object.entries(groups) as [
+        string,
+        DOEReport[],
+      ][]) {
         //console.info("groupName", groupName);
         const groupPercent =
           Math.round((unnamed.length / totalDrops) * 10000) / 100;
@@ -134,7 +138,10 @@ export default function Renderer({ drops }) {
         };
         slotChild.children.push(groupChild);
 
-        const names = Object.groupBy(unnamed, ({ Name }) => Name);
+        const names = Object.groupBy(
+          unnamed,
+          ({ Name }: { Name: string }) => Name,
+        );
         for (const [name, unclassed] of Object.entries(names)) {
           // console.info("nameName", name);
           const namePercent =
