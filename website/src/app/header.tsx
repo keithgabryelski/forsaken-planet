@@ -4,14 +4,14 @@ import { MenuItem } from "primereact/menuitem";
 export default function Header() {
   const items: MenuItem[] = [
     {
-      label: "Dungeons of Eternity",
+      label: "Forsaken Planet",
       icon: "pi pi-home",
       url: "/",
     },
     {
       label: "Wiki",
       icon: "pi pi-book",
-      url: "https://forsaken-planet.com/mediawiki/index.php?title=Dungeons_Of_Eternity",
+      url: "https://forsaken-planet.com/wiki/Dungeons_Of_Eternity",
     },
     {
       label: "Gear Calcuator",
@@ -83,6 +83,11 @@ export default function Header() {
           label: "Statistics GitHub Repository (R Code)",
           icon: "pi pi-github",
           url: "https://github.com/keithgabryelski/dungeons-of-eternity-statistics",
+        },
+        {
+          label: "Current data (google sheets) level 60 + Spears",
+          icon: "pi pi-table",
+          url: "https://docs.google.com/spreadsheets/d/1jm1ADn_4syrVwkKI_aWd3xJoVkQAw6n3Ej6SM9J-gJw",
         },
         {
           label: "Original data (google sheets) level 60",

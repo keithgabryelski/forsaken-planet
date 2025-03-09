@@ -16,11 +16,11 @@ export default function Footer() {
               style={{ textDecoration: "none", color: "#fff" }}
               href="https://forsaken-planet.com"
             >
-              Dungeons of Eternity: forsaken-planet.com
+              Forsaken Planet
             </Link>
           </div>
           <div>
-            © 2024 OCD Software, LLC. (software we HAD to write) All rights
+            © 2024,2025 OCD Software, LLC. (software we HAD to write) All rights
             reserved.
           </div>
           <div className="mt-3 sm:mt-0">
