@@ -1,12 +1,12 @@
 export async function GET() {
   const lastmod = new Date().toISOString();
   const sitemapFiles = [
-    "/sitemap/sitemap-forsaken-planet.com-NS_0-0.xml.gz",
-    "/sitemap/sitemap-forsaken-planet.com-NS_2-0.xml.gz",
-    "/sitemap/sitemap-forsaken-planet.com-NS_4-0.xml.gz",
-    "/sitemap/sitemap-forsaken-planet.com-NS_6-0.xml.gz",
-    "/sitemap/sitemap-forsaken-planet.com-NS_8-0.xml.gz",
-    "/sitemap-app-pages.xml",
+    "sitemap/sitemap-forsaken-planet.com-NS_0-0.xml.gz",
+    "sitemap/sitemap-forsaken-planet.com-NS_2-0.xml.gz",
+    "sitemap/sitemap-forsaken-planet.com-NS_4-0.xml.gz",
+    "sitemap/sitemap-forsaken-planet.com-NS_6-0.xml.gz",
+    "sitemap/sitemap-forsaken-planet.com-NS_8-0.xml.gz",
+    "sitemap-app-pages.xml",
   ];
   const sitemapXML = sitemapFiles
     .map(

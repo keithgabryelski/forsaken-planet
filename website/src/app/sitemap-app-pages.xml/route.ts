@@ -21,7 +21,7 @@ export async function GET() {
     .map(
       (filename) => `
 	<url>
-		<loc>https://forsaken-planet.com/sitemap/${filename}</loc>
+		<loc>${filename}</loc>
 		<lastmod>${lastmod}</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>1.0</priority>
