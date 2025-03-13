@@ -38,3 +38,6 @@ next-env.d.ts
 certificates
 # Sentry Config File
 .sentryclirc
+
+/public/sitemap/*.xml
+/public/sitemap/*.xml.gz
