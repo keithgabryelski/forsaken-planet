@@ -1,3 +1,12 @@
+# *
 User-agent: *
+Allow: /
 Disallow: /wiki/Special:Random
+
+# Host
+Host: https://forsaken-planet.com
+
+# Sitemaps
+Sitemap: https://forsaken-planet.com/sitemap.xml
+Sitemap: https://forsaken-planet.com/sitemap/sitemap-app-pages.xml
 Sitemap: https://forsaken-planet.com/sitemap/sitemap-index-forsaken-planet.com.xml

@@ -55,7 +55,7 @@ export default function ElementPieChart({ reports }) {
     setChartOptions(options);
 
     const labels = ["physical", "poison", "fire", "ice"];
-    const collatedDataTypes = cache.indexes.byElement.entries().reduce(
+    const collatedDataTypes = [...cache.indexes.byElement].reduce(
       (accumulator, [_name, drops]) => {
         return drops.reduce((acc, drop) => {
           if (["shields", "staves"].includes(drop.Group)) {
