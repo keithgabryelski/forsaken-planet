@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+//import { GoogleAdSense } from "nextjs-google-adsense";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { PrimeReactProvider } from "primereact/api";
 import Header from "./header";
@@ -35,6 +36,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // <GoogleAdSense publisherId="pub-8473742881311360" />
+
   return (
     <html lang="en">
       <body className={inter.className}>
