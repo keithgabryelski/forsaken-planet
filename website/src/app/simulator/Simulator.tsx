@@ -147,6 +147,12 @@ class Element extends Adjustment {
   }
 }
 
+class QuadDamage extends Adjustment {
+  static Factory(): QuadDamage {
+    return new QuadDamage("Quad Damage Potion", "4x the damage", 1.0, 4.0);
+  }
+}
+
 class Perk extends Adjustment {
   static Factory(name: string): Element {
     if (!name) {
@@ -322,15 +328,14 @@ class HitResult {
   get damageAdjustmentScale(): number {
     return this.procs.reduce((accumulator, proc) => {
       if (proc.didOccur) {
-        return accumulator + this.baseDamage * proc.damageScale;
+        return accumulator * proc.damageScale;
       }
       return accumulator;
-    }, 0.0);
+    }, 1.0); // identity
   }
 
   get totalDamageDone(): number {
-    const adjusted = this.damageAdjustmentScale;
-    return this.baseDamage + adjusted;
+    return this.baseDamage * this.damageAdjustmentScale;
   }
 }
 
@@ -360,7 +365,7 @@ class ProgrammedRandomOccurrence {
     if (doesAdjustment) {
       return this.fromAdjustment.multiplier;
     }
-    return 0;
+    return 1; // identity
   }
 
   get didOccur(): boolean {
@@ -373,6 +378,7 @@ class Hit {
   adjustments: Adjustment[];
   enemy: Enemy;
   attackStyle: AttackStyle;
+  quadDamage: boolean;
 
   constructor(
     damage: number,
@@ -408,24 +414,32 @@ class Scenario {
   attackStyle: AttackStyle;
   suit: Suit;
   enemy: Enemy;
+  quadDamage: boolean;
 
   constructor(
     weapon: Weapon,
     attackStyle: AttackStyle,
     suit: Suit,
     enemy: Enemy,
+    quadDamage: boolean,
   ) {
     this.weapon = weapon;
     this.attackStyle = attackStyle;
     this.suit = suit;
     this.enemy = enemy;
+    this.quadDamage = quadDamage;
   }
 
   getAdjustments(): Adjustment[] {
-    return [
-      ...this.weapon.getAdjustments(),
-      ...(this.suit?.getAdjustments() || []),
-    ];
+    const adjustments = this.weapon.getAdjustments();
+    const suitAdjustments = this.suit?.getAdjustments();
+    if (suitAdjustments) {
+      adjustments.push(...suitAdjustments);
+    }
+    if (this.quadDamage) {
+      adjustments.push(QuadDamage.Factory());
+    }
+    return adjustments;
   }
 
   calculateHit(): Hit {
@@ -471,21 +485,7 @@ export class Simulator {
       (selected.armEXOName && Suit.Factory(selected.armEXOName.code)) || null;
     const enemy = Enemy.Factory(selected.opponentIdentities);
     const attackStyle = AttackStyle.Factory(selected.attackStyle?.name);
-    return new Scenario(weapon, attackStyle, suit, enemy);
-  }
-
-  createScenarioSimple(selected: Selectables): Scenario {
-    const gear = Gear.Factory("generic", selected.damage);
-    const element = Element.Factory(selected.elementName.name);
-    const perk1 =
-      (selected.perk1Name && Perk.Factory(selected.perk1Name.name)) || null;
-    const perk2 =
-      (selected.perk2Name && Perk.Factory(selected.perk2Name.name)) || null;
-    const weapon = Weapon.Factory(gear, element, perk1, perk2);
-    const suit =
-      (selected.armEXOName && Suit.Factory(selected.armEXOName)) || null;
-    const enemy = Enemy.Factory(selected.opponentIdentities);
-    const attackStyle = AttackStyle.Factory(selected.attackStyle.name);
-    return new Scenario(weapon, attackStyle, suit, enemy);
+    const quadDamage = selected.quadDamage;
+    return new Scenario(weapon, attackStyle, suit, enemy, quadDamage);
   }
 }

@@ -72,7 +72,6 @@ export default function DamageMINMAX({ reports }: { reports: DOEReport[] }) {
     const groupNames = [...cache.indexes.byHuman.keys()].filter(
       (n) => n !== "shields",
     );
-    console.info("*********", groupNames);
     setDataSources([
       { name: "Group", code: "group" },
       { name: "Name", code: "name" },
@@ -107,7 +106,6 @@ export default function DamageMINMAX({ reports }: { reports: DOEReport[] }) {
     };
 
     for (const name of groupNames) {
-      console.info(";;;;;;;;", name, "----", cache.indexes.byHumanName);
       chartDataSourceOptions[name] = {
         index: cache.indexes.byHumanName,
         initializer: {

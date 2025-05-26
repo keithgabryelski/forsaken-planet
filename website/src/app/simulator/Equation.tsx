@@ -5,7 +5,7 @@ import { exoDescriptions } from "@/models/EXOs";
 
 function addToEquation(
   equation,
-  damage,
+  _damage,
   chance,
   multiplier,
   comment,
@@ -16,7 +16,6 @@ function addToEquation(
     equation.push({
       equationFragment: (
         <span className={className}>
-          <span className="text-orange-300">{damage}</span> *{" "}
           <span className="text-purple-300">{multiplier}</span>
         </span>
       ),
@@ -28,11 +27,9 @@ function addToEquation(
   equation.push({
     equationFragment: (
       <span className={className}>
-        <span className="text-orange-300">{damage}</span> * ({" "}
-        <span className="text-yellow-300">Math.random()</span> &lt;{" "}
-        <span className="text-blue-300">{chance}</span> ) ?{" "}
-        <span className="text-purple-300">{multiplier}</span> :{" "}
-        <span className="text-purple-300">0</span>
+        AdjustmentPROC(<span className="text-blue-300">{chance * 100}%</span>)
+        &rArr;
+        <span className="text-purple-300">{multiplier}</span>
       </span>
     ),
     equationComment: <span>{comment}</span>,

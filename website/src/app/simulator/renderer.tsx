@@ -3,6 +3,7 @@ import { useRef, useState, useEffect } from "react";
 import { Accordion, AccordionTab } from "primereact/accordion";
 import { InputNumber } from "primereact/inputnumber";
 import { Chart } from "primereact/chart";
+import { Checkbox } from "primereact/checkbox";
 import { Card } from "primereact/card";
 import { Dropdown } from "primereact/dropdown";
 import { Slider } from "primereact/slider";
@@ -44,6 +45,7 @@ export default function Renderer({ reports }) {
     armEXOName: null,
     attackStyle: { name: "melee", code: "melee" },
     opponentIdentities: [],
+    quadDamage: false,
   });
 
   useEffect(() => {
@@ -340,6 +342,24 @@ export default function Renderer({ reports }) {
               <span className="text-700 line-height-3">
                 Select the style of attack you&apos;ll use. This affects which
                 perks/EXOs can buff your attack.
+              </span>
+            </div>
+
+            <div className="col-12 md:col-4 mb-4 px-5">
+              <span
+                className="p-3 shadow-2 mb-3 inline-block"
+                style={{ borderRadius: "10px" }}
+              >
+                <Checkbox
+                  onChange={(e) => onChange(e.checked, "quadDamage")}
+                  checked={selected.quadDamage}
+                ></Checkbox>
+              </span>
+              <div className="text-900 text-xl mb-3 font-medium">
+                Quad Damage
+              </div>
+              <span className="text-700 line-height-3">
+                Enable Quad Damage potion effect.
               </span>
             </div>
           </div>

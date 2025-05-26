@@ -11,6 +11,7 @@ export type Selectables = {
   armEXOName: { name: string; code: string };
   attackStyle: { name: string; code: string };
   opponentIdentities: string[];
+  quadDamage: boolean;
 };
 
 const nameSort = (a, b) => {
